@@ -5,5 +5,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface RootConfig {
     @Serializable
-    data object Main : RootConfig
+    data object SplashScreen : RootConfig
+
+    @Serializable
+    data object Auth : RootConfig
+
+    @Serializable
+    data object Home : RootConfig
 }

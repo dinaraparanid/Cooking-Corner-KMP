@@ -29,16 +29,16 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm("desktop")
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -50,18 +50,19 @@ kotlin {
             export(libs.essenty.lifecycle)
         }
     }
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.kodein.android)
         }
         commonMain.dependencies {
-            implementation(project(":core:component"))
-            implementation(project(":core:ui"))
+            implementation(projects.core.component)
+            implementation(projects.core.ui)
+            implementation(projects.core.utils)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -70,6 +71,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            implementation(libs.androidx.splashscreen)
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
@@ -94,6 +97,7 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }

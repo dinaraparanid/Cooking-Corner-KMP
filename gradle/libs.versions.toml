@@ -9,6 +9,7 @@ androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.5.1"
 androidx-material = "1.12.0"
 androidx-dataStore = "1.1.1"
+androidx-splashscreen = "1.0.1"
 androidx-test-junit = "1.1.5"
 constraintlayout = "0.4.0"
 compose-plugin = "1.6.10"
@@ -44,6 +45,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "androidx-dataStore" }
 androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "androidx-dataStore" }
 androidx-datastore-preferences-android = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidx-dataStore" }
+androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splashscreen" }
 
 constraintlayout = { group = "tech.annexflow.compose", name = "constraintlayout-compose-multiplatform", version.ref = "constraintlayout" }
 

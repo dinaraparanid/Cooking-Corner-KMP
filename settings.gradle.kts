@@ -39,3 +39,4 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":core:ui")
 include(":core:component")
+include(":core:utils")

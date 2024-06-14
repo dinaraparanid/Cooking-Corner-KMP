@@ -8,7 +8,7 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.di.initKodein
-import com.paranid5.cooking_corner.presentation.App
+import com.paranid5.cooking_corner.presentation.RootUi
 import kotlinx.browser.document
 import org.kodein.di.instance
 
@@ -18,6 +18,9 @@ fun main() {
     val rootComponentFactory: RootComponent.Factory by kodein.instance()
     val rootComponent = rootComponentFactory.create(DefaultComponentContext(LifecycleRegistry()))
     ComposeViewport(document.body!!) {
-        App(modifier = Modifier.fillMaxSize())
+        RootUi(
+            rootComponent = rootComponent,
+            modifier = Modifier.fillMaxSize(),
+        )
     }
 }
