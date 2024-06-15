@@ -50,7 +50,11 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.androidx.datastore.preferences.android)
+            implementation(libs.androidx.datastore.core.okio)
+            implementation(libs.androidx.datastore.preferences.core)
+
             implementation(libs.kodein.android)
+
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
@@ -64,15 +68,16 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
 
-            implementation(libs.androidx.datastore.core.okio)
-            implementation(libs.androidx.datastore.preferences.core)
-
             implementation(libs.kodein)
         }
         desktopMain.dependencies {
+            implementation(libs.androidx.datastore.core.okio)
+            implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.ktor.client.okhttp)
         }
         iosMain.dependencies {
+            implementation(libs.androidx.datastore.core.okio)
+            implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.ktor.client.darwin)
         }
         wasmJsMain.dependencies {

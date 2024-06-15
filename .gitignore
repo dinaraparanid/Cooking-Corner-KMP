@@ -12,6 +12,7 @@ captures
 .cxx
 .preferences_pb
 .db
+.lock
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/

@@ -99,6 +99,10 @@ kotlin {
             implementation(libs.mviKotlinLogging)
             implementation(libs.mviKotlinCoroutines)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kodein)
+        }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
@@ -152,5 +156,14 @@ compose.desktop {
             packageName = "com.paranid5.cooking_corner"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+tasks.configureEach {
+    when (name) {
+        "desktopRun",
+        "assembleDebug",
+        "assembleRelease",
+        "embedAndSignAppleFrameworkForXcode" -> dependsOn("testDebugUnitTest")
     }
 }
