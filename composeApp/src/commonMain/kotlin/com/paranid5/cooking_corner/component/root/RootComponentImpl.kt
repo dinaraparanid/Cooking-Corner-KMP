@@ -7,12 +7,14 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.paranid5.cooking_corner.component.splash.SplashScreenComponent
 import com.paranid5.cooking_corner.component.toStateFlow
+import com.paranid5.cooking_corner.domain.auth.AuthDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 internal class RootComponentImpl(
     componentContext: ComponentContext,
+    private val authDataSource: AuthDataSource,
     private val splashScreenComponentFactory: SplashScreenComponent.Factory,
 ) : RootComponent,
     ComponentContext by componentContext {
@@ -51,11 +53,13 @@ internal class RootComponentImpl(
     }
 
     internal class Factory(
+        private val authDataSource: AuthDataSource,
         private val splashScreenComponentFactory: SplashScreenComponent.Factory,
     ) : RootComponent.Factory {
         override fun create(componentContext: ComponentContext): RootComponent =
             RootComponentImpl(
                 componentContext = componentContext,
+                authDataSource = authDataSource,
                 splashScreenComponentFactory = splashScreenComponentFactory,
             )
     }
