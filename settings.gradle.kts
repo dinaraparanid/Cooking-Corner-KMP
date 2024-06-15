@@ -37,10 +37,12 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":core:common")
 include(":core:ui")
 include(":core:component")
 include(":core:utils")
 include(":domain:auth")
 include(":data")
-include(":core:common")
 include(":feature:splash")
+include(":feature:auth")
+include(":feature:main:root")

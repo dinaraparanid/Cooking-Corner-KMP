@@ -65,6 +65,8 @@ kotlin {
             implementation(projects.core.utils)
             implementation(projects.data)
             implementation(projects.feature.splash)
+            implementation(projects.feature.auth)
+            implementation(projects.feature.main.root)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

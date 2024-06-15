@@ -3,7 +3,6 @@ package com.paranid5.cooking_corner.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -20,6 +19,8 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.component.root.RootChild
 import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.component.root.RootConfig
+import com.paranid5.cooking_corner.featrue.auth.AuthUi
+import com.paranid5.cooking_corner.feature.main.root.MainRootUi
 import com.paranid5.cooking_corner.feature.splash.SplashScreenUi
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
@@ -69,9 +70,15 @@ private fun RootContent(
                 modifier = Modifier.fillMaxSize(),
             )
 
-            is RootChild.Auth -> Text("TODO: Auth screen")
+            is RootChild.Auth -> AuthUi(
+                component = instance.component,
+                modifier = Modifier.fillMaxSize(),
+            )
 
-            is RootChild.Home -> Text("TODO: Home screen")
+            is RootChild.Main -> MainRootUi(
+                component = instance.component,
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }

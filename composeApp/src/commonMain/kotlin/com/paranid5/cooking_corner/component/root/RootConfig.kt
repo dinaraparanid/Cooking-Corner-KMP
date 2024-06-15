@@ -11,5 +11,5 @@ sealed interface RootConfig {
     data object Auth : RootConfig
 
     @Serializable
-    data object Home : RootConfig
+    data object Main : RootConfig
 }
