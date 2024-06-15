@@ -1,9 +1,9 @@
-package com.paranid5.cooking_corner.component.splash
+package com.paranid5.cooking_corner.feature.splash
 
 import com.arkivanov.decompose.ComponentContext
 import com.paranid5.cooking_corner.component.UiIntentHandler
 
-internal interface SplashScreenComponent : UiIntentHandler<SplashScreenUiIntent> {
+interface SplashScreenComponent : UiIntentHandler<SplashScreenUiIntent> {
 
     interface Factory {
         fun create(

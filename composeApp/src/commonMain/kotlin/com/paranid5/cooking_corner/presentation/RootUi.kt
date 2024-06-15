@@ -20,7 +20,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.component.root.RootChild
 import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.component.root.RootConfig
-import com.paranid5.cooking_corner.component.splash.SplashScreenUi
+import com.paranid5.cooking_corner.feature.splash.SplashScreenUi
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 @OptIn(ExperimentalCoilApi::class)

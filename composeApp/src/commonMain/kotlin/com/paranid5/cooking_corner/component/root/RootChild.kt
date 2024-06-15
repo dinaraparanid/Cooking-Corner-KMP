@@ -1,6 +1,6 @@
 package com.paranid5.cooking_corner.component.root
 
-import com.paranid5.cooking_corner.component.splash.SplashScreenComponent
+import com.paranid5.cooking_corner.feature.splash.SplashScreenComponent
 
 sealed interface RootChild {
     class SplashScreen internal constructor(

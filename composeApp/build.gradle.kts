@@ -64,6 +64,7 @@ kotlin {
             implementation(projects.core.ui)
             implementation(projects.core.utils)
             implementation(projects.data)
+            implementation(projects.feature.splash)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

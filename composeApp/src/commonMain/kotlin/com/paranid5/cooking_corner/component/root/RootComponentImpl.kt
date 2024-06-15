@@ -5,12 +5,10 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceCurrent
-import com.paranid5.cooking_corner.component.splash.SplashScreenComponent
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.domain.auth.AuthDataSource
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.paranid5.cooking_corner.feature.splash.SplashScreenComponent
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 internal class RootComponentImpl(
     componentContext: ComponentContext,
@@ -19,9 +17,6 @@ internal class RootComponentImpl(
 ) : RootComponent,
     ComponentContext by componentContext {
     private val navigation = StackNavigation<RootConfig>()
-
-    private val _stateFlow = MutableStateFlow(RootState())
-    override val stateFlow = _stateFlow.asStateFlow()
 
     override val stack: StateFlow<ChildStack<RootConfig, RootChild>> = childStack(
         source = navigation,
@@ -47,10 +42,6 @@ internal class RootComponentImpl(
 
             RootConfig.Home -> RootChild.Home
         }
-
-    override fun onUiIntent(intent: RootUiIntent) = when (intent) {
-        else -> Unit // TODO: UiIntents
-    }
 
     internal class Factory(
         private val authDataSource: AuthDataSource,
