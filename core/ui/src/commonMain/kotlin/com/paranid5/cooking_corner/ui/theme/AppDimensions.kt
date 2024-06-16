@@ -22,16 +22,17 @@ data class AppDimensions(
                     medium = 12.dp,
                     extraMedium = 16.dp,
                     big = 20.dp,
-                    extraBig = 48.dp,
+                    extraBig = 24.dp,
                     large = 32.dp,
                     extraLarge = 48.dp,
                     enormous = 64.dp,
                 ),
                 corners = Corners(
-                    minimum = 8.dp,
+                    minimum = 4.dp,
+                    extraSmall = 8.dp,
                     small = 16.dp,
-                    extraSmall = 20.dp,
-                    medium = 24.dp,
+                    medium = 20.dp,
+                    extraMedium = 24.dp,
                 ),
                 separators = Separators(minimum = 1.dp),
             )
@@ -55,9 +56,10 @@ data class AppDimensions(
     @Immutable
     data class Corners(
         val minimum: Dp,
-        val small: Dp,
         val extraSmall: Dp,
+        val small: Dp,
         val medium: Dp,
+        val extraMedium: Dp,
     )
 
     @Immutable

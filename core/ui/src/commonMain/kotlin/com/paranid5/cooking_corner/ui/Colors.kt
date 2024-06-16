@@ -2,15 +2,10 @@ package com.paranid5.cooking_corner.ui
 
 import androidx.compose.ui.graphics.Color
 
-internal val Purple80 = Color(0xFFD0BCFF)
-internal val PurpleGrey80 = Color(0xFFCCC2DC)
-internal val Pink80 = Color(0xFFEFB8C8)
-
-internal val Purple40 = Color(0xFF6650a4)
-internal val PurpleGrey40 = Color(0xFF625b71)
-internal val Pink40 = Color(0xFF7D5260)
+internal val MainPastel = Color(0xFFFFEEDD)
+internal val MainBlack = Color(0xFF2B2B2B)
+internal val SecondaryBlack = Color(0xFF1E1E1E)
+internal val OrangeSelect = Color(0xFFFE7F00)
 
 internal val TransparentUtilityDark = Color.White.copy(alpha = 0.25F)
 internal val TransparentUtilityLight = Color.Black.copy(alpha = 0.2F)
-
-internal val AppBarColor = Color(0xFF2A2A2A)

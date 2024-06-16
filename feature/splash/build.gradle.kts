@@ -50,6 +50,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.core.component)
+            api(projects.core.ui)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

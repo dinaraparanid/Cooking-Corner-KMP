@@ -2,6 +2,8 @@ package com.paranid5.cooking_corner
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
@@ -18,6 +20,9 @@ import org.jetbrains.compose.resources.stringResource
 import org.kodein.di.instance
 import javax.swing.SwingUtilities
 
+private val DEFAULT_WIDTH = 1280.dp
+private val DEFAULT_HEIGHT = 720.dp
+
 fun main() {
     SwingUtilities.invokeAndWait { setMainThreadId(Thread.currentThread().id) }
 
@@ -30,7 +35,10 @@ fun main() {
     }
 
     application {
-        val windowState = rememberWindowState()
+        val windowState = rememberWindowState(
+            size = DpSize(width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT)
+        )
+
         LifecycleController(lifecycle, windowState)
 
         Window(

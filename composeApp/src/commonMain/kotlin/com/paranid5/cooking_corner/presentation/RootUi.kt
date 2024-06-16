@@ -15,13 +15,16 @@ import coil3.ImageLoader
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.scale
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.component.root.RootChild
 import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.component.root.RootConfig
-import com.paranid5.cooking_corner.featrue.auth.AuthUi
+import com.paranid5.cooking_corner.featrue.auth.presentation.AuthUi
 import com.paranid5.cooking_corner.feature.main.root.MainRootUi
-import com.paranid5.cooking_corner.feature.splash.SplashScreenUi
+import com.paranid5.cooking_corner.feature.splash.presentation.SplashScreenUi
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 @OptIn(ExperimentalCoilApi::class)
@@ -43,7 +46,7 @@ fun RootUi(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(screenPadding)
-                .background(brush = AppTheme.colors.backgroundGradient),
+                .background(color = AppTheme.colors.background),
         ) {
             RootContent(
                 childStackState = rootComponent.stack.collectAsState(),
@@ -63,10 +66,10 @@ private fun RootContent(
     Children(
         modifier = modifier,
         stack = childStack,
+        animation = stackAnimation(fade())
     ) { child ->
         when (val instance = child.instance) {
             is RootChild.SplashScreen -> SplashScreenUi(
-                component = instance.component,
                 modifier = Modifier.fillMaxSize(),
             )
 

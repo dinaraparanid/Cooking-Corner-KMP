@@ -5,9 +5,9 @@ import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.di.initKodein
 import com.paranid5.cooking_corner.domain.auth.AuthApi
 import com.paranid5.cooking_corner.domain.auth.AuthDataSource
-import com.paranid5.cooking_corner.featrue.auth.AuthComponent
+import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.MainRootComponent
-import com.paranid5.cooking_corner.feature.splash.SplashScreenComponent
+import com.paranid5.cooking_corner.feature.splash.component.SplashScreenComponent
 import io.ktor.client.HttpClient
 import org.kodein.di.DIAware
 import org.kodein.di.instanceOrNull

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -50,12 +51,17 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.core.component)
+            api(projects.core.ui)
+            implementation(projects.domain.auth)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.material3)
             implementation(compose.ui)
+            implementation(compose.components.resources)
+
+            implementation(libs.decompose.extensions.compose)
 
             implementation(libs.bundles.component)
         }

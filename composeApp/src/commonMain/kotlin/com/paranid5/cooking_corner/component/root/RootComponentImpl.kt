@@ -8,9 +8,9 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.domain.auth.AuthDataSource
-import com.paranid5.cooking_corner.featrue.auth.AuthComponent
+import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.MainRootComponent
-import com.paranid5.cooking_corner.feature.splash.SplashScreenComponent
+import com.paranid5.cooking_corner.feature.splash.component.SplashScreenComponent
 import kotlinx.coroutines.flow.StateFlow
 
 internal class RootComponentImpl(
@@ -34,29 +34,46 @@ internal class RootComponentImpl(
     private fun createChild(config: RootConfig, componentContext: ComponentContext) =
         when (config) {
             RootConfig.SplashScreen -> RootChild.SplashScreen(
-                component = splashScreenComponentFactory.create(
-                    componentContext = componentContext,
-                    onSplashScreenClosed = {
-                        // TODO: handle auth
-                        navigation.replaceCurrent(RootConfig.Auth)
-                    }
-                )
+                buildSplashScreenComponent(componentContext)
             )
 
             RootConfig.Auth -> RootChild.Auth(
-                component = authComponentFactory.create(
-                    componentContext = componentContext,
-                    onBack = navigation::pop,
-                )
+                buildAuthComponent(componentContext)
             )
 
             RootConfig.Main -> RootChild.Main(
-                component = mainRootComponentFactory.create(
-                    componentContext = componentContext,
-                    onBack = navigation::pop,
-                )
+                buildMainComponent(componentContext)
             )
         }
+
+    private fun buildSplashScreenComponent(componentContext: ComponentContext) =
+        splashScreenComponentFactory.create(
+            componentContext = componentContext,
+            onSplashScreenClosed = {
+                // TODO: handle auth
+                navigation.replaceCurrent(RootConfig.Auth)
+            }
+        )
+
+    private fun buildAuthComponent(componentContext: ComponentContext) =
+        authComponentFactory.create(
+            componentContext = componentContext,
+            onBack = { result ->
+                when (result) {
+                    is AuthComponent.BackResult.Dismiss ->
+                        navigation.pop()
+
+                    is AuthComponent.BackResult.LoggedIn ->
+                        navigation.replaceCurrent(RootConfig.Main)
+                }
+            },
+        )
+
+    private fun buildMainComponent(componentContext: ComponentContext) =
+        mainRootComponentFactory.create(
+            componentContext = componentContext,
+            onBack = navigation::pop,
+        )
 
     internal class Factory(
         private val authDataSource: AuthDataSource,

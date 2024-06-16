@@ -13,7 +13,7 @@ fun AppTheme(
     typography: AppTypography = AppTypography.default,
     content: @Composable () -> Unit,
 ) {
-    val colors by remember() {
+    val colors by remember {
         derivedStateOf { AppColors.create() }
     }
 

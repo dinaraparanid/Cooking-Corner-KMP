@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.feature.splash
+package com.paranid5.cooking_corner.feature.splash.component
 
 import com.arkivanov.decompose.ComponentContext
 import com.paranid5.cooking_corner.component.UiIntentHandler

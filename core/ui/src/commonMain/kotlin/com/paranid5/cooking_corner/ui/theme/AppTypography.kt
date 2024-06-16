@@ -1,6 +1,7 @@
 package com.paranid5.cooking_corner.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
@@ -9,6 +10,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.sp
+import com.paranid5.cooking_corner.ui.InterFont
 
 @Immutable
 data class AppTypography(
@@ -26,7 +28,7 @@ data class AppTypography(
     )
 
     companion object {
-        val default
+        internal val default
             get() = AppTypography(
                 h = AppHTypo(
                     h1 = TextStyle(
@@ -82,6 +84,10 @@ data class AppTypography(
                 ),
             )
     }
+
+    val primaryFontFamily
+        @Composable
+        get() = InterFont
 }
 
 internal val LocalTypography = staticCompositionLocalOf { AppTypography.default }
