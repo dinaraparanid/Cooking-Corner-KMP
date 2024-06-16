@@ -9,6 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
+internal const val PASSWORD_MASK = '*'
+
 @Composable
 internal fun AuthEditText(
     value: String,

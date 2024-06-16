@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +25,7 @@ import com.paranid5.cooking_corner.core.resources.sign_in
 import com.paranid5.cooking_corner.core.resources.sign_up
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
+import com.paranid5.cooking_corner.featrue.auth.presentation.PASSWORD_MASK
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
@@ -36,7 +37,6 @@ import org.jetbrains.compose.resources.stringResource
 private val CONTENT_TOP_PADDING = 92.dp
 private val COOKING_ICON_WIDTH = 105.dp
 private val COOKING_ICON_HEIGHT = 134.dp
-private const val PASSWORD_MASK = '*'
 
 @Composable
 internal fun SignInUi(
@@ -122,9 +122,10 @@ private fun SignUpButton(
 ) = Button(
     modifier = modifier,
     onClick = { onUiIntent(UiIntent.ShowSignUp) },
+    elevation = null,
     colors = ButtonDefaults.buttonColors(
-        containerColor = Color.Transparent,
-        disabledContentColor = Color.Transparent,
+        backgroundColor = Color.Transparent,
+        disabledBackgroundColor = Color.Transparent,
     ),
 ) {
     Text(

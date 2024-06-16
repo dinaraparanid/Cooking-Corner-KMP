@@ -1,15 +1,17 @@
 package com.paranid5.cooking_corner.featrue.auth.presentation
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.paranid5.cooking_corner.featrue.auth.component.AuthChild
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.presentation.SignInUi
+import com.paranid5.cooking_corner.featrue.auth.sign_up.presentation.SignUpUi
 
 @Composable
 fun AuthUi(
@@ -21,6 +23,7 @@ fun AuthUi(
     Children(
         stack = childStack,
         modifier = modifier,
+        animation = stackAnimation(fade()),
     ) { child ->
         when (val instance = child.instance) {
             is AuthChild.SignIn -> SignInUi(
@@ -28,7 +31,10 @@ fun AuthUi(
                 modifier = Modifier.fillMaxSize(),
             )
 
-            is AuthChild.SignUp -> Text("TODO: Sign Up")
+            is AuthChild.SignUp -> SignUpUi(
+                component = instance.component,
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }

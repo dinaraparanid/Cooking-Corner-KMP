@@ -61,6 +61,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
+            implementation(libs.constraintlayout)
+
             implementation(libs.decompose.extensions.compose)
 
             implementation(libs.bundles.component)

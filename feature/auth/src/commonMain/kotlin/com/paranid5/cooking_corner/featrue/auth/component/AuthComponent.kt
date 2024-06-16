@@ -10,7 +10,7 @@ interface AuthComponent : UiIntentHandler<AuthUiIntent> {
 
     sealed interface BackResult {
         data object Dismiss : BackResult
-        data object LoggedIn : BackResult
+        data object Authorized : BackResult
     }
 
     interface Factory {

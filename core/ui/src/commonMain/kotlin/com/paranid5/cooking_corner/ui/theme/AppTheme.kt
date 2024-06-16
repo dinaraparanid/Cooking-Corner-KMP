@@ -1,5 +1,6 @@
 package com.paranid5.cooking_corner.ui.theme
 
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -21,6 +22,7 @@ fun AppTheme(
         LocalColors provides colors,
         LocalDimensions provides dimensions,
         LocalTypography provides typography,
+        LocalRippleTheme provides AppRippleTheme,
     ) {
         MaterialTheme(
             colorScheme = colors.colorScheme,

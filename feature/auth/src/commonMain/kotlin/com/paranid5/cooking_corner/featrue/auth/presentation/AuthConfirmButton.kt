@@ -3,8 +3,8 @@ package com.paranid5.cooking_corner.featrue.auth.presentation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -26,16 +26,9 @@ internal fun AuthConfirmButton(
         radius = AppTheme.dimensions.corners.minimum
     ),
     shape = RoundedCornerShape(AppTheme.dimensions.corners.minimum),
-    colors = ButtonDefaults.elevatedButtonColors(
-        containerColor = AppTheme.colors.button.primary,
-        disabledContainerColor = AppTheme.colors.button.primary,
-    ),
-    elevation = ButtonDefaults.elevatedButtonElevation(
-        defaultElevation = ELEVATION,
-        pressedElevation = ELEVATION,
-        focusedElevation = ELEVATION,
-        hoveredElevation = ELEVATION,
-        disabledElevation = ELEVATION,
+    colors = ButtonDefaults.buttonColors(
+        backgroundColor = AppTheme.colors.button.primary,
+        disabledBackgroundColor = AppTheme.colors.button.primary,
     ),
 ) {
     AuthButtonText(

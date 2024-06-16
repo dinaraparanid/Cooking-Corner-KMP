@@ -1,0 +1,35 @@
+package com.paranid5.cooking_corner.featrue.auth.sign_up.component
+
+import androidx.compose.runtime.Immutable
+import com.arkivanov.mvikotlin.core.store.Store
+import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Label
+import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
+import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
+import kotlinx.serialization.Serializable
+
+internal interface SignUpStore : Store<UiIntent, State, Label> {
+    sealed interface UiIntent {
+        data object Back : UiIntent
+        data class UpdateLoginText(val login: String) : UiIntent
+        data class UpdatePasswordText(val password: String) : UiIntent
+        data class UpdateConfirmPasswordText(val confirmPassword: String) : UiIntent
+        data object ConfirmCredentials : UiIntent
+    }
+
+    @Serializable
+    @Immutable
+    data class State(
+        val login: String,
+        val password: String,
+        val confirmPassword: String,
+    ) {
+        val isPasswordConfirmed = password == confirmPassword
+
+        constructor() : this(login = "", password = "", confirmPassword = "")
+    }
+
+    sealed interface Label {
+        data object Back : Label
+        data object ConfirmedCredentials : Label
+    }
+}

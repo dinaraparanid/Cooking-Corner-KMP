@@ -33,5 +33,4 @@ internal interface SignInStore : Store<UiIntent, State, Label> {
         data object ConfirmedCredentials : Label
         data object ShowSignUp : Label
     }
-
 }

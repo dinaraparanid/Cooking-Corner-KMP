@@ -63,7 +63,7 @@ internal class RootComponentImpl(
                     is AuthComponent.BackResult.Dismiss ->
                         navigation.pop()
 
-                    is AuthComponent.BackResult.LoggedIn ->
+                    is AuthComponent.BackResult.Authorized ->
                         navigation.replaceCurrent(RootConfig.Main)
                 }
             },

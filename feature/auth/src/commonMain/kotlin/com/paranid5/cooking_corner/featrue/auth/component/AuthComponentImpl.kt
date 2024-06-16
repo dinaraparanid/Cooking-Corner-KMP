@@ -8,11 +8,13 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent.BackResult
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInComponent
+import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
 import kotlinx.coroutines.flow.StateFlow
 
 internal class AuthComponentImpl(
     componentContext: ComponentContext,
     private val signInComponentFactory: SignInComponent.Factory,
+    private val signUpComponentFactory: SignUpComponent.Factory,
     private val onBack: (BackResult) -> Unit,
 ) : AuthComponent,
     ComponentContext by componentContext {
@@ -34,7 +36,7 @@ internal class AuthComponentImpl(
     private fun createChild(config: AuthConfig, componentContext: ComponentContext) =
         when (config) {
             is AuthConfig.SignIn -> AuthChild.SignIn(buildSignInComponent(componentContext))
-            is AuthConfig.SignUp -> AuthChild.SignUp()
+            is AuthConfig.SignUp -> AuthChild.SignUp(buildSignUpComponent(componentContext))
         }
 
     private fun buildSignInComponent(componentContext: ComponentContext) =
@@ -44,13 +46,25 @@ internal class AuthComponentImpl(
                 when (result) {
                     is SignInComponent.BackResult.Dismiss -> onBack(BackResult.Dismiss)
                     is SignInComponent.BackResult.ShowSignUp -> onUiIntent(AuthUiIntent.ShowSignUp)
-                    is SignInComponent.BackResult.SignedIn -> onBack(BackResult.LoggedIn)
+                    is SignInComponent.BackResult.SignedIn -> onBack(BackResult.Authorized)
+                }
+            }
+        )
+
+    private fun buildSignUpComponent(componentContext: ComponentContext) =
+        signUpComponentFactory.create(
+            componentContext = componentContext,
+            onBack = { result ->
+                when (result) {
+                    is SignUpComponent.BackResult.Dismiss -> onUiIntent(AuthUiIntent.ShowSignIn)
+                    is SignUpComponent.BackResult.SignedUp -> onBack(BackResult.Authorized)
                 }
             }
         )
 
     class Factory(
         private val signInComponentFactory: SignInComponent.Factory,
+        private val signUpComponentFactory: SignUpComponent.Factory,
     ) : AuthComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
@@ -58,6 +72,7 @@ internal class AuthComponentImpl(
         ): AuthComponent = AuthComponentImpl(
             componentContext = componentContext,
             signInComponentFactory = signInComponentFactory,
+            signUpComponentFactory = signUpComponentFactory,
             onBack = onBack,
         )
     }
