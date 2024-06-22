@@ -13,6 +13,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentChild
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentConfig
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentUiIntent
+import com.paranid5.cooking_corner.feature.main.home.presentation.HomeUi
 
 @Composable
 internal fun ContentUi(
@@ -27,8 +28,13 @@ internal fun ContentUi(
         modifier = modifier,
     ) {
         when (val child = it.instance) {
-            is MainContentChild.Home -> Text("TODO: Home", Modifier.fillMaxSize())
+            is MainContentChild.Home -> HomeUi(
+                component = child.component,
+                modifier = Modifier.fillMaxSize(),
+            )
+
             is MainContentChild.Profile -> Text("TODO: Profile", Modifier.fillMaxSize())
+
             is MainContentChild.Search -> Text("TODO: Search", Modifier.fillMaxSize())
         }
     }

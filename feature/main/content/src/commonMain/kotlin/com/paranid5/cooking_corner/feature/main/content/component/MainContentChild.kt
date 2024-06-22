@@ -1,6 +1,7 @@
 package com.paranid5.cooking_corner.feature.main.content.component
 
 import androidx.compose.runtime.Immutable
+import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 
 @Immutable
 sealed interface MainContentChild {
@@ -8,7 +9,9 @@ sealed interface MainContentChild {
     data object Search : MainContentChild
 
     @Immutable
-    data object Home : MainContentChild
+    class Home internal constructor(
+        internal val component: HomeComponent
+    ) : MainContentChild
 
     @Immutable
     data object Profile : MainContentChild
