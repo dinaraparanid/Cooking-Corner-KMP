@@ -34,7 +34,6 @@ import com.paranid5.cooking_corner.ui.common.CookingIcon
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
-private val CONTENT_TOP_PADDING = 92.dp
 private val COOKING_ICON_WIDTH = 105.dp
 private val COOKING_ICON_HEIGHT = 134.dp
 
@@ -52,14 +51,14 @@ internal fun SignInUi(
             onUiIntent = onUiIntent,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = CONTENT_TOP_PADDING),
+                .padding(top = AppTheme.dimensions.padding.enormous),
         )
 
         SignUpButton(
             onUiIntent = onUiIntent,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = AppTheme.dimensions.padding.large),
+                .padding(bottom = AppTheme.dimensions.padding.extraMedium),
         )
     }
 }

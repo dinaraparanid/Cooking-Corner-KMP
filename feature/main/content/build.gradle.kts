@@ -12,7 +12,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "featureMainRoot"
+        moduleName = "featureMainContent"
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -43,7 +43,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "root"
+            baseName = "content"
             isStatic = true
         }
     }
@@ -52,13 +52,13 @@ kotlin {
         commonMain.dependencies {
             api(projects.core.component)
             implementation(projects.feature.main.splash)
-            implementation(projects.feature.main.content)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.material3)
             implementation(compose.ui)
+            implementation(compose.components.resources)
 
             implementation(libs.decompose.extensions.compose)
 
@@ -68,7 +68,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.paranid5.cooking_corner.feature.main.root"
+    namespace = "com.paranid5.cooking_corner.feature.main.content"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

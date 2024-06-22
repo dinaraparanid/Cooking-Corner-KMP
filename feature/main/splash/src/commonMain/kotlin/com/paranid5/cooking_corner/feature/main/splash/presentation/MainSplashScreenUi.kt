@@ -32,6 +32,7 @@ private val IMAGE_SIZE = 253.dp
 private val IMAGE_START_PADDING = 94.dp
 private val IMAGE_END_PADDING = 43.dp
 private val IMAGE_BUTTON_PADDING = 81.dp
+private val BUTTON_BOTTOM_PADDING = 128.dp
 
 @Composable
 fun MainSplashScreenUi(
@@ -50,7 +51,7 @@ fun MainSplashScreenUi(
 
         MainSplashScreenTitle(
             Modifier.constrainAs(title) {
-                top.linkTo(parent.top, margin = appPadding.enormous)
+                top.linkTo(parent.top, margin = appPadding.large)
                 start.linkTo(parent.start, margin = appPadding.extraLarge)
                 end.linkTo(parent.end, margin = appPadding.extraLarge)
             }
@@ -66,7 +67,7 @@ fun MainSplashScreenUi(
 
         MainSplashScreenImage(
             Modifier.size(IMAGE_SIZE).constrainAs(image) {
-                top.linkTo(text.bottom, margin = appPadding.extraLarge)
+                top.linkTo(text.bottom, margin = appPadding.extraBig)
                 start.linkTo(parent.start, margin = IMAGE_START_PADDING)
                 end.linkTo(parent.end, margin = IMAGE_END_PADDING)
             }
@@ -76,6 +77,7 @@ fun MainSplashScreenUi(
             onClick = { component.onUiIntent(MainSplashScreenUiIntent.CloseSplashScreen) },
             modifier = Modifier.constrainAs(beginButton) {
                 top.linkTo(image.bottom, margin = IMAGE_BUTTON_PADDING)
+                bottom.linkTo(parent.bottom, margin = BUTTON_BOTTOM_PADDING)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
                 end.linkTo(parent.end, margin = appPadding.extraMedium)
                 width = Dimension.fillToConstraints

@@ -8,5 +8,5 @@ sealed interface MainRootConfig {
     data object SplashScreen : MainRootConfig
 
     @Serializable
-    data object Main : MainRootConfig
+    data object Content : MainRootConfig
 }

@@ -9,4 +9,7 @@
     <string name="main_splash_title">Keep your recipes wherever you go</string>
     <string name="main_splash_text">Find new cooking recipes, share yours and become a better cook!</string>
     <string name="main_splash_begin">Begin Now!</string>
+    <string name="nav_bar_search">Search</string>
+    <string name="nav_bar_home">Home</string>
+    <string name="nav_bar_profile">Profile</string>
 </resources>

@@ -25,7 +25,7 @@ data class AppColors(
             tertiary = MainBlack,
             background = MainPastel,
             onBackground = MainBlack,
-            onSurface = TransparentUtilityDark
+            onSurface = TransparentUtilityDark,
         )
 
         internal fun create() = AppColors(
@@ -35,6 +35,8 @@ data class AppColors(
             button = AppButtonColors.default,
         )
     }
+
+    fun getTabColor(isCurrent: Boolean) = if (isCurrent) OrangeSelect else MainBlack
 }
 
 @Immutable
