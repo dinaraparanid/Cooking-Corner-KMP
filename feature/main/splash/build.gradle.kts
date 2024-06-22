@@ -6,13 +6,12 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "featureMainRoot"
+        moduleName = "featureMainSplash"
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -43,7 +42,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "root"
+            baseName = "splash"
             isStatic = true
         }
     }
@@ -51,15 +50,16 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.core.component)
-            implementation(projects.feature.main.splash)
+            api(projects.core.ui)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.material3)
             implementation(compose.ui)
+            implementation(compose.components.resources)
 
-            implementation(libs.decompose.extensions.compose)
+            implementation(libs.constraintlayout)
 
             implementation(libs.bundles.component)
         }
@@ -67,7 +67,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.paranid5.cooking_corner.feature.main.root"
+    namespace = "com.paranid5.cooking_corner.feature.main.splash"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

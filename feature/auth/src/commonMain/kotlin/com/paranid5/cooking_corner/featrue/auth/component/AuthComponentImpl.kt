@@ -16,8 +16,7 @@ internal class AuthComponentImpl(
     private val signInComponentFactory: SignInComponent.Factory,
     private val signUpComponentFactory: SignUpComponent.Factory,
     private val onBack: (BackResult) -> Unit,
-) : AuthComponent,
-    ComponentContext by componentContext {
+) : AuthComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<AuthConfig>()
 
     override val stack: StateFlow<ChildStack<AuthConfig, AuthChild>> = childStack(
@@ -46,7 +45,7 @@ internal class AuthComponentImpl(
                 when (result) {
                     is SignInComponent.BackResult.Dismiss -> onBack(BackResult.Dismiss)
                     is SignInComponent.BackResult.ShowSignUp -> onUiIntent(AuthUiIntent.ShowSignUp)
-                    is SignInComponent.BackResult.SignedIn -> onBack(BackResult.Authorized)
+                    is SignInComponent.BackResult.SignedIn -> onBack(BackResult.SignedIn)
                 }
             }
         )
@@ -57,7 +56,7 @@ internal class AuthComponentImpl(
             onBack = { result ->
                 when (result) {
                     is SignUpComponent.BackResult.Dismiss -> onUiIntent(AuthUiIntent.ShowSignIn)
-                    is SignUpComponent.BackResult.SignedUp -> onBack(BackResult.Authorized)
+                    is SignUpComponent.BackResult.SignedUp -> onBack(BackResult.SignedUp)
                 }
             }
         )

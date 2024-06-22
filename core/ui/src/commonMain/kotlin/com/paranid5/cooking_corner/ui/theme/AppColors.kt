@@ -57,10 +57,12 @@ data class AppTextColors(
 @Immutable
 data class AppButtonColors(
     val primary: Color,
+    val secondary: Color,
 ) {
     companion object {
         internal val default = AppButtonColors(
             primary = MainBlack,
+            secondary = MainPastel,
         )
     }
 }

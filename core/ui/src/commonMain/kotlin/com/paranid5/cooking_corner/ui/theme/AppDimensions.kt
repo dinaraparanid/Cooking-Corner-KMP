@@ -10,6 +10,8 @@ data class AppDimensions(
     val padding: Padding,
     val corners: Corners,
     val separators: Separators,
+    val elevation: Elevation,
+    val borders: Borders,
 ) {
     companion object {
         val default
@@ -35,6 +37,8 @@ data class AppDimensions(
                     extraMedium = 24.dp,
                 ),
                 separators = Separators(minimum = 1.dp),
+                elevation = Elevation(extraBig = 24.dp),
+                borders = Borders(extraSmall = 4.dp),
             )
     }
 
@@ -64,6 +68,12 @@ data class AppDimensions(
 
     @Immutable
     data class Separators(val minimum: Dp)
+
+    @Immutable
+    data class Elevation(val extraBig: Dp)
+
+    @Immutable
+    data class Borders(val extraSmall: Dp)
 }
 
 internal val LocalDimensions = staticCompositionLocalOf { AppDimensions.default }

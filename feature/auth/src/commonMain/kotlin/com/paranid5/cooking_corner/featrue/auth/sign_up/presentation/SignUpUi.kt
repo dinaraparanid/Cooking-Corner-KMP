@@ -45,7 +45,7 @@ internal fun SignUpUi(
             text = stringResource(Res.string.sign_up),
             color = AppTheme.colors.text.primary,
             style = AppTheme.typography.h.h1,
-            fontFamily = AppTheme.typography.primaryFontFamily,
+            fontFamily = AppTheme.typography.InterFontFamily,
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top, margin = appPadding.enormous)
                 centerHorizontallyTo(parent)

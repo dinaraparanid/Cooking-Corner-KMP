@@ -132,6 +132,6 @@ private fun SignUpButton(
         text = stringResource(Res.string.sign_up),
         color = AppTheme.colors.text.tertiriary,
         style = AppTheme.typography.h.h3,
-        fontFamily = AppTheme.typography.primaryFontFamily,
+        fontFamily = AppTheme.typography.InterFontFamily,
     )
 }

@@ -9,7 +9,8 @@ import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.domain.auth.AuthDataSource
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
-import com.paranid5.cooking_corner.feature.main.root.MainRootComponent
+import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
+import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent.AuthorizeType
 import com.paranid5.cooking_corner.feature.splash.component.SplashScreenComponent
 import kotlinx.coroutines.flow.StateFlow
 
@@ -33,16 +34,19 @@ internal class RootComponentImpl(
 
     private fun createChild(config: RootConfig, componentContext: ComponentContext) =
         when (config) {
-            RootConfig.SplashScreen -> RootChild.SplashScreen(
+            is RootConfig.SplashScreen -> RootChild.SplashScreen(
                 buildSplashScreenComponent(componentContext)
             )
 
-            RootConfig.Auth -> RootChild.Auth(
+            is RootConfig.Auth -> RootChild.Auth(
                 buildAuthComponent(componentContext)
             )
 
-            RootConfig.Main -> RootChild.Main(
-                buildMainComponent(componentContext)
+            is RootConfig.Main -> RootChild.Main(
+                buildMainComponent(
+                    config = config,
+                    componentContext = componentContext,
+                )
             )
         }
 
@@ -63,17 +67,23 @@ internal class RootComponentImpl(
                     is AuthComponent.BackResult.Dismiss ->
                         navigation.pop()
 
-                    is AuthComponent.BackResult.Authorized ->
-                        navigation.replaceCurrent(RootConfig.Main)
+                    is AuthComponent.BackResult.SignedIn ->
+                        navigation.replaceCurrent(RootConfig.Main(AuthorizeType.SIGNED_IN))
+
+                    is AuthComponent.BackResult.SignedUp ->
+                        navigation.replaceCurrent(RootConfig.Main(AuthorizeType.SIGNED_UP))
                 }
             },
         )
 
-    private fun buildMainComponent(componentContext: ComponentContext) =
-        mainRootComponentFactory.create(
-            componentContext = componentContext,
-            onBack = navigation::pop,
-        )
+    private fun buildMainComponent(
+        config: RootConfig.Main,
+        componentContext: ComponentContext,
+    ) = mainRootComponentFactory.create(
+        componentContext = componentContext,
+        authType = config.authType,
+        onBack = navigation::pop,
+    )
 
     internal class Factory(
         private val authDataSource: AuthDataSource,

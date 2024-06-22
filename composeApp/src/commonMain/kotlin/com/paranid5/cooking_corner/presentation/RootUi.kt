@@ -16,14 +16,13 @@ import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.stack.animation.scale
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.component.root.RootChild
 import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.component.root.RootConfig
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthUi
-import com.paranid5.cooking_corner.feature.main.root.MainRootUi
+import com.paranid5.cooking_corner.feature.main.root.presentation.MainRootUi
 import com.paranid5.cooking_corner.feature.splash.presentation.SplashScreenUi
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 

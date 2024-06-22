@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.paranid5.cooking_corner.feature.splash.component.SplashScreenComponent
 import com.paranid5.cooking_corner.ui.common.CookingCornerLabel
 import com.paranid5.cooking_corner.ui.common.CookingIcon
 import com.paranid5.cooking_corner.ui.theme.AppTheme

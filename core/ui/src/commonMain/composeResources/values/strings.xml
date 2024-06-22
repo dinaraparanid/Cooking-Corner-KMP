@@ -6,4 +6,7 @@
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="main_splash_title">Keep your recipes wherever you go</string>
+    <string name="main_splash_text">Find new cooking recipes, share yours and become a better cook!</string>
+    <string name="main_splash_begin">Begin Now!</string>
 </resources>

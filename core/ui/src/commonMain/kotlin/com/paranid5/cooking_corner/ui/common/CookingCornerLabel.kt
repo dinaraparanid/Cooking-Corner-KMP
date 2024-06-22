@@ -23,7 +23,7 @@ fun CookingCornerLabel(modifier: Modifier = Modifier) =
             )
         ),
         color = AppTheme.colors.text.primary,
-        fontFamily = AppTheme.typography.primaryFontFamily,
+        fontFamily = AppTheme.typography.InterFontFamily,
         fontWeight = FontWeight.Bold,
         modifier = modifier,
     )
