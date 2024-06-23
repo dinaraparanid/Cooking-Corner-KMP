@@ -1,16 +1,16 @@
-package com.paranid5.cooking_corner.feature.main.home.component
+package com.paranid5.cooking_corner.feature.main.profile.component
 
 import com.arkivanov.decompose.ComponentContext
 
-internal class HomeComponentImpl(
+internal class ProfileComponentImpl(
     componentContext: ComponentContext,
     private val onBack: () -> Unit,
-) : HomeComponent, ComponentContext by componentContext {
-    class Factory : HomeComponent.Factory {
+) : ProfileComponent, ComponentContext by componentContext {
+    class Factory : ProfileComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
             onBack: () -> Unit,
-        ): HomeComponent = HomeComponentImpl(
+        ): ProfileComponent = ProfileComponentImpl(
             componentContext = componentContext,
             onBack = onBack,
         )

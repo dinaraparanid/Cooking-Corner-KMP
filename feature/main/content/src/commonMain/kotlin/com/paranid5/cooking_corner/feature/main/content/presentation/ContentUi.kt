@@ -1,7 +1,6 @@
 package com.paranid5.cooking_corner.feature.main.content.presentation
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -12,8 +11,9 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentChild
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentConfig
-import com.paranid5.cooking_corner.feature.main.content.component.MainContentUiIntent
 import com.paranid5.cooking_corner.feature.main.home.presentation.HomeUi
+import com.paranid5.cooking_corner.feature.main.profile.presentation.ProfileUi
+import com.paranid5.cooking_corner.feature.main.search.presentation.SearchUi
 
 @Composable
 internal fun ContentUi(
@@ -33,9 +33,15 @@ internal fun ContentUi(
                 modifier = Modifier.fillMaxSize(),
             )
 
-            is MainContentChild.Profile -> Text("TODO: Profile", Modifier.fillMaxSize())
+            is MainContentChild.Profile -> ProfileUi(
+                component = child.component,
+                modifier = Modifier.fillMaxSize(),
+            )
 
-            is MainContentChild.Search -> Text("TODO: Search", Modifier.fillMaxSize())
+            is MainContentChild.Search -> SearchUi(
+                component = child.component,
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }

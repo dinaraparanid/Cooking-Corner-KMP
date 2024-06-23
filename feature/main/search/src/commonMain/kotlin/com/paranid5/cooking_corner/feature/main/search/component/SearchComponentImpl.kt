@@ -1,16 +1,16 @@
-package com.paranid5.cooking_corner.feature.main.home.component
+package com.paranid5.cooking_corner.feature.main.search.component
 
 import com.arkivanov.decompose.ComponentContext
 
-internal class HomeComponentImpl(
+internal class SearchComponentImpl(
     componentContext: ComponentContext,
     private val onBack: () -> Unit,
-) : HomeComponent, ComponentContext by componentContext {
-    class Factory : HomeComponent.Factory {
+) : SearchComponent, ComponentContext by componentContext {
+    class Factory : SearchComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
             onBack: () -> Unit,
-        ): HomeComponent = HomeComponentImpl(
+        ): SearchComponent = SearchComponentImpl(
             componentContext = componentContext,
             onBack = onBack,
         )

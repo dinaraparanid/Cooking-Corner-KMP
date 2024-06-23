@@ -32,12 +32,14 @@ fun MainContentUi(
     val childStack = component.stack.collectAsState()
     val onUiIntent = component::onUiIntent
 
-    MainContentUiImpl(
-        currentScreen = currentScreen,
-        childStack = childStack,
-        onUiIntent = onUiIntent,
-        modifier = modifier,
-    )
+    currentScreen?.let { screen ->
+        MainContentUiImpl(
+            currentScreen = screen,
+            childStack = childStack,
+            onUiIntent = onUiIntent,
+            modifier = modifier,
+        )
+    }
 }
 
 @Composable
@@ -119,4 +121,4 @@ internal fun MainContentUiImplPC(
 
 @Composable
 private fun rememberCurrentScreen(component: MainContentComponent) =
-    component.stack.map { it.active.instance }.collectAsState(MainContentChild.Search)
+    component.stack.map { it.active.instance }.collectAsState(null)
