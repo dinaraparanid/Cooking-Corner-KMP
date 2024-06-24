@@ -25,6 +25,7 @@ kotlin = "2.0.0"
 kolor = "1.6.1"
 ktor = "3.0.0-wasm2"
 coil = "3.0.0-alpha06"
+paging = "3.3.0-alpha02-0.4.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
@@ -61,6 +62,9 @@ kodein = { group = "org.kodein.di", name = "kodein-di", version.ref = "kodein" }
 kodein-android = { group = "org.kodein.di", name = "kodein-di-framework-android-x", version.ref = "kodein" }
 kodein-compose = { group = "org.kodein.di", name = "kodein-di-framework-compose", version.ref = "kodein" }
 
+paging-common = { group = "app.cash.paging", name = "paging-common", version.ref = "paging" }
+paging-compose = { group = "app.cash.paging", name = "paging-compose-common", version.ref = "paging" }
+
 kolor = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
 
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
@@ -75,7 +79,6 @@ mviKotlinMain = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", ve
 mviKotlinLogging = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-logging", version.ref = "mviKotlin" }
 mviKotlinCoroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mviKotlin" }
 essenty-lifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty" }
-
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

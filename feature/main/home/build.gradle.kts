@@ -59,6 +59,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
+            implementation(libs.paging.common)
+            implementation(libs.paging.compose)
+
             implementation(libs.decompose.extensions.compose)
 
             implementation(libs.bundles.component)
