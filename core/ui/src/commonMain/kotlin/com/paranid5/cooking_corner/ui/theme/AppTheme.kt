@@ -1,5 +1,6 @@
 package com.paranid5.cooking_corner.ui.theme
 
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -7,6 +8,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import com.paranid5.cooking_corner.ui.utils.AppTextSelectionColors
 
 @Composable
 fun AppTheme(
@@ -23,6 +25,7 @@ fun AppTheme(
         LocalDimensions provides dimensions,
         LocalTypography provides typography,
         LocalRippleTheme provides AppRippleTheme,
+        LocalTextSelectionColors provides AppTextSelectionColors,
     ) {
         MaterialTheme(
             colorScheme = colors.colorScheme,

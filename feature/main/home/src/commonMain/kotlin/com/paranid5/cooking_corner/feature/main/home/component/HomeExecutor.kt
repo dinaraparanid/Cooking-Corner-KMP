@@ -11,6 +11,10 @@ internal class HomeExecutor : CoroutineExecutor<UiIntent, Unit, State, Msg, Labe
         when (intent) {
             is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeUiState))
             is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(intent.text))
+            is UiIntent.SelectCategory -> dispatch(Msg.SelectCategory(intent.index))
+            is UiIntent.AddRecipe -> Unit // TODO: Add recipe
+            is UiIntent.DescendingFilterClick -> Unit // TODO: Descending filter
+            is UiIntent.ShowFavourites -> Unit // TODO: Show favourites
         }
     }
 }

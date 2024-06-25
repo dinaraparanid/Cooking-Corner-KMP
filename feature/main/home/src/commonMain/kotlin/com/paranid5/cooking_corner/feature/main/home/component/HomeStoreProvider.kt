@@ -9,6 +9,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiInten
 internal class HomeStoreProvider(private val storeFactory: StoreFactory) {
     sealed interface Msg {
         data class UpdateSearchText(val text: String) : Msg
+        data class SelectCategory(val index: Int) : Msg
     }
 
     fun provide(initialState: State): HomeStore = object :

@@ -5,6 +5,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import com.paranid5.cooking_corner.ui.DarkerPastel
 import com.paranid5.cooking_corner.ui.MainBlack
 import com.paranid5.cooking_corner.ui.MainPastel
 import com.paranid5.cooking_corner.ui.OrangeSelect
@@ -15,6 +16,7 @@ import com.paranid5.cooking_corner.ui.TransparentUtilityDark
 data class AppColors(
     val colorScheme: ColorScheme,
     val background: Color,
+    val backgroundAlternative: Color,
     val text: AppTextColors,
     val button: AppButtonColors,
 ) {
@@ -31,12 +33,15 @@ data class AppColors(
         internal fun create() = AppColors(
             colorScheme = ColorScheme,
             background = MainPastel,
+            backgroundAlternative = DarkerPastel,
             text = AppTextColors.default,
             button = AppButtonColors.default,
         )
     }
 
     fun getTabColor(isCurrent: Boolean) = if (isCurrent) OrangeSelect else MainBlack
+
+    val orange = OrangeSelect
 }
 
 @Immutable

@@ -8,16 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.ic_home
-import com.paranid5.cooking_corner.core.resources.ic_profile
-import com.paranid5.cooking_corner.core.resources.ic_search
+import com.paranid5.cooking_corner.core.resources.home_tab
 import com.paranid5.cooking_corner.core.resources.nav_bar_home
 import com.paranid5.cooking_corner.core.resources.nav_bar_profile
 import com.paranid5.cooking_corner.core.resources.nav_bar_search
+import com.paranid5.cooking_corner.core.resources.profile_tab
+import com.paranid5.cooking_corner.core.resources.search_tab
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentChild
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentUiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -51,7 +50,7 @@ internal fun NavBarMobile(
     ) {
         NavBarItem(
             title = stringResource(Res.string.nav_bar_search),
-            image = vectorResource(Res.drawable.ic_search),
+            image = vectorResource(Res.drawable.search_tab),
             isCurrent = currentScreen is MainContentChild.Search,
             modifier = Modifier.weight(1F),
             onClick = { onUiIntent(MainContentUiIntent.ShowSearch) },
@@ -59,7 +58,7 @@ internal fun NavBarMobile(
 
         NavBarItem(
             title = stringResource(Res.string.nav_bar_home),
-            image = vectorResource(Res.drawable.ic_home),
+            image = vectorResource(Res.drawable.home_tab),
             isCurrent = currentScreen is MainContentChild.Home,
             modifier = Modifier.weight(1F),
             onClick = { onUiIntent(MainContentUiIntent.ShowHome) },
@@ -67,7 +66,7 @@ internal fun NavBarMobile(
 
         NavBarItem(
             title = stringResource(Res.string.nav_bar_profile),
-            image = vectorResource(Res.drawable.ic_profile),
+            image = vectorResource(Res.drawable.profile_tab),
             isCurrent = currentScreen is MainContentChild.Profile,
             modifier = Modifier.weight(1F),
             onClick = { onUiIntent(MainContentUiIntent.ShowProfile) },
@@ -98,7 +97,7 @@ internal fun NavBarPC(
     ) {
         NavBarItem(
             title = stringResource(Res.string.nav_bar_search),
-            image = vectorResource(Res.drawable.ic_search),
+            image = vectorResource(Res.drawable.search_tab),
             isCurrent = currentScreen is MainContentChild.Search,
             modifier = Modifier.weight(1F),
             onClick = { onUiIntent(MainContentUiIntent.ShowSearch) },
@@ -106,7 +105,7 @@ internal fun NavBarPC(
 
         NavBarItem(
             title = stringResource(Res.string.nav_bar_home),
-            image = vectorResource(Res.drawable.ic_home),
+            image = vectorResource(Res.drawable.home_tab),
             isCurrent = currentScreen is MainContentChild.Home,
             modifier = Modifier.weight(1F),
             onClick = { onUiIntent(MainContentUiIntent.ShowHome) },
@@ -114,7 +113,7 @@ internal fun NavBarPC(
 
         NavBarItem(
             title = stringResource(Res.string.nav_bar_profile),
-            image = vectorResource(Res.drawable.ic_profile),
+            image = vectorResource(Res.drawable.profile_tab),
             isCurrent = currentScreen is MainContentChild.Profile,
             modifier = Modifier.weight(1F),
             onClick = { onUiIntent(MainContentUiIntent.ShowProfile) },

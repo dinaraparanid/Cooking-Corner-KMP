@@ -7,5 +7,6 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStoreProvider
 internal object HomeReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg): State = when (msg) {
         is Msg.UpdateSearchText -> copy(searchText = msg.text)
+        is Msg.SelectCategory -> copy(selectedCategoryIndex = msg.index)
     }
 }

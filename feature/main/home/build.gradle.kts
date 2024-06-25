@@ -50,6 +50,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.core.ui)
             api(projects.core.component)
 
             implementation(compose.runtime)
@@ -61,6 +62,8 @@ kotlin {
 
             implementation(libs.paging.common)
             implementation(libs.paging.compose)
+
+            implementation(libs.kotlinx.collections.immutable)
 
             implementation(libs.decompose.extensions.compose)
 

@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cooking Corner</string>
+
+    <!-- Auth -->
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
+
+    <!-- Main Splash Screen -->
     <string name="main_splash_title">Keep your recipes wherever you go</string>
     <string name="main_splash_text">Find new cooking recipes, share yours and become a better cook!</string>
     <string name="main_splash_begin">Begin Now!</string>
+
+    <!-- Main Nav Bar -->
     <string name="nav_bar_search">Search</string>
     <string name="nav_bar_home">Home</string>
     <string name="nav_bar_profile">Profile</string>
+
+    <!-- Home -->
+    <string name="home_recipe_placeholder">Filter your recipes</string>
+    <string name="home_category">Category</string>
 </resources>

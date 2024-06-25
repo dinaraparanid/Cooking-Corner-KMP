@@ -38,7 +38,10 @@ data class AppDimensions(
                 ),
                 separators = Separators(minimum = 1.dp),
                 elevation = Elevation(extraBig = 24.dp),
-                borders = Borders(extraSmall = 4.dp),
+                borders = Borders(
+                    minimum = 2.dp,
+                    extraSmall = 4.dp,
+                ),
             )
     }
 
@@ -73,7 +76,10 @@ data class AppDimensions(
     data class Elevation(val extraBig: Dp)
 
     @Immutable
-    data class Borders(val extraSmall: Dp)
+    data class Borders(
+        val minimum: Dp,
+        val extraSmall: Dp,
+    )
 }
 
 internal val LocalDimensions = staticCompositionLocalOf { AppDimensions.default }
