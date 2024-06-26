@@ -18,7 +18,10 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiInten
 import com.paranid5.cooking_corner.feature.main.home.domain.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.pxToDp
 
-private val ITEM_HEIGHT = 280.dp
+private const val MIN_RECIPES_IN_ROW = 2
+private val RECIPE_MAX_WIDTH = 200.dp
+private val RECIPE_HEIGHT = 280.dp
+private val PADDING_BETWEEN_RECIPES = 8.dp
 
 @Composable
 internal fun RecipesGrid(
@@ -39,7 +42,7 @@ internal fun RecipesGrid(
                     onUiIntent = onUiIntent,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(ITEM_HEIGHT)
+                        .height(RECIPE_HEIGHT)
                         .clickable { onUiIntent(UiIntent.ShowRecipe(recipe)) },
                 )
             }
@@ -57,7 +60,3 @@ private fun getMinCellWidth(screenWidth: Int): Dp {
         )
     }
 }
-
-private const val MIN_RECIPES_IN_ROW = 2
-private val RECIPE_MAX_WIDTH = 185.dp
-private val PADDING_BETWEEN_RECIPES = 8.dp

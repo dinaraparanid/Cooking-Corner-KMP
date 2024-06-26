@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.home_add_to_favourites
+import com.paranid5.cooking_corner.core.resources.home_remove_from_favourites
 import com.paranid5.cooking_corner.core.resources.ic_like
 import com.paranid5.cooking_corner.core.resources.ic_liked
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -50,7 +51,10 @@ internal fun FavouritesButton(
             radius = AppTheme.dimensions.corners.small,
         )
     ) {
-        FavouritesButtonLabel(modifier = Modifier.align(Alignment.CenterVertically))
+        FavouritesButtonLabel(
+            isLiked = isLiked,
+            modifier = Modifier.align(Alignment.CenterVertically),
+        )
 
         Spacer(Modifier.width(AppTheme.dimensions.padding.extraSmall))
 
@@ -64,9 +68,28 @@ internal fun FavouritesButton(
 }
 
 @Composable
-private fun FavouritesButtonLabel(modifier: Modifier = Modifier) = Text(
+private fun FavouritesButtonLabel(
+    isLiked: Boolean,
+    modifier: Modifier = Modifier,
+) = when {
+    isLiked -> FavouritesButtonLabelImpl(
+        text = stringResource(Res.string.home_add_to_favourites),
+        modifier = modifier,
+    )
+
+    else -> FavouritesButtonLabelImpl(
+        text = stringResource(Res.string.home_remove_from_favourites),
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun FavouritesButtonLabelImpl(
+    text: String,
+    modifier: Modifier = Modifier,
+) = Text(
+    text = text,
     modifier = modifier,
-    text = stringResource(Res.string.home_add_to_favourites),
     color = AppTheme.colors.text.primary,
     fontWeight = FontWeight.Bold,
     fontFamily = AppTheme.typography.RalewayFontFamily,

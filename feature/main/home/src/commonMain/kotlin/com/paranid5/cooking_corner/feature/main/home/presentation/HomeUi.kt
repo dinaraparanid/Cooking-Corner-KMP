@@ -19,7 +19,7 @@ import com.paranid5.cooking_corner.ui.theme.AppTheme
 @Composable
 fun HomeUi(
     component: HomeComponent,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by component.stateFlow.collectAsState()
     val recipes = component.recepiesPagedFlow.collectAsLazyPagingItems()
