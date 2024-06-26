@@ -19,7 +19,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.domain.CategoryUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.AppSpinner
+import com.paranid5.cooking_corner.ui.common.AppSpinner
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

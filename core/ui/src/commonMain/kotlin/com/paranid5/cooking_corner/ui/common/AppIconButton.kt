@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.ui.utils
+package com.paranid5.cooking_corner.ui.common
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton

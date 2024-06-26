@@ -11,11 +11,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
+private val DEFAULT_ICON_SIZE = 24.dp
+
 @Composable
-fun BackButton(
+fun AppBackButton(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    iconSize: Dp = 24.dp,
+    iconSize: Dp = DEFAULT_ICON_SIZE,
 ) = IconButton(
     onClick = onBack,
     modifier = modifier,

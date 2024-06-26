@@ -21,7 +21,7 @@ import com.paranid5.cooking_corner.core.resources.ic_like
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.AppIconButton
+import com.paranid5.cooking_corner.ui.common.AppIconButton
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable

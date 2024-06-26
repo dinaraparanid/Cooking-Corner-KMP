@@ -18,7 +18,7 @@ import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
 import com.paranid5.cooking_corner.featrue.auth.presentation.PASSWORD_MASK
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
-import com.paranid5.cooking_corner.ui.common.BackButton
+import com.paranid5.cooking_corner.ui.common.AppBackButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -52,7 +52,7 @@ internal fun SignUpUi(
             }
         )
 
-        BackButton(
+        AppBackButton(
             onBack = { onUiIntent(UiIntent.Back) },
             modifier = Modifier.constrainAs(backButton) {
                 centerVerticallyTo(title)

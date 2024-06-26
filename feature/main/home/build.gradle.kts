@@ -60,6 +60,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
+            implementation(libs.coil.compose.core)
+
             implementation(libs.paging.common)
             implementation(libs.paging.compose)
 

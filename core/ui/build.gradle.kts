@@ -65,6 +65,12 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.collections.immutable)
 
+            api(libs.ktor.client.core)
+            api(libs.coil.compose.core)
+            api(libs.coil.compose)
+            api(libs.coil.mp)
+            api(libs.coil.ktor)
+
             implementation(libs.kolor)
 
             implementation(libs.kodein)
