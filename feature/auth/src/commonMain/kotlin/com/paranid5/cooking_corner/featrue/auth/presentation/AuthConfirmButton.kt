@@ -22,7 +22,7 @@ internal fun AuthConfirmButton(
         elevation = AppTheme.dimensions.elevation.extraBig,
         radius = AppTheme.dimensions.corners.minimum
     ),
-    shape = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall),
+    shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
     colors = ButtonDefaults.buttonColors(
         backgroundColor = AppTheme.colors.button.primary,
         disabledBackgroundColor = AppTheme.colors.button.primary,

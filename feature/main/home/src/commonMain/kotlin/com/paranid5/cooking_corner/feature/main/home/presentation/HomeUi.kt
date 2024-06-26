@@ -40,7 +40,7 @@ fun HomeUi(
         HomeTopBar(
             state = state,
             onUiIntent = onUiIntent,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.small))
@@ -50,7 +50,7 @@ fun HomeUi(
             onUiIntent = onUiIntent,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = AppTheme.dimensions.padding.extraSmall)
+                .padding(horizontal = AppTheme.dimensions.padding.extraSmall),
         )
     }
 }

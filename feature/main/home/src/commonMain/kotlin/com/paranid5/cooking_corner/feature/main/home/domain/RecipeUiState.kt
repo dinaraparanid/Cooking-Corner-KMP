@@ -13,6 +13,7 @@ data class RecipeUiState(
     val preparingTime: Int,
     val cookingTime: Int,
     val author: String,
+    val isLiked: Boolean,
     val coverUrlState: UiState<String> = UiState.Undefined,
 ) {
     @Transient

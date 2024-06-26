@@ -53,6 +53,7 @@ internal class HomeComponentImpl(
                         rating = 4.8F,
                         preparingTime = 5,
                         cookingTime = 10,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -60,6 +61,7 @@ internal class HomeComponentImpl(
                         rating = 4.5F,
                         preparingTime = 10,
                         cookingTime = 10,
+                        isLiked = false,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -67,6 +69,7 @@ internal class HomeComponentImpl(
                         rating = 4.1F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -74,6 +77,7 @@ internal class HomeComponentImpl(
                         rating = 4.9F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = false,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -81,6 +85,7 @@ internal class HomeComponentImpl(
                         rating = 4.8F,
                         preparingTime = 5,
                         cookingTime = 10,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -88,6 +93,7 @@ internal class HomeComponentImpl(
                         rating = 4.5F,
                         preparingTime = 10,
                         cookingTime = 10,
+                        isLiked = false,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -95,6 +101,7 @@ internal class HomeComponentImpl(
                         rating = 4.1F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -102,6 +109,7 @@ internal class HomeComponentImpl(
                         rating = 4.9F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = false,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -109,6 +117,7 @@ internal class HomeComponentImpl(
                         rating = 4.8F,
                         preparingTime = 5,
                         cookingTime = 10,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -116,6 +125,7 @@ internal class HomeComponentImpl(
                         rating = 4.5F,
                         preparingTime = 10,
                         cookingTime = 10,
+                        isLiked = false,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -123,6 +133,7 @@ internal class HomeComponentImpl(
                         rating = 4.1F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -130,6 +141,7 @@ internal class HomeComponentImpl(
                         rating = 4.9F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = false,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -137,6 +149,7 @@ internal class HomeComponentImpl(
                         rating = 4.8F,
                         preparingTime = 5,
                         cookingTime = 10,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -144,6 +157,7 @@ internal class HomeComponentImpl(
                         rating = 4.5F,
                         preparingTime = 10,
                         cookingTime = 10,
+                        isLiked = false,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -151,6 +165,7 @@ internal class HomeComponentImpl(
                         rating = 4.1F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = true,
                         author = "OlgaLove",
                     ),
                     RecipeUiState(
@@ -158,6 +173,7 @@ internal class HomeComponentImpl(
                         rating = 4.9F,
                         preparingTime = 20,
                         cookingTime = 20,
+                        isLiked = false,
                         author = "OlgaLove",
                     )
                 )

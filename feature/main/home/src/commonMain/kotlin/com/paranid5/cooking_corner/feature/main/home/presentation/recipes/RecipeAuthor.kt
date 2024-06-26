@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.home_author
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -48,6 +49,8 @@ private fun RecipeAuthorImpl(
     modifier: Modifier = Modifier,
 ) = Text(
     text = author,
+    maxLines = 1,
+    overflow = TextOverflow.Ellipsis,
     color = AppTheme.colors.text.primary,
     style = AppTheme.typography.caption,
     fontFamily = AppTheme.typography.RalewayFontFamily,

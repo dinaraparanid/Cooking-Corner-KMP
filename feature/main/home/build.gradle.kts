@@ -63,6 +63,8 @@ kotlin {
 
             implementation(libs.coil.compose.core)
 
+            implementation(libs.constraintlayout)
+
             implementation(libs.paging.common)
             implementation(libs.paging.compose)
 

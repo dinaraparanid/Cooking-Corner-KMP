@@ -15,6 +15,7 @@ internal class HomeExecutor : CoroutineExecutor<UiIntent, Unit, State, Msg, Labe
             is UiIntent.AddRecipe -> Unit // TODO: Add recipe
             is UiIntent.DescendingFilterClick -> Unit // TODO: Descending filter
             is UiIntent.ShowFavourites -> Unit // TODO: Show favourites
+            is UiIntent.LikeClick -> Unit // TODO: Like click
         }
     }
 }

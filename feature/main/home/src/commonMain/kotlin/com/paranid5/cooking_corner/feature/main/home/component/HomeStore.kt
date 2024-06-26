@@ -19,6 +19,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
         data object AddRecipe : UiIntent
         data object DescendingFilterClick : UiIntent
         data object ShowFavourites : UiIntent
+        data object LikeClick : UiIntent
     }
 
     @Serializable

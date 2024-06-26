@@ -4,6 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
@@ -15,6 +17,8 @@ import app.cash.paging.compose.LazyPagingItems
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.domain.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.pxToDp
+
+private val ITEM_HEIGHT = 280.dp
 
 @Composable
 internal fun RecipesGrid(
@@ -32,8 +36,10 @@ internal fun RecipesGrid(
             recipes[index]?.let { recipe ->
                 RecipeItem(
                     recipe = recipe,
+                    onUiIntent = onUiIntent,
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
+                        .height(ITEM_HEIGHT)
                         .clickable { onUiIntent(UiIntent.ShowRecipe(recipe)) },
                 )
             }

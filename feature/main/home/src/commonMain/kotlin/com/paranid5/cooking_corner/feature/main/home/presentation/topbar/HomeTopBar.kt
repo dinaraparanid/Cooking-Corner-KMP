@@ -18,6 +18,7 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_add
 import com.paranid5.cooking_corner.core.resources.ic_descending_filter
 import com.paranid5.cooking_corner.core.resources.ic_like
+import com.paranid5.cooking_corner.core.resources.like
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -86,7 +87,7 @@ private fun HomeTopBarImpl(
         Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
 
         AppIconButton(
-            icon = vectorResource(Res.drawable.ic_like),
+            icon = vectorResource(Res.drawable.like),
             tint = AppTheme.colors.orange,
             modifier = Modifier.align(Alignment.CenterVertically),
             onClick = { onUiIntent(UiIntent.ShowFavourites) },
