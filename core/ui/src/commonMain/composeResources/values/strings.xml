@@ -22,4 +22,8 @@
     <!-- Home -->
     <string name="home_recipe_placeholder">Filter your recipes</string>
     <string name="home_category">Category</string>
+    <string name="home_author">Author</string>
+
+    <!-- Units -->
+    <string name="unit_minute">min</string>
 </resources>
