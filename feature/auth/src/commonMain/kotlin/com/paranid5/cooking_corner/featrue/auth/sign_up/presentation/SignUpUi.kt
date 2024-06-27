@@ -8,12 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.confirm_password
-import com.paranid5.cooking_corner.core.resources.login
-import com.paranid5.cooking_corner.core.resources.password
-import com.paranid5.cooking_corner.core.resources.sign_up
+import com.paranid5.cooking_corner.core.resources.auth_password
+import com.paranid5.cooking_corner.core.resources.auth_confirm_password
+import com.paranid5.cooking_corner.core.resources.auth_login
+import com.paranid5.cooking_corner.core.resources.auth_sign_up
+import com.paranid5.cooking_corner.core.resources.auth_wrong_password
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
+import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordHandling
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
 import com.paranid5.cooking_corner.ui.common.AppBackButton
@@ -29,6 +31,12 @@ internal fun SignUpUi(
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
 
+    val passwordHandling = PasswordHandling(
+        isPasswordVisible = state.isPasswordVisible,
+        isPasswordInvalid = state.isPasswordInvalid,
+        onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
+    )
+
     ConstraintLayout(modifier = modifier) {
         val (
             backButton,
@@ -36,18 +44,18 @@ internal fun SignUpUi(
             login,
             password,
             confirmPassword,
-            confirmButton
+            confirmButton,
         ) = createRefs()
 
         Text(
-            text = stringResource(Res.string.sign_up),
+            text = stringResource(Res.string.auth_sign_up),
             color = AppTheme.colors.text.primary,
             style = AppTheme.typography.h.h1,
             fontFamily = AppTheme.typography.InterFontFamily,
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top, margin = appPadding.enormous)
                 centerHorizontallyTo(parent)
-            }
+            },
         )
 
         AppBackButton(
@@ -61,22 +69,20 @@ internal fun SignUpUi(
         AuthEditText(
             value = state.login,
             onValueChange = { onUiIntent(UiIntent.UpdateLoginText(login = it)) },
-            placeholder = stringResource(Res.string.login),
+            placeholder = stringResource(Res.string.auth_login),
             modifier = Modifier.constrainAs(login) {
                 top.linkTo(title.bottom, margin = appPadding.extraLarge)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
                 end.linkTo(parent.end, margin = appPadding.extraMedium)
                 width = Dimension.fillToConstraints
-            }
+            },
         )
 
         AuthEditText(
             value = state.password,
             onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
-            placeholder = stringResource(Res.string.password),
-            isPassword = true,
-            isPasswordVisible = state.isPasswordVisible,
-            onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
+            placeholder = stringResource(Res.string.auth_password),
+            passwordHandling = passwordHandling,
             modifier = Modifier.constrainAs(password) {
                 top.linkTo(login.bottom, margin = appPadding.extraBig)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
@@ -88,10 +94,8 @@ internal fun SignUpUi(
         AuthEditText(
             value = state.confirmPassword,
             onValueChange = { onUiIntent(UiIntent.UpdateConfirmPasswordText(confirmPassword = it)) },
-            placeholder = stringResource(Res.string.confirm_password),
-            isPassword = true,
-            isPasswordVisible = state.isPasswordVisible,
-            onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
+            placeholder = stringResource(Res.string.auth_confirm_password),
+            passwordHandling = passwordHandling,
             modifier = Modifier.constrainAs(confirmPassword) {
                 top.linkTo(password.bottom, margin = appPadding.extraBig)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
@@ -101,14 +105,21 @@ internal fun SignUpUi(
         )
 
         AuthConfirmButton(
-            text = stringResource(Res.string.sign_up),
+            text = stringResource(
+                confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
+            ),
             onClick = { onUiIntent(UiIntent.ConfirmCredentials) },
             modifier = Modifier.constrainAs(confirmButton) {
                 top.linkTo(confirmPassword.bottom, margin = appPadding.large)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
                 end.linkTo(parent.end, margin = appPadding.extraMedium)
                 width = Dimension.fillToConstraints
-            }
+            },
         )
     }
+}
+
+private fun confirmButtonTextRes(areCredentialsInvalid: Boolean) = when {
+    areCredentialsInvalid -> Res.string.auth_wrong_password
+    else -> Res.string.auth_sign_up
 }

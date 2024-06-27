@@ -6,6 +6,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.paranid5.cooking_corner.ui.DarkerPastel
+import com.paranid5.cooking_corner.ui.Error
 import com.paranid5.cooking_corner.ui.MainBlack
 import com.paranid5.cooking_corner.ui.MainPastel
 import com.paranid5.cooking_corner.ui.OrangeSelect
@@ -17,6 +18,7 @@ data class AppColors(
     val colorScheme: ColorScheme,
     val background: Color,
     val backgroundAlternative: Color,
+    val error: Color,
     val text: AppTextColors,
     val button: AppButtonColors,
 ) {
@@ -34,6 +36,7 @@ data class AppColors(
             colorScheme = ColorScheme,
             background = MainPastel,
             backgroundAlternative = DarkerPastel,
+            error = Error,
             text = AppTextColors.default,
             button = AppButtonColors.default,
         )

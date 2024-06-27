@@ -19,9 +19,9 @@ import com.paranid5.cooking_corner.feature.main.home.domain.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.pxToDp
 
 private const val MIN_RECIPES_IN_ROW = 2
-private val RECIPE_MAX_WIDTH = 200.dp
+private val RECIPE_MAX_WIDTH = 185.dp
 private val RECIPE_HEIGHT = 280.dp
-private val PADDING_BETWEEN_RECIPES = 8.dp
+private val PADDING_BETWEEN_RECIPES = 4.dp
 
 @Composable
 internal fun RecipesGrid(

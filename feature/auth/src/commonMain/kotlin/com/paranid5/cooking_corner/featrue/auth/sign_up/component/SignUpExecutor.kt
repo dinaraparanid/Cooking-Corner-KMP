@@ -32,6 +32,9 @@ internal class SignUpExecutor(
 
     private fun checkCredentials() {
         // TODO: check credentials
-        publish(Label.ConfirmedCredentials)
+        when {
+            state().isPasswordConfirmed -> publish(Label.ConfirmedCredentials)
+            else -> dispatch(Msg.InvalidPassword)
+        }
     }
 }

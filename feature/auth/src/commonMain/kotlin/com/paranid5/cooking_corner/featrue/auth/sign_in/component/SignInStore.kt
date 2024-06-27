@@ -23,11 +23,13 @@ internal interface SignInStore : Store<UiIntent, State, Label> {
         val login: String,
         val password: String,
         val isPasswordVisible: Boolean,
+        val isPasswordInvalid: Boolean,
     ) {
         constructor() : this(
             login = "",
             password = "",
             isPasswordVisible = false,
+            isPasswordInvalid = false,
         )
     }
 

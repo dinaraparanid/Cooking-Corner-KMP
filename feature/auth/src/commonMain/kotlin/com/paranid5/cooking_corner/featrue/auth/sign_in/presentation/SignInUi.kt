@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.login
-import com.paranid5.cooking_corner.core.resources.password
-import com.paranid5.cooking_corner.core.resources.sign_in
-import com.paranid5.cooking_corner.core.resources.sign_up
+import com.paranid5.cooking_corner.core.resources.auth_login
+import com.paranid5.cooking_corner.core.resources.auth_password
+import com.paranid5.cooking_corner.core.resources.auth_sign_in
+import com.paranid5.cooking_corner.core.resources.auth_sign_up
+import com.paranid5.cooking_corner.core.resources.auth_wrong_password
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
+import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordHandling
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
@@ -83,7 +85,7 @@ private fun SignInContent(
     AuthEditText(
         value = state.login,
         onValueChange = { onUiIntent(UiIntent.UpdateLoginText(login = it)) },
-        placeholder = stringResource(Res.string.login),
+        placeholder = stringResource(Res.string.auth_login),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
@@ -94,10 +96,12 @@ private fun SignInContent(
     AuthEditText(
         value = state.password,
         onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
-        placeholder = stringResource(Res.string.password),
-        isPassword = true,
-        isPasswordVisible = state.isPasswordVisible,
-        onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
+        placeholder = stringResource(Res.string.auth_password),
+        passwordHandling = PasswordHandling(
+            isPasswordVisible = state.isPasswordVisible,
+            isPasswordInvalid = state.isPasswordInvalid,
+            onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
@@ -106,7 +110,9 @@ private fun SignInContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.extraBig))
 
     AuthConfirmButton(
-        text = stringResource(Res.string.sign_in),
+        text = stringResource(
+            confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
+        ),
         onClick = { onUiIntent(UiIntent.ConfirmCredentials) },
         modifier = Modifier
             .fillMaxWidth()
@@ -128,9 +134,14 @@ private fun SignUpButton(
     ),
 ) {
     Text(
-        text = stringResource(Res.string.sign_up),
+        text = stringResource(Res.string.auth_sign_up),
         color = AppTheme.colors.text.tertiriary,
         style = AppTheme.typography.h.h3,
         fontFamily = AppTheme.typography.InterFontFamily,
     )
+}
+
+private fun confirmButtonTextRes(areCredentialsInvalid: Boolean) = when {
+    areCredentialsInvalid -> Res.string.auth_wrong_password
+    else -> Res.string.auth_sign_in
 }

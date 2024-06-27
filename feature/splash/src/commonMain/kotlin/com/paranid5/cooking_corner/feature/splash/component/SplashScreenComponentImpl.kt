@@ -11,7 +11,7 @@ internal class SplashScreenComponentImpl(
     private val onSplashScreenClosed: () -> Unit,
 ) : SplashScreenComponent, ComponentContext by componentContext {
     private companion object {
-        const val SPLASH_SCREEN_DURATION_MS = 3000L
+        const val SPLASH_SCREEN_DURATION_MS = 1500L
     }
 
     init {

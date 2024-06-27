@@ -15,6 +15,7 @@ internal class SignInStoreProvider(
         data class UpdateLoginText(val login: String) : Msg
         data class UpdatePasswordText(val password: String) : Msg
         data object UpdatePasswordVisibility : Msg
+        data object InvalidPassword : Msg
     }
 
     fun provide(initialState: State): SignInStore = object :

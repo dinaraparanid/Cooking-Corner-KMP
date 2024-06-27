@@ -2,9 +2,8 @@ package com.paranid5.cooking_corner.feature.main.home.presentation.recipes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
@@ -15,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.home_add_to_favourites
 import com.paranid5.cooking_corner.core.resources.home_remove_from_favourites
@@ -33,6 +34,7 @@ internal fun FavouritesButton(
     onLikedChanged: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val appPadding = AppTheme.dimensions.padding
     val buttonShape = RoundedCornerShape(AppTheme.dimensions.corners.small)
 
     OutlinedButton(
@@ -51,19 +53,33 @@ internal fun FavouritesButton(
             radius = AppTheme.dimensions.corners.small,
         )
     ) {
-        FavouritesButtonLabel(
-            isLiked = isLiked,
-            modifier = Modifier.align(Alignment.CenterVertically),
-        )
+        ConstraintLayout(
+            Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterVertically)
+        ) {
+            val (label, image) = createRefs()
 
-        Spacer(Modifier.width(AppTheme.dimensions.padding.extraSmall))
+            FavouritesButtonLabel(
+                isLiked = isLiked,
+                modifier = Modifier.constrainAs(label) {
+                    centerVerticallyTo(parent)
+                    start.linkTo(parent.start, margin = appPadding.extraSmall)
+                    end.linkTo(image.start, margin = appPadding.extraSmall)
+                    width = Dimension.fillToConstraints
+                },
+            )
 
-        FavouritesButtonImage(
-            isLiked = isLiked,
-            modifier = Modifier
-                .size(ICON_SIZE)
-                .align(Alignment.CenterVertically),
-        )
+            FavouritesButtonImage(
+                isLiked = isLiked,
+                modifier = Modifier
+                    .size(ICON_SIZE)
+                    .constrainAs(image) {
+                        centerVerticallyTo(parent)
+                        end.linkTo(parent.end)
+                    },
+            )
+        }
     }
 }
 
@@ -93,7 +109,7 @@ private fun FavouritesButtonLabelImpl(
     color = AppTheme.colors.text.primary,
     fontWeight = FontWeight.Bold,
     fontFamily = AppTheme.typography.RalewayFontFamily,
-    style = AppTheme.typography.caption,
+    style = AppTheme.typography.captionSm,
 )
 
 @Composable

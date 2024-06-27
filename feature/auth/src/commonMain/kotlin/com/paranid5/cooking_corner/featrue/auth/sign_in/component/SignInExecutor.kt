@@ -7,6 +7,9 @@ import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.St
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStoreProvider.Msg
 
+// TODO: убрать
+private const val MOCK_CORRECT_PASSWORD = "БИБА"
+
 internal class SignInExecutor(
     private val authApi: AuthApi,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
@@ -20,7 +23,10 @@ internal class SignInExecutor(
     }
 
     private fun checkCredentials() {
-        // TODO: check credentials
-        publish(Label.ConfirmedCredentials)
+        // TODO: send request to check
+        when (state().password) {
+            MOCK_CORRECT_PASSWORD -> publish(Label.ConfirmedCredentials)
+            else -> dispatch(Msg.InvalidPassword)
+        }
     }
 }

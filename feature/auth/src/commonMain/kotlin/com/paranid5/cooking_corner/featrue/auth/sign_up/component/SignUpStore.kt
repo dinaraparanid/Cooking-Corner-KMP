@@ -24,6 +24,7 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
         val password: String,
         val confirmPassword: String,
         val isPasswordVisible: Boolean,
+        val isPasswordInvalid: Boolean,
     ) {
         val isPasswordConfirmed = password == confirmPassword
 
@@ -32,6 +33,7 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
             password = "",
             confirmPassword = "",
             isPasswordVisible = false,
+            isPasswordInvalid = false,
         )
     }
 
