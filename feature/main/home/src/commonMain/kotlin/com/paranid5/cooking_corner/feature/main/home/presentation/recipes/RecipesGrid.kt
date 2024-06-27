@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.LazyPagingItems
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.home.domain.RecipeUiState
+import com.paranid5.cooking_corner.feature.main.home.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.pxToDp
 
 private const val MIN_RECIPES_IN_ROW = 2

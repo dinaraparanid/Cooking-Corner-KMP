@@ -27,6 +27,14 @@
     <string name="home_add_to_favourites">Add to favourites</string>
     <string name="home_remove_from_favourites">Remove from favourites</string>
 
+    <!-- Profile -->
+    <string name="profile_username">Username</string>
+    <string name="profile_name">Name</string>
+    <string name="profile_surname">Surname</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_cooking_experience">Cooking experience</string>
+    <string name="profile_edit">Edit</string>
+
     <!-- Units -->
     <string name="unit_minute">min</string>
 </resources>

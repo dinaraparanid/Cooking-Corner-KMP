@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.feature.main.home.domain
+package com.paranid5.cooking_corner.feature.main.home.entity
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable

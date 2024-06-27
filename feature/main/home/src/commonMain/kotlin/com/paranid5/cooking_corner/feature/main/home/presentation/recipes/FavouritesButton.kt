@@ -35,11 +35,10 @@ internal fun FavouritesButton(
     modifier: Modifier = Modifier,
 ) {
     val appPadding = AppTheme.dimensions.padding
-    val buttonShape = RoundedCornerShape(AppTheme.dimensions.corners.small)
 
     OutlinedButton(
         onClick = onLikedChanged,
-        shape = buttonShape,
+        shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
         border = BorderStroke(
             width = AppTheme.dimensions.borders.minimum,
             color = AppTheme.colors.button.primary,
@@ -51,7 +50,7 @@ internal fun FavouritesButton(
         modifier = modifier.simpleShadow(
             elevation = AppTheme.dimensions.elevation.extraBig,
             radius = AppTheme.dimensions.corners.small,
-        )
+        ),
     ) {
         ConstraintLayout(
             Modifier

@@ -17,7 +17,7 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.home.domain.RecipeUiState
+import com.paranid5.cooking_corner.feature.main.home.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 

@@ -1,6 +1,8 @@
 package com.paranid5.cooking_corner.ui.common
 
+import androidx.compose.runtime.Composable
 import coil3.PlatformContext
+import coil3.compose.LocalPlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -22,3 +24,13 @@ fun coverModel(
     .scale(Scale.FILL)
     .crossfade(animationMillis)
     .build()
+
+@Composable
+fun coverModel(
+    coverUrl: String?,
+    animationMillis: Int = DEFAULT_ANIMATION_DURATION,
+) = coverModel(
+    coverUrl = coverUrl,
+    context = LocalPlatformContext.current,
+    animationMillis = animationMillis,
+)

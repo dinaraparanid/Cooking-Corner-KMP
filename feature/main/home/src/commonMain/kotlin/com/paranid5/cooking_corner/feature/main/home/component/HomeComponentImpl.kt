@@ -16,7 +16,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent.Chi
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.home.domain.RecipeUiState
+import com.paranid5.cooking_corner.feature.main.home.entity.RecipeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf

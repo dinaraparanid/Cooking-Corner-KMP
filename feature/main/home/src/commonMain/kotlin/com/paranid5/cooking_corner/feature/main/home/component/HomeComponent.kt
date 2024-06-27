@@ -7,18 +7,18 @@ import com.paranid5.cooking_corner.component.StateSource
 import com.paranid5.cooking_corner.component.UiIntentHandler
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.home.domain.RecipeUiState
+import com.paranid5.cooking_corner.feature.main.home.entity.RecipeUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface HomeComponent : StateSource<State>, UiIntentHandler<UiIntent> {
     val childSlot: StateFlow<ChildSlot<*, Child>>
 
+    val recepiesPagedFlow: Flow<PagingData<RecipeUiState>>
+
     sealed interface Child {
         data object Recepie : Child
     }
-
-    val recepiesPagedFlow: Flow<PagingData<RecipeUiState>>
 
     interface Factory {
         fun create(
