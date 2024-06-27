@@ -12,6 +12,7 @@ internal interface SignInStore : Store<UiIntent, State, Label> {
         data object Back : UiIntent
         data class UpdateLoginText(val login: String) : UiIntent
         data class UpdatePasswordText(val password: String) : UiIntent
+        data object UpdatePasswordVisibility : UiIntent
         data object ConfirmCredentials : UiIntent
         data object ShowSignUp : UiIntent
     }
@@ -21,10 +22,12 @@ internal interface SignInStore : Store<UiIntent, State, Label> {
     data class State(
         val login: String,
         val password: String,
+        val isPasswordVisible: Boolean,
     ) {
         constructor() : this(
             login = "",
             password = "",
+            isPasswordVisible = false,
         )
     }
 

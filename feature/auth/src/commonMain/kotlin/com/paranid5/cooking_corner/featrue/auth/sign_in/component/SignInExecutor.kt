@@ -16,6 +16,7 @@ internal class SignInExecutor(
         is UiIntent.ShowSignUp -> publish(Label.ShowSignUp)
         is UiIntent.UpdateLoginText -> dispatch(Msg.UpdateLoginText(intent.login))
         is UiIntent.UpdatePasswordText -> dispatch(Msg.UpdatePasswordText(intent.password))
+        is UiIntent.UpdatePasswordVisibility -> dispatch(Msg.UpdatePasswordVisibility)
     }
 
     private fun checkCredentials() {

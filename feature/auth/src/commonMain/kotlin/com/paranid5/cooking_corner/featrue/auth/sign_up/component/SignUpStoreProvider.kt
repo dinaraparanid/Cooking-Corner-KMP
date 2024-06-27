@@ -14,6 +14,7 @@ internal class SignUpStoreProvider(
     sealed interface Msg {
         data class UpdateLoginText(val login: String) : Msg
         data class UpdatePasswordText(val password: String) : Msg
+        data object UpdatePasswordVisibility : Msg
         data class UpdateConfirmPasswordText(val confirmPassword: String) : Msg
     }
 

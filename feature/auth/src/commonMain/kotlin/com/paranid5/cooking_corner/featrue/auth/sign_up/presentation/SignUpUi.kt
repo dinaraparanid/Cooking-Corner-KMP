@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.core.resources.Res
@@ -15,7 +14,6 @@ import com.paranid5.cooking_corner.core.resources.password
 import com.paranid5.cooking_corner.core.resources.sign_up
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
-import com.paranid5.cooking_corner.featrue.auth.presentation.PASSWORD_MASK
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
 import com.paranid5.cooking_corner.ui.common.AppBackButton
@@ -76,26 +74,30 @@ internal fun SignUpUi(
             value = state.password,
             onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
             placeholder = stringResource(Res.string.password),
-            visualTransformation = PasswordVisualTransformation(mask = PASSWORD_MASK),
+            isPassword = true,
+            isPasswordVisible = state.isPasswordVisible,
+            onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
             modifier = Modifier.constrainAs(password) {
                 top.linkTo(login.bottom, margin = appPadding.extraBig)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
                 end.linkTo(parent.end, margin = appPadding.extraMedium)
                 width = Dimension.fillToConstraints
-            }
+            },
         )
 
         AuthEditText(
             value = state.confirmPassword,
             onValueChange = { onUiIntent(UiIntent.UpdateConfirmPasswordText(confirmPassword = it)) },
             placeholder = stringResource(Res.string.confirm_password),
-            visualTransformation = PasswordVisualTransformation(mask = PASSWORD_MASK),
+            isPassword = true,
+            isPasswordVisible = state.isPasswordVisible,
+            onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
             modifier = Modifier.constrainAs(confirmPassword) {
                 top.linkTo(password.bottom, margin = appPadding.extraBig)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
                 end.linkTo(parent.end, margin = appPadding.extraMedium)
                 width = Dimension.fillToConstraints
-            }
+            },
         )
 
         AuthConfirmButton(

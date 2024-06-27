@@ -8,6 +8,7 @@ internal object SignUpReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg) = when (msg) {
         is Msg.UpdateLoginText -> copy(login = msg.login)
         is Msg.UpdatePasswordText -> copy(password = msg.password)
+        is Msg.UpdatePasswordVisibility -> copy(isPasswordVisible = isPasswordVisible.not())
         is Msg.UpdateConfirmPasswordText -> copy(confirmPassword = msg.confirmPassword)
     }
 }

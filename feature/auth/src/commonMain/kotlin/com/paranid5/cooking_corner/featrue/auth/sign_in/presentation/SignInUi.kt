@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.login
@@ -25,7 +24,6 @@ import com.paranid5.cooking_corner.core.resources.sign_in
 import com.paranid5.cooking_corner.core.resources.sign_up
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
-import com.paranid5.cooking_corner.featrue.auth.presentation.PASSWORD_MASK
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
@@ -97,7 +95,9 @@ private fun SignInContent(
         value = state.password,
         onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
         placeholder = stringResource(Res.string.password),
-        visualTransformation = PasswordVisualTransformation(mask = PASSWORD_MASK),
+        isPassword = true,
+        isPasswordVisible = state.isPasswordVisible,
+        onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = AppTheme.dimensions.padding.extraMedium),

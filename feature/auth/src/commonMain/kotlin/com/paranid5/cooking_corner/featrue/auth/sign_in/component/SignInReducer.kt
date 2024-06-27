@@ -8,5 +8,6 @@ internal object SignInReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg) = when (msg) {
         is Msg.UpdateLoginText -> copy(login = msg.login)
         is Msg.UpdatePasswordText -> copy(password = msg.password)
+        is Msg.UpdatePasswordVisibility -> copy(isPasswordVisible = isPasswordVisible.not())
     }
 }
