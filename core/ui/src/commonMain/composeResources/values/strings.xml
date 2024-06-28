@@ -21,7 +21,7 @@
     <string name="nav_bar_profile">Profile</string>
 
     <!-- Home -->
-    <string name="home_recipe_placeholder">Filter your recipes</string>
+    <string name="home_filter_placeholder">Filter your recipes</string>
     <string name="home_category">Category</string>
     <string name="home_author">Author</string>
     <string name="home_add_to_favourites">Add to favourites</string>
@@ -34,6 +34,12 @@
     <string name="profile_email">Email</string>
     <string name="profile_cooking_experience">Cooking experience</string>
     <string name="profile_edit">Edit</string>
+
+    <!-- Search -->
+    <string name="search_filter_placeholder">Search for new cooking recipes</string>
+    <string name="search_last_recipes">Last recipes</string>
+    <string name="search_add_to_recipes">Add to your recipes</string>
+    <string name="search_recommended">Recommended</string>
 
     <!-- Units -->
     <string name="unit_minute">min</string>

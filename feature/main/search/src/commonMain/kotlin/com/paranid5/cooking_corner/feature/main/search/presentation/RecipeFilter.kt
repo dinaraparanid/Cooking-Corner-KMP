@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.feature.main.home.presentation
+package com.paranid5.cooking_corner.feature.main.search.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.home_filter_placeholder
 import com.paranid5.cooking_corner.core.resources.ic_search
-import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
-import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
+import com.paranid5.cooking_corner.core.resources.search_filter_placeholder
+import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
+import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.AppTextSelectionColors
 import org.jetbrains.compose.resources.stringResource
@@ -47,14 +47,14 @@ internal fun RecipeFilter(
             cursorColor = AppTheme.colors.text.primary,
             focusedContainerColor = AppTheme.colors.background.alternative,
             unfocusedContainerColor = AppTheme.colors.background.alternative,
-            selectionColors = AppTextSelectionColors
+            selectionColors = AppTextSelectionColors,
         )
     )
 }
 
 @Composable
 private fun RecipeFilterPlaceholder(modifier: Modifier = Modifier) = Text(
-    text = stringResource(Res.string.home_filter_placeholder),
+    text = stringResource(Res.string.search_filter_placeholder),
     color = AppTheme.colors.text.primary,
     style = AppTheme.typography.regular,
     fontFamily = AppTheme.typography.RalewayFontFamily,

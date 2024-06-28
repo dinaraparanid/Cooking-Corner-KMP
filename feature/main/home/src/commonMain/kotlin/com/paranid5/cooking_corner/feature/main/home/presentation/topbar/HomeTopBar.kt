@@ -20,8 +20,8 @@ import com.paranid5.cooking_corner.core.resources.ic_descending_filter
 import com.paranid5.cooking_corner.core.resources.like
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.foundation.AppIconButton
+import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -49,7 +49,7 @@ private fun HomeTopBarImpl(
 ) {
     val spinnerShape = RoundedCornerShape(AppTheme.dimensions.corners.small)
 
-    Row(modifier = modifier.background(AppTheme.colors.backgroundAlternative)) {
+    Row(modifier = modifier.background(AppTheme.colors.background.secondary)) {
         Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
 
         AppIconButton(

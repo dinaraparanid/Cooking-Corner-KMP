@@ -54,6 +54,8 @@ kotlin {
             implementation(projects.core.utils)
             api(projects.core.component)
 
+            implementation(projects.feature.main.recipe)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.State as ComposeState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.paranid5.cooking_corner.core.resources.Res
@@ -18,20 +17,21 @@ import com.paranid5.cooking_corner.core.resources.ic_arrow_down
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
-import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.foundation.AppSpinner
+import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import androidx.compose.runtime.State as ComposeState
 
 @Composable
 internal fun CategorySpinner(
     state: State,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
-) = Box(modifier.background(AppTheme.colors.background)) {
+) = Box(modifier.background(AppTheme.colors.background.primary)) {
     CategorySpinnerImpl(
         state = state,
         onUiIntent = onUiIntent,

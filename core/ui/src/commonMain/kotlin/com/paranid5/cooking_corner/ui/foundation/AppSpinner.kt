@@ -25,7 +25,7 @@ fun AppSpinner(
     onItemSelected: (Int, String) -> Unit,
     modifier: Modifier = Modifier,
     dropdownModifier: Modifier = Modifier,
-    background: Color = AppTheme.colors.background,
+    background: Color = AppTheme.colors.background.primary,
     previewItemIndex: Int = selectedItemIndices.firstOrNull() ?: 0,
     selectedItemFactory: @Composable (Int, String, Modifier) -> Unit = { _, text, mod ->
         DefaultSelectedItem(text, mod)

@@ -9,6 +9,7 @@ import com.paranid5.cooking_corner.ui.DarkerPastel
 import com.paranid5.cooking_corner.ui.Error
 import com.paranid5.cooking_corner.ui.MainBlack
 import com.paranid5.cooking_corner.ui.MainPastel
+import com.paranid5.cooking_corner.ui.MainWhite
 import com.paranid5.cooking_corner.ui.OrangeSelect
 import com.paranid5.cooking_corner.ui.SecondaryBlack
 import com.paranid5.cooking_corner.ui.TransparentUtilityDark
@@ -16,9 +17,8 @@ import com.paranid5.cooking_corner.ui.TransparentUtilityDark
 @Immutable
 data class AppColors(
     val colorScheme: ColorScheme,
-    val background: Color,
-    val backgroundAlternative: Color,
     val error: Color,
+    val background: AppBackgroundColors,
     val text: AppTextColors,
     val button: AppButtonColors,
 ) {
@@ -34,9 +34,8 @@ data class AppColors(
 
         internal fun create() = AppColors(
             colorScheme = ColorScheme,
-            background = MainPastel,
-            backgroundAlternative = DarkerPastel,
             error = Error,
+            background = AppBackgroundColors.default,
             text = AppTextColors.default,
             button = AppButtonColors.default,
         )
@@ -45,6 +44,21 @@ data class AppColors(
     fun getTabColor(isCurrent: Boolean) = if (isCurrent) OrangeSelect else MainBlack
 
     val orange = OrangeSelect
+}
+
+@Immutable
+data class AppBackgroundColors(
+    val primary: Color,
+    val secondary: Color,
+    val alternative: Color,
+) {
+    companion object {
+        internal val default = AppBackgroundColors(
+            primary = MainPastel,
+            secondary = DarkerPastel,
+            alternative = MainWhite,
+        )
+    }
 }
 
 @Immutable

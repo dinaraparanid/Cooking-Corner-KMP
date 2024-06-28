@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.feature.main.home.presentation.recipes
+package com.paranid5.cooking_corner.feature.main.recipe.presentation
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -16,18 +16,17 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 private val COVER_HEIGHT = 100.dp
 
 @Composable
-internal fun RecipeItem(
+fun RecipeItem(
     recipe: RecipeUiState,
-    onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
+    actionButton: @Composable (Modifier) -> Unit,
 ) = ConstraintLayout(modifier) {
     val appPadding = AppTheme.dimensions.padding
 
@@ -36,7 +35,7 @@ internal fun RecipeItem(
         title,
         ratingTimeRow,
         author,
-        favouritesButton,
+        actButton,
     ) = createRefs()
 
     fun ConstrainScope.fillMaxWidthWithPadding() {
@@ -76,15 +75,13 @@ internal fun RecipeItem(
     RecipeAuthor(
         author = recipe.author,
         modifier = Modifier.constrainAs(author) {
-            bottom.linkTo(favouritesButton.top, margin = appPadding.small)
+            bottom.linkTo(actButton.top, margin = appPadding.small)
             fillMaxWidthWithPadding()
         },
     )
 
-    FavouritesButton(
-        isLiked = recipe.isLiked,
-        onLikedChanged = { onUiIntent(UiIntent.LikeClick) },
-        modifier = Modifier.constrainAs(favouritesButton) {
+    actionButton(
+        Modifier.constrainAs(actButton) {
             bottom.linkTo(parent.bottom, margin = appPadding.extraMedium)
             fillMaxWidthWithPadding()
         }

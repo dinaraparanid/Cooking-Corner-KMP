@@ -45,7 +45,7 @@ fun RootUi(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(screenPadding)
-                .background(color = AppTheme.colors.background),
+                .background(color = AppTheme.colors.background.primary),
         ) {
             RootContent(
                 childStackState = rootComponent.stack.collectAsState(),

@@ -26,13 +26,14 @@ fun HomeUi(
     val onUiIntent = component::onUiIntent
 
     Column(modifier) {
+        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+
         RecipeFilter(
             state = state,
             onUiIntent = onUiIntent,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = AppTheme.dimensions.padding.extraBig)
-                .padding(top = AppTheme.dimensions.padding.extraSmall),
+                .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
         )
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))

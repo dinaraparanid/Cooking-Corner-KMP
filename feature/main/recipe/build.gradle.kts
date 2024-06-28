@@ -12,7 +12,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "featureMainSearch"
+        moduleName = "featureMainRecipe"
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -43,7 +43,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "search"
+            baseName = "recipe"
             isStatic = true
         }
     }
@@ -51,9 +51,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.ui)
+            implementation(projects.core.utils)
             api(projects.core.component)
-
-            implementation(projects.feature.main.recipe)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -62,8 +61,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
-            implementation(libs.paging.common)
-            implementation(libs.paging.compose)
+            implementation(libs.constraintlayout)
+
+            implementation(libs.coil.compose.core)
 
             implementation(libs.decompose.extensions.compose)
 
@@ -73,7 +73,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.paranid5.cooking_corner.feature.main.search"
+    namespace = "com.paranid5.cooking_corner.feature.main.recipe"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

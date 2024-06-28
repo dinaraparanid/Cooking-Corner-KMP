@@ -40,7 +40,7 @@ internal fun ProfilePhoto(
 
 @Composable
 private fun ProfilePhotoUndefinedPlaceholder(modifier: Modifier = Modifier) =
-    Box(modifier = modifier.background(AppTheme.colors.background)) {
+    Box(modifier = modifier.background(AppTheme.colors.background.primary)) {
         Image(
             imageVector = vectorResource(Res.drawable.placeholder_profile),
             contentDescription = null,

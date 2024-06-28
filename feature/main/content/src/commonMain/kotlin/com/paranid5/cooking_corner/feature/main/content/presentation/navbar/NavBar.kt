@@ -39,7 +39,7 @@ internal fun NavBarMobile(
     )
 
     BottomAppBar(
-        containerColor = AppTheme.colors.background,
+        containerColor = AppTheme.colors.background.primary,
         modifier = modifier
             .border(
                 width = AppTheme.dimensions.borders.extraSmall,
@@ -86,7 +86,7 @@ internal fun NavBarPC(
     )
 
     NavigationRail(
-        containerColor = AppTheme.colors.background,
+        containerColor = AppTheme.colors.background.primary,
         modifier = modifier
             .border(
                 width = AppTheme.dimensions.borders.extraSmall,
