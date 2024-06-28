@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.ui.common
+package com.paranid5.cooking_corner.ui.foundation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

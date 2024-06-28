@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.paranid5.cooking_corner.ui.common.CookingCornerLabel
-import com.paranid5.cooking_corner.ui.common.CookingIcon
+import com.paranid5.cooking_corner.ui.foundation.CookingCornerLabel
+import com.paranid5.cooking_corner.ui.foundation.CookingIcon
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 private val COOKING_ICON_WIDTH = 105.dp

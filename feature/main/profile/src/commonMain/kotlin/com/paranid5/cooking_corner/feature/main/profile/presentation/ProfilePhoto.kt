@@ -13,8 +13,8 @@ import coil3.compose.SubcomposeAsyncImage
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.placeholder_profile
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.common.AppProgressIndicator
-import com.paranid5.cooking_corner.ui.common.coverModel
+import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.coverModel
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource

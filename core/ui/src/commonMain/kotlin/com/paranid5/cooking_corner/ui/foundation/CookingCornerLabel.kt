@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.ui.common
+package com.paranid5.cooking_corner.ui.foundation
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

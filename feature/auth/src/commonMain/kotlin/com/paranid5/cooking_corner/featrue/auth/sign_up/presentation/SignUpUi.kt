@@ -18,7 +18,7 @@ import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
 import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordHandling
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
-import com.paranid5.cooking_corner.ui.common.AppBackButton
+import com.paranid5.cooking_corner.ui.foundation.AppBackButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 

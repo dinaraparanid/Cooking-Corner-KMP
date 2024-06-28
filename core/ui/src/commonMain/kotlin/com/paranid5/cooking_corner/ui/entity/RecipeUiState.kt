@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.feature.main.home.entity
+package com.paranid5.cooking_corner.ui.entity
 
 import androidx.compose.runtime.Immutable
 import com.paranid5.cooking_corner.ui.UiState

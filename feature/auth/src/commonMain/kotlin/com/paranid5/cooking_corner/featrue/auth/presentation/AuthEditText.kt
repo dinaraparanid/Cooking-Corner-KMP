@@ -12,7 +12,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_password_hide
 import com.paranid5.cooking_corner.core.resources.ic_password_show
-import com.paranid5.cooking_corner.ui.common.AppIconButton
+import com.paranid5.cooking_corner.ui.foundation.AppIconButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
 

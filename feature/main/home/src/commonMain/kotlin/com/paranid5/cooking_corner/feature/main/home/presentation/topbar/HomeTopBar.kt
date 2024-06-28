@@ -17,12 +17,11 @@ import androidx.compose.ui.draw.clip
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_add
 import com.paranid5.cooking_corner.core.resources.ic_descending_filter
-import com.paranid5.cooking_corner.core.resources.ic_like
 import com.paranid5.cooking_corner.core.resources.like
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.common.AppIconButton
+import com.paranid5.cooking_corner.ui.foundation.AppIconButton
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable

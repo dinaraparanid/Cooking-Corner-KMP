@@ -6,7 +6,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
-import com.paranid5.cooking_corner.feature.main.home.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable

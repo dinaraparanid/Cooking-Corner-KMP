@@ -16,7 +16,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent.Chi
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.home.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -45,140 +45,7 @@ internal class HomeComponentImpl(
 
     override val recepiesPagedFlow by lazy {
         // TODO: paging from network
-        flowOf(
-            PagingData.from(
-                listOf(
-                    RecipeUiState(
-                        title = "Boiled shrimps",
-                        rating = 4.8F,
-                        preparingTime = 5,
-                        cookingTime = 10,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Chicken in soy sauce",
-                        rating = 4.5F,
-                        preparingTime = 10,
-                        cookingTime = 10,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Easy Lasagna in Pan",
-                        rating = 4.1F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Charlotte in a slow cooker",
-                        rating = 4.9F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Boiled shrimps",
-                        rating = 4.8F,
-                        preparingTime = 5,
-                        cookingTime = 10,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Chicken in soy sauce",
-                        rating = 4.5F,
-                        preparingTime = 10,
-                        cookingTime = 10,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Easy Lasagna in Pan",
-                        rating = 4.1F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Charlotte in a slow cooker",
-                        rating = 4.9F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Boiled shrimps",
-                        rating = 4.8F,
-                        preparingTime = 5,
-                        cookingTime = 10,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Chicken in soy sauce",
-                        rating = 4.5F,
-                        preparingTime = 10,
-                        cookingTime = 10,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Easy Lasagna in Pan",
-                        rating = 4.1F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Charlotte in a slow cooker",
-                        rating = 4.9F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Boiled shrimps",
-                        rating = 4.8F,
-                        preparingTime = 5,
-                        cookingTime = 10,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Chicken in soy sauce",
-                        rating = 4.5F,
-                        preparingTime = 10,
-                        cookingTime = 10,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Easy Lasagna in Pan",
-                        rating = 4.1F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = true,
-                        author = "OlgaLove",
-                    ),
-                    RecipeUiState(
-                        title = "Charlotte in a slow cooker",
-                        rating = 4.9F,
-                        preparingTime = 20,
-                        cookingTime = 20,
-                        isLiked = false,
-                        author = "OlgaLove",
-                    )
-                )
-            )
-        )
+        stub()
     }
 
     private val childSlotNavigation = SlotNavigation<Slot>()
@@ -221,3 +88,138 @@ internal class HomeComponentImpl(
         )
     }
 }
+
+private fun stub() = flowOf(
+    PagingData.from(
+        listOf(
+            RecipeUiState(
+                title = "Boiled shrimps",
+                rating = 4.8F,
+                preparingTime = 5,
+                cookingTime = 10,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Chicken in soy sauce",
+                rating = 4.5F,
+                preparingTime = 10,
+                cookingTime = 10,
+                isLiked = false,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Easy Lasagna in Pan",
+                rating = 4.1F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Charlotte in a slow cooker",
+                rating = 4.9F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = false,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Boiled shrimps",
+                rating = 4.8F,
+                preparingTime = 5,
+                cookingTime = 10,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Chicken in soy sauce",
+                rating = 4.5F,
+                preparingTime = 10,
+                cookingTime = 10,
+                isLiked = false,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Easy Lasagna in Pan",
+                rating = 4.1F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Charlotte in a slow cooker",
+                rating = 4.9F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = false,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Boiled shrimps",
+                rating = 4.8F,
+                preparingTime = 5,
+                cookingTime = 10,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Chicken in soy sauce",
+                rating = 4.5F,
+                preparingTime = 10,
+                cookingTime = 10,
+                isLiked = false,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Easy Lasagna in Pan",
+                rating = 4.1F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Charlotte in a slow cooker",
+                rating = 4.9F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = false,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Boiled shrimps",
+                rating = 4.8F,
+                preparingTime = 5,
+                cookingTime = 10,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Chicken in soy sauce",
+                rating = 4.5F,
+                preparingTime = 10,
+                cookingTime = 10,
+                isLiked = false,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Easy Lasagna in Pan",
+                rating = 4.1F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = true,
+                author = "OlgaLove",
+            ),
+            RecipeUiState(
+                title = "Charlotte in a slow cooker",
+                rating = 4.9F,
+                preparingTime = 20,
+                cookingTime = 20,
+                isLiked = false,
+                author = "OlgaLove",
+            )
+        )
+    )
+)

@@ -29,8 +29,8 @@ import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordHandling
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
-import com.paranid5.cooking_corner.ui.common.CookingCornerLabel
-import com.paranid5.cooking_corner.ui.common.CookingIcon
+import com.paranid5.cooking_corner.ui.foundation.CookingCornerLabel
+import com.paranid5.cooking_corner.ui.foundation.CookingIcon
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
