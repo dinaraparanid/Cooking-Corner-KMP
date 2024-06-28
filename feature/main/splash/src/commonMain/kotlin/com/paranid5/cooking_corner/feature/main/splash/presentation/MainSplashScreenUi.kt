@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import com.paranid5.cooking_corner.core.resources.main_splash_title
 import com.paranid5.cooking_corner.feature.main.splash.component.MainSplashScreenComponent
 import com.paranid5.cooking_corner.feature.main.splash.component.MainSplashScreenUiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.ui.utils.RippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -118,7 +118,7 @@ private fun MainSplashScreenImage(modifier: Modifier = Modifier) = Image(
 private fun MainSplashScreenBeginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-) = Button(
+) = RippleButton(
     onClick = onClick,
     shape = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall),
     border = BorderStroke(

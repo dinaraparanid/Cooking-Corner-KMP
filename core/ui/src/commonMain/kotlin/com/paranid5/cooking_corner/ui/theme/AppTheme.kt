@@ -1,7 +1,9 @@
 package com.paranid5.cooking_corner.ui.theme
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -16,15 +18,15 @@ fun AppTheme(
     typography: AppTypography = AppTypography.default,
     content: @Composable () -> Unit,
 ) {
-    val colors by remember {
-        derivedStateOf { AppColors.create() }
-    }
+    val colors by remember { derivedStateOf { AppColors.create() } }
+    val rippleIndication = rememberRipple(color = AppTheme.colors.orange)
 
     CompositionLocalProvider(
         LocalColors provides colors,
         LocalDimensions provides dimensions,
         LocalTypography provides typography,
         LocalRippleTheme provides AppRippleTheme,
+        LocalIndication provides rippleIndication,
         LocalTextSelectionColors provides AppTextSelectionColors,
     ) {
         MaterialTheme(

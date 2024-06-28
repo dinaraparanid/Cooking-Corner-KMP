@@ -1,11 +1,9 @@
 package com.paranid5.cooking_corner.feature.main.content.presentation.navbar
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 
 @Composable
 internal fun NavBarItem(
@@ -26,16 +25,11 @@ internal fun NavBarItem(
     isCurrent: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-) = NavBarItemImpl(
-    modifier = modifier,
-    icon = {
-        NavBarIcon(
-            title = title,
-            image = image,
-            isCurrent = isCurrent,
-        )
-    },
-    onClick = onClick,
+) = NavBarIcon(
+    title = title,
+    image = image,
+    isCurrent = isCurrent,
+    modifier = modifier.clickableWithRipple(onClick = onClick)
 )
 
 @Composable
@@ -47,41 +41,26 @@ private fun NavBarIcon(
 ) {
     val itemColor by rememberItemColor(isCurrent)
 
-    Column(modifier) {
-        Icon(
-            imageVector = image,
-            contentDescription = title,
-            tint = itemColor,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        )
+    Box(modifier) {
+        Column(Modifier.align(Alignment.Center)) {
+            Icon(
+                imageVector = image,
+                contentDescription = title,
+                tint = itemColor,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+            Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
-        Text(
-            text = title,
-            color = itemColor,
-            style = AppTheme.typography.regular,
-            fontFamily = AppTheme.typography.RalewayFontFamily,
-        )
+            Text(
+                text = title,
+                color = itemColor,
+                style = AppTheme.typography.regular,
+                fontFamily = AppTheme.typography.RalewayFontFamily,
+            )
+        }
     }
 }
-
-@Composable
-private fun NavBarItemImpl(
-    icon: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) = Button(
-    modifier = modifier,
-    onClick = onClick,
-    elevation = null,
-    colors = ButtonDefaults.buttonColors(
-        backgroundColor = Color.Transparent,
-        disabledBackgroundColor = Color.Transparent,
-    ),
-    shape = RoundedCornerShape(AppTheme.dimensions.corners.medium),
-    content = { icon() },
-)
 
 @Composable
 private fun rememberItemColor(isCurrent: Boolean): State<Color> {

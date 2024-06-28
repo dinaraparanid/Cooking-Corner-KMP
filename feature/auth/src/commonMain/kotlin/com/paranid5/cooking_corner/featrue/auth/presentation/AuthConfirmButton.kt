@@ -2,13 +2,13 @@ package com.paranid5.cooking_corner.featrue.auth.presentation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.ui.utils.RippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 
 @Composable
@@ -16,16 +16,17 @@ internal fun AuthConfirmButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-) = Button(
+) = RippleButton(
     onClick = onClick,
+    rippleColor = AppTheme.colors.button.primary,
     modifier = modifier.simpleShadow(
         elevation = AppTheme.dimensions.elevation.extraBig,
         radius = AppTheme.dimensions.corners.minimum
     ),
     shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
     colors = ButtonDefaults.buttonColors(
-        backgroundColor = AppTheme.colors.button.primary,
-        disabledBackgroundColor = AppTheme.colors.button.primary,
+        containerColor = AppTheme.colors.button.primary,
+        disabledContainerColor = AppTheme.colors.button.primary,
     ),
 ) {
     AuthButtonText(
