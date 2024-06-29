@@ -5,9 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +21,7 @@ import com.paranid5.cooking_corner.core.resources.home_remove_from_favourites
 import com.paranid5.cooking_corner.core.resources.ic_like
 import com.paranid5.cooking_corner.core.resources.ic_liked
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.ui.utils.OutlinedRippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -36,7 +36,7 @@ internal fun FavouritesButton(
 ) {
     val appPadding = AppTheme.dimensions.padding
 
-    OutlinedButton(
+    OutlinedRippleButton(
         onClick = onLikedChanged,
         shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
         border = BorderStroke(
@@ -44,8 +44,8 @@ internal fun FavouritesButton(
             color = AppTheme.colors.button.primary,
         ),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = AppTheme.colors.button.secondary,
-            disabledBackgroundColor = AppTheme.colors.button.secondary,
+            containerColor = AppTheme.colors.button.secondary,
+            disabledContainerColor = AppTheme.colors.button.secondary,
         ),
         modifier = modifier.simpleShadow(
             elevation = AppTheme.dimensions.elevation.extraBig,

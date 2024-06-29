@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.ui.MainBlack
@@ -18,6 +19,19 @@ fun Modifier.simpleShadow(
     shadow(
         elevation = elevation,
         shape = RoundedCornerShape(radius ?: AppTheme.dimensions.corners.medium),
+        ambientColor = color ?: MainBlack,
+        spotColor = color ?: MainBlack
+    )
+}
+
+fun Modifier.simpleShadow(
+    shape: Shape,
+    elevation: Dp = 64.dp,
+    color: Color? = null,
+) = this.composed {
+    shadow(
+        elevation = elevation,
+        shape = shape ?: RoundedCornerShape(AppTheme.dimensions.corners.medium),
         ambientColor = color ?: MainBlack,
         spotColor = color ?: MainBlack
     )

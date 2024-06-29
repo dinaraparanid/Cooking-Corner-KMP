@@ -56,6 +56,8 @@ kotlin {
 
         androidMain.dependencies {
             implementation(compose.preview)
+            implementation(libs.androidx.material)
+            implementation(libs.androidx.material3)
             implementation(libs.androidx.activity.compose)
             implementation(libs.kodein.android)
         }

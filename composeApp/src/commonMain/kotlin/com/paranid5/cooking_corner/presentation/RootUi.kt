@@ -1,8 +1,11 @@
 package com.paranid5.cooking_corner.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -37,8 +40,10 @@ fun RootUi(
     }
 
     Scaffold(
-        modifier = modifier,
         containerColor = Color.Transparent,
+        modifier = modifier
+            .background(AppTheme.colors.background.primary)
+            .windowInsetsPadding(WindowInsets.safeDrawing),
     ) { screenPadding ->
         Surface(
             color = Color.Transparent,

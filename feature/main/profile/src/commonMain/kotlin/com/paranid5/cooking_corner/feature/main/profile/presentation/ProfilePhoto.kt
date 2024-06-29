@@ -13,9 +13,11 @@ import coil3.compose.SubcomposeAsyncImage
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.placeholder_profile
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.foundation.AppLoadingBox
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.coverModel
 import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.ui.isUndefinedOrLoading
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
 
@@ -23,20 +25,27 @@ import org.jetbrains.compose.resources.vectorResource
 internal fun ProfilePhoto(
     photoUrlState: UiState<String>,
     modifier: Modifier = Modifier,
-) = SubcomposeAsyncImage(
-    modifier = modifier,
-    model = coverModel(coverUrl = photoUrlState.getOrNull()),
-    contentDescription = null,
-    alignment = Alignment.Center,
-    contentScale = ContentScale.Crop,
-    loading = { AppProgressIndicator(Modifier.fillMaxSize()) },
-    error = {
-        ProfilePhotoThumbnail(
-            photoUrlState = photoUrlState,
-            modifier = Modifier.fillMaxSize(),
-        )
-    }
-)
+) = AppLoadingBox(
+    isLoading = photoUrlState.isUndefinedOrLoading,
+    isError = photoUrlState is UiState.Error,
+    onErrorButtonClick = { }, // TODO: retry
+    modifier = modifier
+) {
+    SubcomposeAsyncImage(
+        modifier = Modifier.fillMaxSize(),
+        model = coverModel(coverUrl = photoUrlState.getOrNull()),
+        contentDescription = null,
+        alignment = Alignment.Center,
+        contentScale = ContentScale.Crop,
+        loading = { AppProgressIndicator(Modifier.fillMaxSize()) },
+        error = {
+            ProfilePhotoThumbnail(
+                photoUrlState = photoUrlState,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+    )
+}
 
 @Composable
 private fun ProfilePhotoUndefinedPlaceholder(modifier: Modifier = Modifier) =

@@ -42,16 +42,16 @@
     <string name="search_recommended">Recommended</string>
 
     <!-- Recipe -->
-    <string name="recipe_reviews" formatted="false">%s reviews</string>
-    <string name="recipe_author" formatted="false">Author: %s</string>
+    <string name="recipe_reviews" formatted="false">%1$s reviews</string>
+    <string name="recipe_author" formatted="false">Author: %1$s</string>
     <string name="recipe_prep_time">Prep. time</string>
     <string name="recipe_cooking_time">Cooking time</string>
     <string name="recipe_portions">Portions</string>
-    <string name="recipe_portions_value" formatted="false">%s meals</string>
+    <string name="recipe_portions_value" formatted="false">%1$d meals</string>
     <string name="recipe_cooking_steps">Cooking steps</string>
     <string name="recipe_ingredients">Ingredients</string>
-    <string name="recipe_step" formatted="false">Step %s</string>
-    <string name="recipe_ingredient" formatted="false">Ingredient %s</string>
+    <string name="recipe_step" formatted="false">Step %1$d</string>
+    <string name="recipe_ingredient" formatted="false">Ingredient %1$d</string>
 
     <!-- Units -->
     <string name="unit_minute">min</string>

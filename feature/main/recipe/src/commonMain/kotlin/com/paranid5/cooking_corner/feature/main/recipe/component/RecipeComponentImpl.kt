@@ -30,7 +30,7 @@ internal class RecipeComponentImpl(
     override fun onUiIntent(intent: RecipeUiIntent) {
         when (intent) {
             is RecipeUiIntent.Back -> onBack()
-            is RecipeUiIntent.LikeClick -> Unit // TODO: Like click
+            is RecipeUiIntent.Edit -> Unit // TODO: Edit click
         }
     }
 

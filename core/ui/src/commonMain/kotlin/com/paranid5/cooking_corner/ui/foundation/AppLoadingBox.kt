@@ -33,7 +33,7 @@ fun AppLoadingBox(
     errorBackgroundColor: Color = AppTheme.colors.background.secondary,
     errorText: String = stringResource(Res.string.something_went_wrong),
     errorButtonText: String = stringResource(Res.string.retry),
-    contentAlignment: Alignment = Alignment.TopStart,
+    contentAlignment: Alignment = Alignment.Center,
     propagateMinConstraints: Boolean = false,
     content: (@Composable BoxScope.() -> Unit)? = null,
 ) = Box(
