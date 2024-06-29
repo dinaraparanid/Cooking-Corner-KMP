@@ -9,7 +9,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,13 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
-import com.arkivanov.decompose.router.slot.ChildSlot
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.search_last_recipes
 import com.paranid5.cooking_corner.core.resources.search_recommended
-import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeDetailsUi
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
-import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent.Child
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
@@ -46,11 +42,6 @@ fun SearchUi(
         latestRecipes = latestRecipes,
         recommendedRecipes = recommendedRecipes,
         modifier = modifier.verticalScroll(rememberScrollState()),
-    )
-
-    SearchUiSlots(
-        childSlot = component.childSlot.collectAsState(),
-        modifier = modifier,
     )
 }
 
@@ -101,17 +92,6 @@ private fun SearchUiContent(
     )
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
-}
-
-@Composable
-private fun SearchUiSlots(
-    childSlot: State<ChildSlot<*, Child>>,
-    modifier: Modifier = Modifier,
-) {
-    when (val instance = childSlot.value.child?.instance) {
-        is Child.RecepieDetails -> RecipeDetailsUi(modifier = modifier)
-        null -> Unit
-    }
 }
 
 @Composable

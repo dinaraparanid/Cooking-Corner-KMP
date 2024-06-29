@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.feature.main.recipe.presentation
+package com.paranid5.cooking_corner.feature.main.recipe.presentation.brief
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row

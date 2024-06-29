@@ -1,26 +1,20 @@
-package com.paranid5.cooking_corner.feature.main.recipe.presentation
+package com.paranid5.cooking_corner.feature.main.recipe.presentation.brief
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
-import com.paranid5.cooking_corner.ui.foundation.AppLoadingBox
-import com.paranid5.cooking_corner.ui.isUndefinedOrLoading
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 private val COVER_WIDTH = 166.dp
@@ -52,10 +46,12 @@ fun RecipeItem(
     RecipeClippedCover(
         coverUrlState = recipe.coverUrlState,
         onErrorButtonClick = onErrorButtonClick,
-        modifier = Modifier.constrainAs(cover) {
-            top.linkTo(parent.top, margin = appPadding.medium)
-            fillMaxWidthWithPadding()
-        },
+        modifier = Modifier
+            .size(width = COVER_WIDTH, height = COVER_HEIGHT)
+            .constrainAs(cover) {
+                top.linkTo(parent.top, margin = appPadding.medium)
+                fillMaxWidthWithPadding()
+            },
     )
 
     RecipeTitle(
@@ -108,32 +104,4 @@ private fun RecipeTitle(
             .fillMaxWidth()
             .align(Alignment.CenterStart),
     )
-}
-
-@Composable
-private fun RecipeClippedCover(
-    coverUrlState: UiState<String>,
-    modifier: Modifier = Modifier,
-    onErrorButtonClick: (() -> Unit)? = null,
-) {
-    val coverShape = RoundedCornerShape(AppTheme.dimensions.corners.small)
-
-    AppLoadingBox(
-        isLoading = coverUrlState.isUndefinedOrLoading,
-        isError = coverUrlState is UiState.Error,
-        onErrorButtonClick = onErrorButtonClick,
-        modifier = modifier
-            .size(width = COVER_WIDTH, height = COVER_HEIGHT)
-            .clip(coverShape)
-            .border(
-                width = AppTheme.dimensions.borders.minimum,
-                color = AppTheme.colors.button.primary,
-                shape = coverShape,
-            ),
-    ) {
-        RecipeCover(
-            coverUrlState = coverUrlState,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
 }

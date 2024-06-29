@@ -14,7 +14,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.paranid5.cooking_corner.component.getComponentStore
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
-import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent.Child
+import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent.BackResult
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
@@ -27,15 +27,8 @@ import kotlinx.serialization.Serializable
 internal class SearchComponentImpl(
     componentContext: ComponentContext,
     private val storeFactory: SearchStoreProvider.Factory,
-    private val recipeComponentFactory: RecipeComponent.Factory,
-    private val onBack: () -> Unit,
+    private val onBack: (BackResult) -> Unit,
 ) : SearchComponent, ComponentContext by componentContext {
-    @Serializable
-    sealed interface Slot {
-        @Serializable
-        data class Recipe(val recipeUiState: RecipeUiState) : Slot
-    }
-
     private val componentStore = getComponentStore(
         defaultState = State(),
         storeFactory = { storeFactory.create().provide(initialState = it) }
@@ -56,14 +49,6 @@ internal class SearchComponentImpl(
         stub()
     }
 
-    private val childSlotNavigation = SlotNavigation<Slot>()
-
-    override val childSlot: StateFlow<ChildSlot<*, Child>> = childSlot(
-        source = childSlotNavigation,
-        serializer = Slot.serializer(),
-        childFactory = ::createChildSlot,
-    ).toStateFlow()
-
     init {
         bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
             store.labels bindTo ::onLabel
@@ -72,34 +57,19 @@ internal class SearchComponentImpl(
 
     override fun onUiIntent(intent: UiIntent) = store.accept(intent)
 
-    private fun createChildSlot(
-        configuration: Slot,
-        componentContext: ComponentContext,
-    ) = when (configuration) {
-        is Slot.Recipe -> Child.RecepieDetails(
-            recipeComponentFactory.create(
-                componentContext = componentContext,
-                recipeUiState = configuration.recipeUiState,
-                onBack = { childSlotNavigation.dismiss() },
-            )
+    private fun onLabel(label: Label) = when (label) {
+        is Label.ShowRecipe -> onBack(
+            BackResult.ShowRecipeDetails(recipeUiState = label.recipeUiState)
         )
     }
 
-    private fun onLabel(label: Label) = when (label) {
-        is Label.ShowRecipe -> childSlotNavigation.activate(Slot.Recipe(label.recipeUiState))
-    }
-
-    class Factory(
-        private val storeFactory: SearchStoreProvider.Factory,
-        private val recipeComponentFactory: RecipeComponent.Factory,
-    ) : SearchComponent.Factory {
+    class Factory(private val storeFactory: SearchStoreProvider.Factory) : SearchComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
-            onBack: () -> Unit,
+            onBack: (BackResult) -> Unit,
         ): SearchComponent = SearchComponentImpl(
             componentContext = componentContext,
             storeFactory = storeFactory,
-            recipeComponentFactory = recipeComponentFactory,
             onBack = onBack,
         )
     }

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.LazyPagingItems
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeItem
+import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.RecipeItem
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
@@ -44,7 +44,9 @@ internal fun RecipesGrid(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(RECIPE_HEIGHT)
-                        .clickableWithRipple(bounded = true) { onUiIntent(UiIntent.ShowRecipe(recipe)) },
+                        .clickableWithRipple(bounded = true) {
+                            onUiIntent(UiIntent.ShowRecipe(recipe))
+                        },
                 ) { modifier ->
                     FavouritesButton(
                         isLiked = recipe.isLiked,

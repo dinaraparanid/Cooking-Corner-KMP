@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import app.cash.paging.compose.LazyPagingItems
-import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeItem
+import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.RecipeItem
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
@@ -32,7 +32,9 @@ internal fun RecipesRow(
                 onErrorButtonClick = { }, // TODO: Error handling
                 modifier = Modifier
                     .size(width = RECIPE_WIDTH, height = RECIPE_HEIGHT)
-                    .clickableWithRipple(bounded = true) { onUiIntent(UiIntent.ShowRecipe(recipe)) },
+                    .clickableWithRipple(bounded = true) {
+                        onUiIntent(UiIntent.ShowRecipe(recipe))
+                    },
             ) { modifier ->
                 AddToYourRecipesButton(
                     onClick = { onUiIntent(UiIntent.AddToRecipesClick) },

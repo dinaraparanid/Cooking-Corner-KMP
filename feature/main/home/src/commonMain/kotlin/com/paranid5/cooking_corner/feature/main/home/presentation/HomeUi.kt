@@ -7,20 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
-import com.arkivanov.decompose.router.slot.ChildSlot
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
-import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent.Child
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.presentation.recipes.RecipesGrid
 import com.paranid5.cooking_corner.feature.main.home.presentation.topbar.HomeTopBar
-import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeDetailsUi
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
@@ -37,11 +33,6 @@ fun HomeUi(
         state = state,
         onUiIntent = onUiIntent,
         recipes = recipes,
-        modifier = modifier,
-    )
-
-    HomeUiSlots(
-        childSlot = component.childSlot.collectAsState(),
         modifier = modifier,
     )
 }
@@ -80,15 +71,4 @@ private fun HomeUiContent(
             .fillMaxSize()
             .padding(horizontal = AppTheme.dimensions.padding.extraSmall),
     )
-}
-
-@Composable
-private fun HomeUiSlots(
-    childSlot: State<ChildSlot<*, Child>>,
-    modifier: Modifier = Modifier,
-) {
-    when (val instance = childSlot.value.child?.instance) {
-        is Child.RecepieDetails -> RecipeDetailsUi(modifier = modifier)
-        null -> Unit
-    }
 }

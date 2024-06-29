@@ -13,6 +13,7 @@ import com.paranid5.cooking_corner.feature.main.content.component.MainContentChi
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentConfig
 import com.paranid5.cooking_corner.feature.main.home.presentation.HomeUi
 import com.paranid5.cooking_corner.feature.main.profile.presentation.ProfileUi
+import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.RecipeDetailsUi
 import com.paranid5.cooking_corner.feature.main.search.presentation.SearchUi
 
 @Composable
@@ -39,6 +40,11 @@ internal fun ContentUi(
             )
 
             is MainContentChild.Search -> SearchUi(
+                component = child.component,
+                modifier = Modifier.fillMaxSize(),
+            )
+
+            is MainContentChild.RecepieDetails -> RecipeDetailsUi(
                 component = child.component,
                 modifier = Modifier.fillMaxSize(),
             )

@@ -9,6 +9,7 @@ import com.arkivanov.decompose.router.stack.pop
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 import kotlinx.coroutines.flow.StateFlow
 
@@ -17,6 +18,7 @@ internal class MainContentComponentImpl(
     private val searchComponentFactory: SearchComponent.Factory,
     private val homeComponentFactory: HomeComponent.Factory,
     private val profileComponentFactory: ProfileComponent.Factory,
+    private val recipeComponentFactory: RecipeComponent.Factory,
     private val onBack: () -> Unit,
 ) : MainContentComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<MainContentConfig>()
@@ -50,6 +52,10 @@ internal class MainContentComponentImpl(
             is MainContentConfig.Search -> MainContentChild.Search(
                 component = buildSearchComponent(config, componentContext)
             )
+
+            is MainContentConfig.RecipeDetails -> MainContentChild.RecepieDetails(
+                component = buildRecipeDetailsComponent(config, componentContext)
+            )
         }
 
     private fun buildHomeComponent(
@@ -57,7 +63,15 @@ internal class MainContentComponentImpl(
         componentContext: ComponentContext,
     ) = homeComponentFactory.create(
         componentContext = componentContext,
-        onBack = navigation::pop,
+        onBack = { result ->
+            when (result) {
+                is HomeComponent.BackResult.Dismiss ->
+                    navigation.pop()
+
+                is HomeComponent.BackResult.ShowRecipeDetails ->
+                    navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
+            }
+        },
     )
 
     private fun buildSearchComponent(
@@ -65,7 +79,15 @@ internal class MainContentComponentImpl(
         componentContext: ComponentContext,
     ) = searchComponentFactory.create(
         componentContext = componentContext,
-        onBack = navigation::pop,
+        onBack = { result ->
+            when (result) {
+                is SearchComponent.BackResult.Dismiss ->
+                    navigation.pop()
+
+                is SearchComponent.BackResult.ShowRecipeDetails ->
+                    navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
+            }
+        },
     )
 
     private fun buildProfileComponent(
@@ -76,10 +98,20 @@ internal class MainContentComponentImpl(
         onBack = navigation::pop,
     )
 
+    private fun buildRecipeDetailsComponent(
+        config: MainContentConfig.RecipeDetails,
+        componentContext: ComponentContext,
+    ) = recipeComponentFactory.create(
+        componentContext = componentContext,
+        recipeUiState = config.recipeUiState,
+        onBack = navigation::pop,
+    )
+
     class Factory(
         private val searchComponentFactory: SearchComponent.Factory,
         private val homeComponentFactory: HomeComponent.Factory,
         private val profileComponentFactory: ProfileComponent.Factory,
+        private val recipeComponentFactory: RecipeComponent.Factory,
     ) : MainContentComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
@@ -89,6 +121,7 @@ internal class MainContentComponentImpl(
             searchComponentFactory = searchComponentFactory,
             homeComponentFactory = homeComponentFactory,
             profileComponentFactory = profileComponentFactory,
+            recipeComponentFactory = recipeComponentFactory,
             onBack = onBack,
         )
     }
