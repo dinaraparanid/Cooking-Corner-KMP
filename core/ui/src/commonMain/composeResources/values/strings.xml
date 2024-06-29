@@ -43,4 +43,8 @@
 
     <!-- Units -->
     <string name="unit_minute">min</string>
+
+    <!-- General -->
+    <string name="retry">Retry</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

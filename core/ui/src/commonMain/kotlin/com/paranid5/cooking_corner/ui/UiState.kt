@@ -1,7 +1,6 @@
 package com.paranid5.cooking_corner.ui
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.snapshots.SnapshotApplyResult.Success.check
 import com.arkivanov.essenty.statekeeper.SerializableContainer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -51,3 +50,6 @@ inline fun <reified D : Any> D.toUiState() =
 
 inline fun <reified D : Any> D?.toUiStateIfNotNull() =
     this?.toUiState() ?: UiState.Error()
+
+inline val <T> UiState<T>.isUndefinedOrLoading
+    get() = this is UiState.Undefined || this is UiState.Loading

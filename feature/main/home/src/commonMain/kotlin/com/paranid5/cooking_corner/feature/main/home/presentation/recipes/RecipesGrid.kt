@@ -1,6 +1,5 @@
 package com.paranid5.cooking_corner.feature.main.home.presentation.recipes
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +16,7 @@ import app.cash.paging.compose.LazyPagingItems
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeItem
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
 
 private const val MIN_RECIPES_IN_ROW = 2
@@ -40,10 +40,11 @@ internal fun RecipesGrid(
             recipes[index]?.let { recipe ->
                 RecipeItem(
                     recipe = recipe,
+                    onErrorButtonClick = { }, // TODO: Error handling
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(RECIPE_HEIGHT)
-                        .clickable { onUiIntent(UiIntent.ShowRecipe(recipe)) },
+                        .clickableWithRipple { onUiIntent(UiIntent.ShowRecipe(recipe)) },
                 ) { modifier ->
                     FavouritesButton(
                         isLiked = recipe.isLiked,
