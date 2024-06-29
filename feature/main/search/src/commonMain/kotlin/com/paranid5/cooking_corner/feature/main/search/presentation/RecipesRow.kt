@@ -32,7 +32,7 @@ internal fun RecipesRow(
                 onErrorButtonClick = { }, // TODO: Error handling
                 modifier = Modifier
                     .size(width = RECIPE_WIDTH, height = RECIPE_HEIGHT)
-                    .clickableWithRipple { onUiIntent(UiIntent.ShowRecipe(recipe)) },
+                    .clickableWithRipple(bounded = true) { onUiIntent(UiIntent.ShowRecipe(recipe)) },
             ) { modifier ->
                 AddToYourRecipesButton(
                     onClick = { onUiIntent(UiIntent.AddToRecipesClick) },

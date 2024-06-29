@@ -25,6 +25,7 @@ internal class ProfileComponentImpl(
 
     private val componentState = getComponentState(
         defaultState = ProfileState(
+            // TODO: acquire from datastore
             profileUiState = ProfileUiState(
                 username = "OlgaLove",
                 name = "Olga",

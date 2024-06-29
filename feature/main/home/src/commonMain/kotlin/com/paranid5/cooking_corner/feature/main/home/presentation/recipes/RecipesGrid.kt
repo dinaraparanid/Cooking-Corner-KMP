@@ -44,7 +44,7 @@ internal fun RecipesGrid(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(RECIPE_HEIGHT)
-                        .clickableWithRipple { onUiIntent(UiIntent.ShowRecipe(recipe)) },
+                        .clickableWithRipple(bounded = true) { onUiIntent(UiIntent.ShowRecipe(recipe)) },
                 ) { modifier ->
                     FavouritesButton(
                         isLiked = recipe.isLiked,

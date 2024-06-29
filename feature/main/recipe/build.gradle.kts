@@ -61,6 +61,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
+            implementation(libs.kotlinx.collections.immutable)
+
             implementation(libs.constraintlayout)
 
             implementation(libs.coil.compose.core)

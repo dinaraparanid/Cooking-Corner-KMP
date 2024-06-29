@@ -5,9 +5,10 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.paranid5.cooking_corner.component.StateSource
 import com.paranid5.cooking_corner.component.UiIntentHandler
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -18,7 +19,7 @@ interface SearchComponent : StateSource<State>, UiIntentHandler<UiIntent> {
     val recommendedRecepiesPagedFlow: Flow<PagingData<RecipeUiState>>
 
     sealed interface Child {
-        data object Recepie : Child
+        class RecepieDetails internal constructor(internal val component: RecipeComponent) : Child
     }
 
     interface Factory {

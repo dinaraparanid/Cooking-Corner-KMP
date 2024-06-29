@@ -55,6 +55,7 @@ kotlin {
             implementation(projects.feature.main.search)
             implementation(projects.feature.main.home)
             implementation(projects.feature.main.profile)
+            implementation(projects.feature.main.recipe)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

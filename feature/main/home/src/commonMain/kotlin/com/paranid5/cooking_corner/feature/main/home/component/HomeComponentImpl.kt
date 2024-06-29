@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
@@ -16,6 +17,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent.Chi
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +27,7 @@ import kotlinx.serialization.Serializable
 internal class HomeComponentImpl(
     componentContext: ComponentContext,
     private val storeFactory: HomeStoreProvider.Factory,
+    private val recipeComponentFactory: RecipeComponent.Factory,
     private val onBack: () -> Unit,
 ) : HomeComponent, ComponentContext by componentContext {
     @Serializable
@@ -68,7 +71,13 @@ internal class HomeComponentImpl(
         configuration: Slot,
         componentContext: ComponentContext,
     ) = when (configuration) {
-        is Slot.Recipe -> Child.Recepie
+        is Slot.Recipe -> Child.RecepieDetails(
+            component = recipeComponentFactory.create(
+                componentContext = componentContext,
+                recipeUiState = configuration.recipeUiState,
+                onBack = { childSlotNavigation.dismiss() }
+            )
+        )
     }
 
     private fun onLabel(label: Label) = when (label) {
@@ -77,6 +86,7 @@ internal class HomeComponentImpl(
 
     class Factory(
         private val storeFactory: HomeStoreProvider.Factory,
+        private val recipeComponentFactory: RecipeComponent.Factory,
     ) : HomeComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
@@ -84,6 +94,7 @@ internal class HomeComponentImpl(
         ): HomeComponent = HomeComponentImpl(
             componentContext = componentContext,
             storeFactory = storeFactory,
+            recipeComponentFactory = recipeComponentFactory,
             onBack = onBack,
         )
     }

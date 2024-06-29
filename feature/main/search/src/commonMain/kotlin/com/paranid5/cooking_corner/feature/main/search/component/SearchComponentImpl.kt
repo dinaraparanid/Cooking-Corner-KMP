@@ -6,12 +6,14 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.paranid5.cooking_corner.component.getComponentStore
 import com.paranid5.cooking_corner.component.toStateFlow
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent.Child
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
@@ -25,6 +27,7 @@ import kotlinx.serialization.Serializable
 internal class SearchComponentImpl(
     componentContext: ComponentContext,
     private val storeFactory: SearchStoreProvider.Factory,
+    private val recipeComponentFactory: RecipeComponent.Factory,
     private val onBack: () -> Unit,
 ) : SearchComponent, ComponentContext by componentContext {
     @Serializable
@@ -73,20 +76,30 @@ internal class SearchComponentImpl(
         configuration: Slot,
         componentContext: ComponentContext,
     ) = when (configuration) {
-        is Slot.Recipe -> Child.Recepie
+        is Slot.Recipe -> Child.RecepieDetails(
+            recipeComponentFactory.create(
+                componentContext = componentContext,
+                recipeUiState = configuration.recipeUiState,
+                onBack = { childSlotNavigation.dismiss() },
+            )
+        )
     }
 
     private fun onLabel(label: Label) = when (label) {
         is Label.ShowRecipe -> childSlotNavigation.activate(Slot.Recipe(label.recipeUiState))
     }
 
-    class Factory(private val storeFactory: SearchStoreProvider.Factory) : SearchComponent.Factory {
+    class Factory(
+        private val storeFactory: SearchStoreProvider.Factory,
+        private val recipeComponentFactory: RecipeComponent.Factory,
+    ) : SearchComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
             onBack: () -> Unit,
         ): SearchComponent = SearchComponentImpl(
             componentContext = componentContext,
             storeFactory = storeFactory,
+            recipeComponentFactory = recipeComponentFactory,
             onBack = onBack,
         )
     }

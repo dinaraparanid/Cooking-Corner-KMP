@@ -7,13 +7,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
+import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent.Child
+import com.paranid5.cooking_corner.feature.main.home.component.HomeStore
+import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.presentation.recipes.RecipesGrid
 import com.paranid5.cooking_corner.feature.main.home.presentation.topbar.HomeTopBar
+import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeDetailsUi
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 @Composable
@@ -25,33 +33,62 @@ fun HomeUi(
     val recipes = component.recepiesPagedFlow.collectAsLazyPagingItems()
     val onUiIntent = component::onUiIntent
 
-    Column(modifier) {
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+    HomeUiContent(
+        state = state,
+        onUiIntent = onUiIntent,
+        recipes = recipes,
+        modifier = modifier,
+    )
 
-        RecipeFilter(
-            state = state,
-            onUiIntent = onUiIntent,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
-        )
+    HomeUiSlots(
+        childSlot = component.childSlot.collectAsState(),
+        modifier = modifier,
+    )
+}
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
+@Composable
+private fun HomeUiContent(
+    state: HomeStore.State,
+    recipes: LazyPagingItems<RecipeUiState>,
+    onUiIntent: (UiIntent) -> Unit,
+    modifier: Modifier = Modifier
+) = Column(modifier) {
+    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
-        HomeTopBar(
-            state = state,
-            onUiIntent = onUiIntent,
-            modifier = Modifier.fillMaxWidth(),
-        )
+    RecipeFilter(
+        state = state,
+        onUiIntent = onUiIntent,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
+    )
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+    Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
-        RecipesGrid(
-            recipes = recipes,
-            onUiIntent = onUiIntent,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = AppTheme.dimensions.padding.extraSmall),
-        )
+    HomeTopBar(
+        state = state,
+        onUiIntent = onUiIntent,
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+
+    RecipesGrid(
+        recipes = recipes,
+        onUiIntent = onUiIntent,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = AppTheme.dimensions.padding.extraSmall),
+    )
+}
+
+@Composable
+private fun HomeUiSlots(
+    childSlot: State<ChildSlot<*, Child>>,
+    modifier: Modifier = Modifier,
+) {
+    when (val instance = childSlot.value.child?.instance) {
+        is Child.RecepieDetails -> RecipeDetailsUi(modifier = modifier)
+        null -> Unit
     }
 }

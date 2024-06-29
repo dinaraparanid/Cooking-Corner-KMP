@@ -9,16 +9,24 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.search_last_recipes
 import com.paranid5.cooking_corner.core.resources.search_recommended
+import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeDetailsUi
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
+import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent.Child
+import com.paranid5.cooking_corner.feature.main.search.component.SearchStore
+import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -32,46 +40,77 @@ fun SearchUi(
     val latestRecipes = component.lastRecepiesPagedFlow.collectAsLazyPagingItems()
     val recommendedRecipes = component.recommendedRecepiesPagedFlow.collectAsLazyPagingItems()
 
-    Column(modifier.verticalScroll(rememberScrollState())) {
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+    SearchUiContent(
+        state = state,
+        onUiIntent = onUiIntent,
+        latestRecipes = latestRecipes,
+        recommendedRecipes = recommendedRecipes,
+        modifier = modifier.verticalScroll(rememberScrollState()),
+    )
 
-        RecipeFilter(
-            state = state,
-            onUiIntent = onUiIntent,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
-        )
+    SearchUiSlots(
+        childSlot = component.childSlot.collectAsState(),
+        modifier = modifier,
+    )
+}
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.big))
+@Composable
+private fun SearchUiContent(
+    state: SearchStore.State,
+    onUiIntent: (UiIntent) -> Unit,
+    latestRecipes: LazyPagingItems<RecipeUiState>,
+    recommendedRecipes: LazyPagingItems<RecipeUiState>,
+    modifier: Modifier = Modifier,
+) = Column(modifier) {
+    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
-        RecipesLabel(
-            text = stringResource(Res.string.search_last_recipes),
-            modifier = Modifier.fillMaxWidth(),
-        )
+    RecipeFilter(
+        state = state,
+        onUiIntent = onUiIntent,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
+    )
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+    Spacer(Modifier.height(AppTheme.dimensions.padding.big))
 
-        RecipesRow(
-            recipes = latestRecipes,
-            onUiIntent = onUiIntent,
-        )
+    RecipesLabel(
+        text = stringResource(Res.string.search_last_recipes),
+        modifier = Modifier.fillMaxWidth(),
+    )
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.big))
+    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
-        RecipesLabel(
-            text = stringResource(Res.string.search_recommended),
-            modifier = Modifier.fillMaxWidth(),
-        )
+    RecipesRow(
+        recipes = latestRecipes,
+        onUiIntent = onUiIntent,
+    )
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+    Spacer(Modifier.height(AppTheme.dimensions.padding.big))
 
-        RecipesRow(
-            recipes = recommendedRecipes,
-            onUiIntent = onUiIntent,
-        )
+    RecipesLabel(
+        text = stringResource(Res.string.search_recommended),
+        modifier = Modifier.fillMaxWidth(),
+    )
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+
+    RecipesRow(
+        recipes = recommendedRecipes,
+        onUiIntent = onUiIntent,
+    )
+
+    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+}
+
+@Composable
+private fun SearchUiSlots(
+    childSlot: State<ChildSlot<*, Child>>,
+    modifier: Modifier = Modifier,
+) {
+    when (val instance = childSlot.value.child?.instance) {
+        is Child.RecepieDetails -> RecipeDetailsUi(modifier = modifier)
+        null -> Unit
     }
 }
 
