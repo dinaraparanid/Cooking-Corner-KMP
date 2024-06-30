@@ -30,7 +30,7 @@ fun AppLoadingBox(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
     onErrorButtonClick: (() -> Unit)? = null,
-    errorBackgroundColor: Color = AppTheme.colors.background.secondary,
+    errorBackgroundColor: Color = AppTheme.colors.background.primaryDarker,
     errorText: String = stringResource(Res.string.something_went_wrong),
     errorButtonText: String = stringResource(Res.string.retry),
     contentAlignment: Alignment = Alignment.Center,

@@ -24,7 +24,7 @@ private val BUTTON_SIZE = 36.dp
 private val ICON_SIZE = 20.dp
 
 @Composable
-internal fun TopBar(
+internal fun RecipeTopBar(
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) = Box(modifier) {

@@ -23,7 +23,7 @@ private const val SHIMMER_DURATION_MS = 1500
 @Composable
 fun Modifier.shimmerEffect(
     accentColor: Color = AppTheme.colors.background.alternative,
-    basicColor: Color = AppTheme.colors.background.secondary,
+    basicColor: Color = AppTheme.colors.background.primaryDarker,
     widthOfShadowBrush: Float = WIDTH_OF_SHADOW_BRUSH,
     durationMillis: Int = SHIMMER_DURATION_MS,
 ): Modifier {

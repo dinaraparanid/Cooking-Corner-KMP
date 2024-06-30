@@ -26,6 +26,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_prep_time
 import com.paranid5.cooking_corner.core.resources.unit_minute
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
+import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.pager.RecipePager
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -48,7 +49,7 @@ fun RecipeDetailsUi(
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
-        TopBar(
+        RecipeTopBar(
             onUiIntent = onUiIntent,
             modifier = fillMaxWidthWithPaddingModifier,
         )
@@ -57,6 +58,7 @@ fun RecipeDetailsUi(
 
         RecipeClippedCover(
             coverUrlState = state.recipe.coverUrlState,
+            onErrorButtonClick = {}, // TODO: Error handle
             modifier = Modifier
                 .size(width = COVER_WIDTH, height = COVER_HEIGHT)
                 .align(Alignment.CenterHorizontally),
@@ -86,6 +88,14 @@ fun RecipeDetailsUi(
             portions = state.recipe.portions,
             modifier = fillMaxWidthWithPaddingModifier,
         )
+
+        Spacer(Modifier.height(AppTheme.dimensions.padding.extraSmall))
+
+        RecipePager(
+            steps = state.steps,
+            ingredients = state.ingredients,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -109,21 +119,21 @@ private fun RatingReviewsAuthor(
     author: String,
     modifier: Modifier = Modifier,
 ) = Row(modifier) {
-    Rating(
+    RecipeRating(
         rating = rating,
         modifier = Modifier.align(Alignment.CenterVertically),
     )
 
     Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
 
-    Reviews(
+    RecipeReviews(
         reviews = reviews,
         modifier = Modifier.align(Alignment.CenterVertically),
     )
 
     Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
 
-    Author(
+    RecipeAuthor(
         author = author,
         modifier = Modifier
             .weight(1F)

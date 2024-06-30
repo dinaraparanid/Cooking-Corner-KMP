@@ -49,7 +49,7 @@ private fun HomeTopBarImpl(
 ) {
     val spinnerShape = RoundedCornerShape(AppTheme.dimensions.corners.small)
 
-    Row(modifier = modifier.background(AppTheme.colors.background.secondary)) {
+    Row(modifier = modifier.background(AppTheme.colors.background.primaryDarker)) {
         Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
 
         AppIconButton(

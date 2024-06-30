@@ -6,6 +6,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.paranid5.cooking_corner.ui.DarkerPastel
+import com.paranid5.cooking_corner.ui.DarkestPastel
 import com.paranid5.cooking_corner.ui.Error
 import com.paranid5.cooking_corner.ui.MainBlack
 import com.paranid5.cooking_corner.ui.MainPastel
@@ -49,13 +50,15 @@ data class AppColors(
 @Immutable
 data class AppBackgroundColors(
     val primary: Color,
-    val secondary: Color,
+    val primaryDarker: Color,
+    val primaryDarkest: Color,
     val alternative: Color,
 ) {
     companion object {
         internal val default = AppBackgroundColors(
             primary = MainPastel,
-            secondary = DarkerPastel,
+            primaryDarker = DarkerPastel,
+            primaryDarkest = DarkestPastel,
             alternative = MainWhite,
         )
     }

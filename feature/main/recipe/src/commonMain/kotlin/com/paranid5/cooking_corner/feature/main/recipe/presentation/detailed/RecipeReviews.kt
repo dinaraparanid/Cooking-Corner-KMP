@@ -9,7 +9,7 @@ import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun Reviews(
+internal fun RecipeReviews(
     reviews: Int,
     modifier: Modifier = Modifier,
 ) = Text(

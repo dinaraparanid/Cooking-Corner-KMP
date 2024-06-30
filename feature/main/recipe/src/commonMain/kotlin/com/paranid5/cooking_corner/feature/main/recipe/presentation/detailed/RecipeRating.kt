@@ -16,7 +16,7 @@ import com.paranid5.cooking_corner.utils.withPrecision
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
-internal fun Rating(
+internal fun RecipeRating(
     rating: Float,
     modifier: Modifier = Modifier,
 ) = Row(modifier = modifier) {
