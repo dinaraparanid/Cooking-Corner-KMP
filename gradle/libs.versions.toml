@@ -11,6 +11,7 @@ androidx-material = "1.12.0"
 androidx-dataStore = "1.1.1"
 androidx-splashscreen = "1.0.1"
 androidx-test-junit = "1.2.1"
+arrowFxCoroutines = "1.2.4"
 constraintlayout = "0.4.0"
 compose-plugin = "1.6.10"
 kotlinxCoroutines = "1.8.1"
@@ -49,6 +50,8 @@ androidx-datastore-preferences-android = { group = "androidx.datastore", name = 
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splashscreen" }
 
 constraintlayout = { group = "tech.annexflow.compose", name = "constraintlayout-compose-multiplatform", version.ref = "constraintlayout" }
+
+arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrowFxCoroutines" }
 
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }

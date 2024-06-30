@@ -8,7 +8,7 @@ internal class DataStoreClientImpl : DataStoreClient {
         const val DATA_STORE_PATH = "params.preferences_pb"
     }
 
-    val dataStore by lazy {
+    override val dataStore by lazy {
         PreferenceDataStoreFactory.createWithPath(
             produceFile = { DATA_STORE_PATH.toPath() }
         )

@@ -50,6 +50,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
+            api(libs.arrow.fx.coroutines)
         }
         desktopMain.dependencies {
             implementation(libs.kotlinx.coroutines.swing)

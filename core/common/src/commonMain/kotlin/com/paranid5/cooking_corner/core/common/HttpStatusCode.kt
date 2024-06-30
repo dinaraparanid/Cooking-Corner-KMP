@@ -1,0 +1,15 @@
+package com.paranid5.cooking_corner.core.common
+
+data class HttpStatusCode(val value: Int)
+
+inline val HttpStatusCode.isSuccess
+    get() = value in 200 until 300
+
+inline val HttpStatusCode.isError
+    get() = value >= 400
+
+inline val HttpStatusCode.isClientError
+    get() = value in 400 until 500
+
+inline val HttpStatusCode.isServerError
+    get() = value >= 500

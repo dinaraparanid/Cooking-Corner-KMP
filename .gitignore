@@ -19,3 +19,5 @@ captures
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+denis.json
+data/src/commonMain/kotlin/com/paranid5/cooking_corner/data/ktor/BaseUrl.kt

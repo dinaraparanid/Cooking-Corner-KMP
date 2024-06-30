@@ -26,7 +26,7 @@ internal class DataStoreClientImpl : DataStoreClient {
             }
     }
 
-    val dataStore by lazy {
+    override val dataStore by lazy {
         PreferenceDataStoreFactory.createWithPath(
             produceFile = { datastoreUrl.toPath() }
         )

@@ -5,5 +5,5 @@ import androidx.datastore.preferences.preferencesDataStore
 
 internal class DataStoreClientImpl(context: Context) : DataStoreClient {
     private val Context.dataStore by preferencesDataStore("params")
-    val dataStore = context.dataStore
+    override val dataStore = context.dataStore
 }
