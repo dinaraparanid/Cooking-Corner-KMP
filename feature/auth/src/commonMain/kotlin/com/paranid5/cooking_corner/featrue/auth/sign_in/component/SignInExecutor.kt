@@ -8,7 +8,7 @@ import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.Ui
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStoreProvider.Msg
 
 // TODO: убрать
-private const val MOCK_CORRECT_PASSWORD = "БИБА"
+private const val MOCK_CORRECT_PASSWORD = "BIBA"
 
 internal class SignInExecutor(
     private val authApi: AuthApi,

@@ -43,6 +43,8 @@ internal fun RecipeIngredients(
             modifier = Modifier.fillMaxWidth(),
         )
     }
+
+    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 }
 
 @Composable
