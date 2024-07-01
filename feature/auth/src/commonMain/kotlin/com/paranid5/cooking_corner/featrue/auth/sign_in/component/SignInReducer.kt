@@ -10,5 +10,6 @@ internal object SignInReducer : Reducer<State, Msg> {
         is Msg.UpdatePasswordText -> copy(password = msg.password, isPasswordInvalid = false)
         is Msg.UpdatePasswordVisibility -> copy(isPasswordVisible = isPasswordVisible.not())
         is Msg.InvalidPassword -> copy(isPasswordInvalid = true)
+        is Msg.UpdateErrorDialogVisibility -> copy(isErrorDialogVisible = true)
     }
 }

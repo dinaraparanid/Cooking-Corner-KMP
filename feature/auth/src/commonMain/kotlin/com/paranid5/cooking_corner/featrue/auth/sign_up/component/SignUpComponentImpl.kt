@@ -6,7 +6,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.paranid5.cooking_corner.component.getComponentStore
-import com.paranid5.cooking_corner.domain.auth.AuthApi
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent.BackResult
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
@@ -16,7 +15,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 internal class SignUpComponentImpl(
     componentContext: ComponentContext,
     private val storeFactory: SignUpStoreProvider.Factory,
-    private val authApi: AuthApi,
     private val onBack: (BackResult) -> Unit,
 ) : SignUpComponent,
     ComponentContext by componentContext {
@@ -43,17 +41,13 @@ internal class SignUpComponentImpl(
         is Label.ConfirmedCredentials -> onBack(BackResult.SignedUp)
     }
 
-    class Factory(
-        private val storeFactory: SignUpStoreProvider.Factory,
-        private val authApi: AuthApi,
-    ) : SignUpComponent.Factory {
+    class Factory(private val storeFactory: SignUpStoreProvider.Factory) : SignUpComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
             onBack: (BackResult) -> Unit,
         ): SignUpComponent = SignUpComponentImpl(
             componentContext = componentContext,
             storeFactory = storeFactory,
-            authApi = authApi,
             onBack = onBack,
         )
     }

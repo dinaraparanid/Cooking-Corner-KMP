@@ -16,7 +16,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 internal class SignInComponentImpl(
     componentContext: ComponentContext,
     private val storeFactory: SignInStoreProvider.Factory,
-    private val authApi: AuthApi,
     private val onBack: (BackResult) -> Unit,
 ) : SignInComponent,
     ComponentContext by componentContext {
@@ -44,17 +43,13 @@ internal class SignInComponentImpl(
         is Label.ShowSignUp -> onBack(BackResult.ShowSignUp)
     }
 
-    class Factory(
-        private val storeFactory: SignInStoreProvider.Factory,
-        private val authApi: AuthApi,
-    ) : SignInComponent.Factory {
+    class Factory(private val storeFactory: SignInStoreProvider.Factory) : SignInComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
             onBack: (BackResult) -> Unit,
         ): SignInComponent = SignInComponentImpl(
             componentContext = componentContext,
             storeFactory = storeFactory,
-            authApi = authApi,
             onBack = onBack,
         )
     }

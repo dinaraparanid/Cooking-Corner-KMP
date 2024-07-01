@@ -6,6 +6,7 @@ import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.La
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 internal interface SignUpStore : Store<UiIntent, State, Label> {
     sealed interface UiIntent {
@@ -24,8 +25,13 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
         val password: String,
         val confirmPassword: String,
         val isPasswordVisible: Boolean,
-        val isPasswordInvalid: Boolean,
+        val isErrorDialogVisible: Boolean,
+        val errorDialogReason: String?,
     ) {
+        @Transient
+        val isInputNotEmpty = login.isNotBlank() && password.isNotBlank()
+
+        @Transient
         val isPasswordConfirmed = password == confirmPassword
 
         constructor() : this(
@@ -33,7 +39,8 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
             password = "",
             confirmPassword = "",
             isPasswordVisible = false,
-            isPasswordInvalid = false,
+            isErrorDialogVisible = false,
+            errorDialogReason = null,
         )
     }
 

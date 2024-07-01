@@ -14,10 +14,12 @@ import com.paranid5.cooking_corner.ui.utils.simpleShadow
 @Composable
 internal fun AuthConfirmButton(
     text: String,
+    isEnabled: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) = RippleButton(
     onClick = onClick,
+    isEnabled = isEnabled,
     rippleColor = AppTheme.colors.button.primary,
     modifier = modifier.simpleShadow(
         elevation = AppTheme.dimensions.elevation.extraBig,

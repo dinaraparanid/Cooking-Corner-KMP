@@ -8,15 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.auth_password
 import com.paranid5.cooking_corner.core.resources.auth_confirm_password
 import com.paranid5.cooking_corner.core.resources.auth_login
+import com.paranid5.cooking_corner.core.resources.auth_password
 import com.paranid5.cooking_corner.core.resources.auth_sign_up
-import com.paranid5.cooking_corner.core.resources.auth_wrong_password
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
 import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordHandling
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
+import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
 import com.paranid5.cooking_corner.ui.foundation.AppBackButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -27,13 +27,31 @@ internal fun SignUpUi(
     component: SignUpComponent,
     modifier: Modifier = Modifier,
 ) {
-    val appPadding = AppTheme.dimensions.padding
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
 
+    SignUpContent(
+        state = state,
+        onUiIntent = onUiIntent,
+        modifier = modifier,
+    )
+
+    if (state.isErrorDialogVisible) {
+        // TODO: Error dialog
+    }
+}
+
+@Composable
+private fun SignUpContent(
+    state: State,
+    onUiIntent: (UiIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val appPadding = AppTheme.dimensions.padding
+
     val passwordHandling = PasswordHandling(
         isPasswordVisible = state.isPasswordVisible,
-        isPasswordInvalid = state.isPasswordInvalid,
+        isPasswordInvalid = state.isPasswordConfirmed.not(),
         onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
     )
 
@@ -105,9 +123,8 @@ internal fun SignUpUi(
         )
 
         AuthConfirmButton(
-            text = stringResource(
-                confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
-            ),
+            isEnabled = state.isInputNotEmpty && state.isPasswordConfirmed,
+            text = stringResource(Res.string.auth_sign_up),
             onClick = { onUiIntent(UiIntent.ConfirmCredentials) },
             modifier = Modifier.constrainAs(confirmButton) {
                 top.linkTo(confirmPassword.bottom, margin = appPadding.large)
@@ -117,9 +134,4 @@ internal fun SignUpUi(
             },
         )
     }
-}
-
-private fun confirmButtonTextRes(areCredentialsInvalid: Boolean) = when {
-    areCredentialsInvalid -> Res.string.auth_wrong_password
-    else -> Res.string.auth_sign_up
 }

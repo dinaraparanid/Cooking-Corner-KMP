@@ -16,7 +16,8 @@ internal class SignUpStoreProvider(
         data class UpdatePasswordText(val password: String) : Msg
         data object UpdatePasswordVisibility : Msg
         data class UpdateConfirmPasswordText(val confirmPassword: String) : Msg
-        data object InvalidPassword : Msg
+        data object InvalidCredentials : Msg
+        data object DismissErrorDialog : Msg
     }
 
     fun provide(initialState: State): SignUpStore = object :

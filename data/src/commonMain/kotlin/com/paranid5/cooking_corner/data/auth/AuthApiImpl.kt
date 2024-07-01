@@ -1,5 +1,6 @@
 package com.paranid5.cooking_corner.data.auth
 
+import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.raise.ensure
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
@@ -13,6 +14,8 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.withContext
 
@@ -23,9 +26,11 @@ internal class AuthApiImpl(
     override suspend fun register(
         username: String,
         password: String,
-    ): ApiResultWithCode<Unit> = runCatching {
+    ): ApiResultWithCode<Unit> = Either.catch {
         suspend fun sendRequest() = withContext(AppDispatchers.Data) {
             ktorClient.post(urlBuilder.buildRegisterUrl()) {
+                contentType(ContentType.Application.Json)
+
                 setBody(
                     AuthorizeRequest(
                         username = username,
@@ -44,9 +49,11 @@ internal class AuthApiImpl(
     override suspend fun login(
         username: String,
         password: String,
-    ): ApiResultWithCode<LoginResponse> = runCatching {
+    ): ApiResultWithCode<LoginResponse> = Either.catch {
         suspend fun sendRequest() = withContext(AppDispatchers.Data) {
             ktorClient.post(urlBuilder.buildLoginUrl()) {
+                contentType(ContentType.Application.Json)
+
                 setBody(
                     AuthorizeRequest(
                         username = username,
@@ -65,7 +72,7 @@ internal class AuthApiImpl(
 
     override suspend fun verifyToken(
         accessToken: String,
-    ): ApiResultWithCode<Unit> = runCatching {
+    ): ApiResultWithCode<Unit> = Either.catch {
         suspend fun sendRequest() = withContext(AppDispatchers.Data) {
             ktorClient.get(urlBuilder.buildVerifyTokenUrl(accessToken))
         }

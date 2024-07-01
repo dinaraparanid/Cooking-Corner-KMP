@@ -25,6 +25,7 @@ fun RippleButton(
     modifier: Modifier = Modifier,
     rippleColor: Color = AppTheme.colors.orange,
     rippleBounded: Boolean = true,
+    isEnabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = ButtonDefaults.shape,
     elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
@@ -34,6 +35,7 @@ fun RippleButton(
     content: @Composable RowScope.() -> Unit,
 ) = Button(
     onClick = onClick,
+    enabled = isEnabled,
     shape = shape,
     interactionSource = interactionSource,
     border = border,

@@ -60,6 +60,10 @@ internal fun SignInUi(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = AppTheme.dimensions.padding.extraMedium),
         )
+
+        if (state.isErrorDialogVisible) {
+            // TODO: Error dialog
+        }
     }
 }
 
@@ -110,6 +114,7 @@ private fun SignInContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.extraBig))
 
     AuthConfirmButton(
+        isEnabled = state.isInputNotEmpty,
         text = stringResource(
             confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
         ),
