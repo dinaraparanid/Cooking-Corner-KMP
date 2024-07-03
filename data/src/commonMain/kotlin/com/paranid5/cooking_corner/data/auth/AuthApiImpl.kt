@@ -11,13 +11,18 @@ import com.paranid5.cooking_corner.domain.auth.dto.LoginResponse
 import com.paranid5.cooking_corner.utils.toAppStatusCode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.withContext
+
+private const val USERNAME_BODY_KEY = "username"
+private const val PASSWORD_BODY_KEY = "password"
 
 internal class AuthApiImpl(
     private val ktorClient: HttpClient,
@@ -52,12 +57,14 @@ internal class AuthApiImpl(
     ): ApiResultWithCode<LoginResponse> = Either.catch {
         suspend fun sendRequest() = withContext(AppDispatchers.Data) {
             ktorClient.post(urlBuilder.buildLoginUrl()) {
-                contentType(ContentType.Application.Json)
+                contentType(ContentType.Application.FormUrlEncoded)
 
                 setBody(
-                    AuthorizeRequest(
-                        username = username,
-                        password = password,
+                    FormDataContent(
+                        Parameters.build {
+                            append(USERNAME_BODY_KEY, username)
+                            append(PASSWORD_BODY_KEY, password)
+                        }
                     )
                 )
             }

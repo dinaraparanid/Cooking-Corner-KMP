@@ -46,10 +46,7 @@ internal class SignInExecutor(
         }
 
         is Either.Right -> when (val res = loginRes.value) {
-            is Either.Left -> {
-                println(res.value)
-                dispatch(Msg.InvalidPassword)
-            }
+            is Either.Left -> dispatch(Msg.InvalidPassword)
 
             is Either.Right -> {
                 authDataSource.storeAccessToken(accessToken = res.value.accessToken)

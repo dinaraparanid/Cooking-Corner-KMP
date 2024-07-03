@@ -1,8 +1,8 @@
 package com.paranid5.cooking_corner.featrue.auth.presentation
 
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
@@ -19,9 +19,8 @@ import org.jetbrains.compose.resources.vectorResource
 private const val PASSWORD_MASK = '*'
 
 @Immutable
-data class PasswordHandling(
+data class PasswordVisibilityHandling(
     val isPasswordVisible: Boolean,
-    val isPasswordInvalid: Boolean,
     val onPasswordVisibilityChanged: () -> Unit,
 )
 
@@ -31,52 +30,63 @@ internal fun AuthEditText(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-    passwordHandling: PasswordHandling? = null,
-) {
-    val textColor = textColor(
-        isPassword = passwordHandling != null,
-        isPasswordInvalid = passwordHandling?.isPasswordInvalid ?: false,
-    )
-
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        textStyle = AppTheme.typography.h.h3,
-        singleLine = true,
-        visualTransformation = VisualTransformation(
-            isPassword = passwordHandling != null,
-            isPasswordVisible = passwordHandling?.isPasswordVisible ?: false,
-        ),
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = textColor,
-            disabledTextColor = textColor,
-            backgroundColor = Color.Transparent,
-            cursorColor = AppTheme.colors.text.tertiriary,
-            focusedIndicatorColor = AppTheme.colors.text.tertiriary,
-            disabledIndicatorColor = AppTheme.colors.text.tertiriary,
-            unfocusedIndicatorColor = AppTheme.colors.text.tertiriary,
-        ),
-        placeholder = { AuthPlaceholder(text = placeholder) },
-        trailingIcon = {
-            passwordHandling?.onPasswordVisibilityChanged?.let {
-                PasswordIcon(
-                    isVisible = passwordHandling.isPasswordVisible,
-                    onPasswordVisibilityChanged = it,
-                )
-            }
+    passwordVisibilityHandling: PasswordVisibilityHandling? = null,
+    isError: Boolean = false,
+    errorText: String? = null,
+) = TextField(
+    value = value,
+    onValueChange = onValueChange,
+    modifier = modifier,
+    textStyle = AppTheme.typography.h.h3,
+    singleLine = true,
+    isError = isError,
+    visualTransformation = VisualTransformation(
+        isPassword = passwordVisibilityHandling != null,
+        isPasswordVisible = passwordVisibilityHandling?.isPasswordVisible ?: false,
+    ),
+    colors = TextFieldDefaults.colors(
+        focusedTextColor = AppTheme.colors.text.tertiriary,
+        unfocusedTextColor = AppTheme.colors.text.tertiriary,
+        disabledTextColor = AppTheme.colors.text.tertiriary,
+        errorTextColor = AppTheme.colors.error,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+        cursorColor = AppTheme.colors.text.tertiriary,
+        focusedIndicatorColor = AppTheme.colors.text.tertiriary,
+        disabledIndicatorColor = AppTheme.colors.text.tertiriary,
+        unfocusedIndicatorColor = AppTheme.colors.text.tertiriary,
+    ),
+    placeholder = { AuthPlaceholder(text = placeholder) },
+    supportingText = { if (isError) errorText?.let { AuthErrorText(text = it) } },
+    trailingIcon = {
+        passwordVisibilityHandling?.onPasswordVisibilityChanged?.let {
+            PasswordIcon(
+                isVisible = passwordVisibilityHandling.isPasswordVisible,
+                onPasswordVisibilityChanged = it,
+            )
         }
-    )
-}
+    },
+)
 
 @Composable
-private fun AuthPlaceholder(text: String, modifier: Modifier = Modifier) =
-    Text(
-        text = text,
-        modifier = modifier,
-        color = AppTheme.colors.text.tertiriary,
-        style = AppTheme.typography.h.h3,
-    )
+private fun AuthPlaceholder(text: String, modifier: Modifier = Modifier) = Text(
+    text = text,
+    modifier = modifier,
+    color = AppTheme.colors.text.tertiriary,
+    style = AppTheme.typography.h.h3,
+    fontFamily = AppTheme.typography.InterFontFamily,
+)
+
+@Composable
+private fun AuthErrorText(text: String, modifier: Modifier = Modifier) = Text(
+    text = text,
+    modifier = modifier,
+    color = AppTheme.colors.error,
+    style = AppTheme.typography.h.h3,
+    fontFamily = AppTheme.typography.InterFontFamily,
+)
 
 @Composable
 private fun PasswordIcon(
@@ -93,12 +103,6 @@ private fun PasswordIcon(
         }
     ),
 )
-
-@Composable
-private fun textColor(isPassword: Boolean, isPasswordInvalid: Boolean) = when {
-    isPassword && isPasswordInvalid -> AppTheme.colors.error
-    else -> AppTheme.colors.text.tertiriary
-}
 
 private fun VisualTransformation(isPassword: Boolean, isPasswordVisible: Boolean) = when {
     isPassword && isPasswordVisible.not() -> PasswordVisualTransformation(mask = PASSWORD_MASK)

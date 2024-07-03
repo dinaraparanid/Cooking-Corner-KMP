@@ -11,10 +11,13 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.auth_confirm_password
 import com.paranid5.cooking_corner.core.resources.auth_login
 import com.paranid5.cooking_corner.core.resources.auth_password
+import com.paranid5.cooking_corner.core.resources.auth_password_not_confirmed
+import com.paranid5.cooking_corner.core.resources.auth_password_too_short
 import com.paranid5.cooking_corner.core.resources.auth_sign_up
+import com.paranid5.cooking_corner.core.resources.auth_username_too_short
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
-import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordHandling
+import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordVisibilityHandling
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
@@ -49,9 +52,8 @@ private fun SignUpContent(
 ) {
     val appPadding = AppTheme.dimensions.padding
 
-    val passwordHandling = PasswordHandling(
+    val passwordVisibilityHandling = PasswordVisibilityHandling(
         isPasswordVisible = state.isPasswordVisible,
-        isPasswordInvalid = state.isPasswordConfirmed.not(),
         onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
     )
 
@@ -88,6 +90,8 @@ private fun SignUpContent(
             value = state.login,
             onValueChange = { onUiIntent(UiIntent.UpdateLoginText(login = it)) },
             placeholder = stringResource(Res.string.auth_login),
+            isError = state.isUsernameShortErrorVisible,
+            errorText = stringResource(Res.string.auth_username_too_short),
             modifier = Modifier.constrainAs(login) {
                 top.linkTo(title.bottom, margin = appPadding.extraLarge)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
@@ -100,7 +104,9 @@ private fun SignUpContent(
             value = state.password,
             onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
             placeholder = stringResource(Res.string.auth_password),
-            passwordHandling = passwordHandling,
+            passwordVisibilityHandling = passwordVisibilityHandling,
+            isError = state.isPasswordShortErrorVisible,
+            errorText = stringResource(Res.string.auth_password_too_short),
             modifier = Modifier.constrainAs(password) {
                 top.linkTo(login.bottom, margin = appPadding.extraBig)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
@@ -113,7 +119,9 @@ private fun SignUpContent(
             value = state.confirmPassword,
             onValueChange = { onUiIntent(UiIntent.UpdateConfirmPasswordText(confirmPassword = it)) },
             placeholder = stringResource(Res.string.auth_confirm_password),
-            passwordHandling = passwordHandling,
+            passwordVisibilityHandling = passwordVisibilityHandling,
+            isError = state.isConfirmedPasswordErrorVisible,
+            errorText = stringResource(Res.string.auth_password_not_confirmed),
             modifier = Modifier.constrainAs(confirmPassword) {
                 top.linkTo(password.bottom, margin = appPadding.extraBig)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
@@ -123,7 +131,7 @@ private fun SignUpContent(
         )
 
         AuthConfirmButton(
-            isEnabled = state.isInputNotEmpty && state.isPasswordConfirmed,
+            isEnabled = state.isInputNotShort && state.isPasswordConfirmed,
             text = stringResource(Res.string.auth_sign_up),
             onClick = { onUiIntent(UiIntent.ConfirmCredentials) },
             modifier = Modifier.constrainAs(confirmButton) {

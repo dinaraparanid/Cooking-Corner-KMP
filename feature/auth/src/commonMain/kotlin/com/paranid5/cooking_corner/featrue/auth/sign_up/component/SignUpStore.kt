@@ -9,6 +9,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 internal interface SignUpStore : Store<UiIntent, State, Label> {
+    private companion object {
+        const val MIN_INPUT_LENGTH = 6
+    }
+
     sealed interface UiIntent {
         data object Back : UiIntent
         data class UpdateLoginText(val login: String) : UiIntent
@@ -29,10 +33,26 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
         val errorDialogReason: String?,
     ) {
         @Transient
-        val isInputNotEmpty = login.isNotBlank() && password.isNotBlank()
+        val isUsernameShort = login.length < MIN_INPUT_LENGTH
+
+        @Transient
+        val isUsernameShortErrorVisible = isUsernameShort && login.isNotEmpty()
+
+        @Transient
+        val isPasswordShort = password.length < MIN_INPUT_LENGTH
+
+        @Transient
+        val isPasswordShortErrorVisible = isPasswordShort && password.isNotEmpty()
+
+        @Transient
+        val isInputNotShort = isUsernameShort.not() && isPasswordShort.not()
 
         @Transient
         val isPasswordConfirmed = password == confirmPassword
+
+        @Transient
+        val isConfirmedPasswordErrorVisible =
+            isPasswordConfirmed.not() && confirmPassword.isNotEmpty()
 
         constructor() : this(
             login = "",

@@ -31,22 +31,24 @@ internal class SignUpExecutor(
         }
     }
 
-    private suspend fun checkCredentials() = when (
-        val registerRes = withContext(AppDispatchers.Data) {
-            authApi.register(
-                username = state().login,
-                password = state().password,
-            )
-        }
-    ) {
-        is Either.Left -> {
-            registerRes.value.printStackTrace()
-            dispatch(Msg.DismissErrorDialog)
-        }
+    private suspend fun checkCredentials() {
+        when (
+            val registerRes = withContext(AppDispatchers.Data) {
+                authApi.register(
+                    username = state().login,
+                    password = state().password,
+                )
+            }
+        ) {
+            is Either.Left -> {
+                registerRes.value.printStackTrace()
+                dispatch(Msg.DismissErrorDialog)
+            }
 
-        is Either.Right -> when (registerRes) {
-            is Either.Left -> dispatch(Msg.InvalidCredentials)
-            is Either.Right -> publish(Label.ConfirmedCredentials)
+            is Either.Right -> when (registerRes.value) {
+                is Either.Left -> dispatch(Msg.InvalidCredentials)
+                is Either.Right -> publish(Label.ConfirmedCredentials)
+            }
         }
     }
 }

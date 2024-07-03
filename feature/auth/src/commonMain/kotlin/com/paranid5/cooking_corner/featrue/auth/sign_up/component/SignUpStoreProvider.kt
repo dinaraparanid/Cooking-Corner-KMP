@@ -17,6 +17,7 @@ internal class SignUpStoreProvider(
         data object UpdatePasswordVisibility : Msg
         data class UpdateConfirmPasswordText(val confirmPassword: String) : Msg
         data object InvalidCredentials : Msg
+        data object UnknownError : Msg
         data object DismissErrorDialog : Msg
     }
 

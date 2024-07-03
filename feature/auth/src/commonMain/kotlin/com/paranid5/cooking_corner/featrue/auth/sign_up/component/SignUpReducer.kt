@@ -1,6 +1,7 @@
 package com.paranid5.cooking_corner.featrue.auth.sign_up.component
 
 import com.arkivanov.mvikotlin.core.store.Reducer
+import com.paranid5.cooking_corner.core.common.error.UnknownErrorException
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStoreProvider.Msg
 import com.paranid5.cooking_corner.featrue.auth.sign_up.error.UserAlreadyExistsException
@@ -21,5 +22,10 @@ internal object SignUpReducer : Reducer<State, Msg> {
         )
 
         is Msg.DismissErrorDialog -> copy(isErrorDialogVisible = false)
+
+        is Msg.UnknownError -> copy(
+            isErrorDialogVisible = true,
+            errorDialogReason = UnknownErrorException::class.simpleName,
+        )
     }
 }

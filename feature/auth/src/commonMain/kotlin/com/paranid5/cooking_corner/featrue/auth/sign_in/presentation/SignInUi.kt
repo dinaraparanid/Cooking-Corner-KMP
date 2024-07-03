@@ -25,7 +25,7 @@ import com.paranid5.cooking_corner.core.resources.auth_sign_up
 import com.paranid5.cooking_corner.core.resources.auth_wrong_password
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
-import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordHandling
+import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordVisibilityHandling
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
@@ -101,9 +101,9 @@ private fun SignInContent(
         value = state.password,
         onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
         placeholder = stringResource(Res.string.auth_password),
-        passwordHandling = PasswordHandling(
+        isError = state.isPasswordInvalid,
+        passwordVisibilityHandling = PasswordVisibilityHandling(
             isPasswordVisible = state.isPasswordVisible,
-            isPasswordInvalid = state.isPasswordInvalid,
             onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
         ),
         modifier = Modifier
@@ -114,7 +114,7 @@ private fun SignInContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.extraBig))
 
     AuthConfirmButton(
-        isEnabled = state.isInputNotEmpty,
+        isEnabled = state.isInputNotShort,
         text = stringResource(
             confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
         ),
