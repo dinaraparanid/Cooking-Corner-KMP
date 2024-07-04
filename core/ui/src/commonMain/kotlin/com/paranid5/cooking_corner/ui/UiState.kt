@@ -22,6 +22,9 @@ sealed interface UiState<out T> {
     data class Error(val errorMessage: String? = null) : UiState<Nothing>
 
     @Serializable
+    data object Success : UiState<Nothing>
+
+    @Serializable
     data class Data<T>(private val container: SerializableContainer) : UiState<T> {
         fun <T : Any> getValue(serializer: KSerializer<T>): T? =
             container.consume(serializer)?.also { value -> container.set(value, serializer) }
@@ -34,7 +37,8 @@ inline fun <reified T> UiState<T>.getOrNull(): T? = when (this) {
 
     is UiState.Error,
     is UiState.Loading,
-    is UiState.Undefined -> null
+    is UiState.Undefined,
+    is UiState.Success -> null
 }
 
 inline fun <reified T> UiState<T>.getOrThrow(): T {
@@ -53,3 +57,6 @@ inline fun <reified D : Any> D?.toUiStateIfNotNull() =
 
 inline val <T> UiState<T>.isUndefinedOrLoading
     get() = this is UiState.Undefined || this is UiState.Loading
+
+inline val <T> UiState<T>.isOk
+    get() = this is UiState.Success || this is UiState.Data

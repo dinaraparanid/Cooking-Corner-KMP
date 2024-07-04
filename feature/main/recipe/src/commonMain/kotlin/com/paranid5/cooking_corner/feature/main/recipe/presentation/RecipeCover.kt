@@ -89,7 +89,8 @@ private fun RecipeThumbnail(
     modifier: Modifier = Modifier,
 ) = when (coverUrlState) {
     is UiState.Undefined,
-    is UiState.Data -> RecipeUndefinedPlaceholder(modifier)
+    is UiState.Data,
+    is UiState.Success -> RecipeUndefinedPlaceholder(modifier)
 
     is UiState.Error -> RecipeErrorPlaceholder(modifier)
 

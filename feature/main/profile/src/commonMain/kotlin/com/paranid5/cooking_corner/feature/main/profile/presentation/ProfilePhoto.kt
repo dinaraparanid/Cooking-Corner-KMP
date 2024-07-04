@@ -67,7 +67,8 @@ private fun ProfilePhotoThumbnail(
     modifier: Modifier = Modifier,
 ) = when (photoUrlState) {
     is UiState.Undefined,
-    is UiState.Data -> ProfilePhotoUndefinedPlaceholder(modifier)
+    is UiState.Data,
+    is UiState.Success -> ProfilePhotoUndefinedPlaceholder(modifier)
 
     is UiState.Error -> ProfilePhotoErrorPlaceholder(modifier)
 

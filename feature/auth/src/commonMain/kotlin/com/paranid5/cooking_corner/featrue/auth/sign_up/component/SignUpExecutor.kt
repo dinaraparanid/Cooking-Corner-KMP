@@ -3,7 +3,7 @@ package com.paranid5.cooking_corner.featrue.auth.sign_up.component
 import arrow.core.Either
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.paranid5.cooking_corner.core.common.AppDispatchers
-import com.paranid5.cooking_corner.domain.auth.AuthApi
+import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 internal class SignUpExecutor(
-    private val authApi: AuthApi,
+    private val authRepository: AuthRepository,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     override fun executeIntent(intent: UiIntent) {
         when (intent) {
@@ -34,7 +34,7 @@ internal class SignUpExecutor(
     private suspend fun checkCredentials() {
         when (
             val registerRes = withContext(AppDispatchers.Data) {
-                authApi.register(
+                authRepository.register(
                     username = state().login,
                     password = state().password,
                 )
