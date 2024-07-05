@@ -12,22 +12,28 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_cooking_time
 import com.paranid5.cooking_corner.core.resources.recipe_portions
 import com.paranid5.cooking_corner.core.resources.recipe_portions_value
 import com.paranid5.cooking_corner.core.resources.recipe_prep_time
 import com.paranid5.cooking_corner.core.resources.unit_minute
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeChild
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.pager.RecipePager
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.utils.doNothing
 import org.jetbrains.compose.resources.stringResource
 
 private val COVER_WIDTH = 325.dp
@@ -41,6 +47,24 @@ fun RecipeDetailsUi(
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
 
+    RecipeDetailsContent(
+        state = state,
+        onUiIntent = onUiIntent,
+        modifier = modifier,
+    )
+
+    RecipeDetailsSlots(
+        childSlot = component.childSlot.collectAsState(),
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun RecipeDetailsContent(
+    state: RecipeState,
+    onUiIntent: (RecipeUiIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val fillMaxWidthWithPaddingModifier =
         Modifier
             .fillMaxWidth()
@@ -50,6 +74,7 @@ fun RecipeDetailsUi(
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
         RecipeTopBar(
+            state = state,
             onUiIntent = onUiIntent,
             modifier = fillMaxWidthWithPaddingModifier,
         )
@@ -96,6 +121,17 @@ fun RecipeDetailsUi(
             ingredients = state.ingredients,
             modifier = Modifier.fillMaxWidth(),
         )
+    }
+}
+
+@Composable
+private fun RecipeDetailsSlots(
+    childSlot: State<ChildSlot<*, RecipeChild>>,
+    modifier: Modifier = Modifier,
+) {
+    when (val instance = childSlot.value.child?.instance) {
+        is RecipeChild.Edit -> doNothing // TODO: Edit screen
+        null -> doNothing
     }
 }
 

@@ -55,6 +55,9 @@
     <string name="recipe_ingredients">Ingredients</string>
     <string name="recipe_step" formatted="false">Step %1$d</string>
     <string name="recipe_ingredient" formatted="false">Ingredient %1$d</string>
+    <string name="recipe_kebab_publish">Publish your recipe</string>
+    <string name="recipe_kebab_edit">Edit your recipe</string>
+    <string name="recipe_kebab_delete">Delete your recipe</string>
 
     <!-- Units -->
     <string name="unit_minute">min</string>

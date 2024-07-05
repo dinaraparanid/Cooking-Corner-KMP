@@ -5,6 +5,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStoreProvider.Msg
+import com.paranid5.cooking_corner.utils.doNothing
 
 internal class HomeExecutor : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     override fun executeIntent(intent: UiIntent) {
@@ -12,10 +13,10 @@ internal class HomeExecutor : CoroutineExecutor<UiIntent, Unit, State, Msg, Labe
             is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeUiState))
             is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(intent.text))
             is UiIntent.SelectCategory -> dispatch(Msg.SelectCategory(intent.index))
-            is UiIntent.AddRecipe -> Unit // TODO: Add recipe
-            is UiIntent.DescendingFilterClick -> Unit // TODO: Descending filter
-            is UiIntent.ShowFavourites -> Unit // TODO: Show favourites
-            is UiIntent.LikeClick -> Unit // TODO: Like click
+            is UiIntent.AddRecipe -> doNothing // TODO: Add recipe
+            is UiIntent.DescendingFilterClick -> doNothing // TODO: Descending filter
+            is UiIntent.ShowFavourites -> doNothing // TODO: Show favourites
+            is UiIntent.LikeClick -> doNothing // TODO: Like click
         }
     }
 }

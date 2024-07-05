@@ -3,6 +3,7 @@ package com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
@@ -14,7 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.ic_edit
+import com.paranid5.cooking_corner.core.resources.ic_kebab
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.OutlinedRippleButton
@@ -25,6 +27,7 @@ private val ICON_SIZE = 20.dp
 
 @Composable
 internal fun RecipeTopBar(
+    state: RecipeState,
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) = Box(modifier) {
@@ -35,12 +38,17 @@ internal fun RecipeTopBar(
             .align(Alignment.CenterStart),
     )
 
-    EditButton(
-        onClick = { onUiIntent(RecipeUiIntent.Edit) },
-        modifier = Modifier
-            .size(BUTTON_SIZE)
-            .align(Alignment.CenterEnd),
-    )
+    Column(Modifier.align(Alignment.CenterEnd)) {
+        KebabButton(
+            onClick = { onUiIntent(RecipeUiIntent.ChangeKebabMenuVisibility(isVisible = true)) },
+            modifier = Modifier.size(BUTTON_SIZE),
+        )
+
+        RecipeKebabMenu(
+            state = state,
+            onUiIntent = onUiIntent,
+        )
+    }
 }
 
 @Composable
@@ -54,13 +62,13 @@ private fun BackButton(
 )
 
 @Composable
-private fun EditButton(
+private fun KebabButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) = TopButton(
     onClick = onClick,
     modifier = modifier,
-    content = { EditIcon(Modifier.size(ICON_SIZE)) },
+    content = { KebabIcon(Modifier.size(ICON_SIZE)) },
 )
 
 @Composable
@@ -71,8 +79,8 @@ private fun BackIcon(modifier: Modifier = Modifier) = Image(
 )
 
 @Composable
-private fun EditIcon(modifier: Modifier = Modifier) = Image(
-    imageVector = vectorResource(Res.drawable.ic_edit),
+private fun KebabIcon(modifier: Modifier = Modifier) = Image(
+    imageVector = vectorResource(Res.drawable.ic_kebab),
     contentDescription = null,
     modifier = modifier,
 )

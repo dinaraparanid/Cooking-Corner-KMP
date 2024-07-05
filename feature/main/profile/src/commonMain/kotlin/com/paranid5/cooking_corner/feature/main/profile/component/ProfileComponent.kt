@@ -7,11 +7,7 @@ import com.paranid5.cooking_corner.component.UiIntentHandler
 import kotlinx.coroutines.flow.StateFlow
 
 interface ProfileComponent : StateSource<ProfileState>, UiIntentHandler<ProfileUiIntent> {
-    val childSlot: StateFlow<ChildSlot<*, Child>>
-
-    sealed interface Child {
-        data object Edit : Child
-    }
+    val childSlot: StateFlow<ChildSlot<*, ProfileChild>>
 
     interface Factory {
         fun create(

@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 internal class RootComponentImpl(
     componentContext: ComponentContext,
@@ -31,12 +32,24 @@ internal class RootComponentImpl(
     private val mainRootComponentFactory: MainRootComponent.Factory,
 ) : RootComponent,
     ComponentContext by componentContext {
-    private val navigation = StackNavigation<RootConfig>()
+    @Serializable
+    sealed interface Config {
+        @Serializable
+        data object SplashScreen : Config
 
-    override val stack: StateFlow<ChildStack<RootConfig, RootChild>> = childStack(
+        @Serializable
+        data object Auth : Config
+
+        @Serializable
+        data class Main(val authType: AuthorizeType) : Config
+    }
+
+    private val navigation = StackNavigation<Config>()
+
+    override val stack: StateFlow<ChildStack<Config, RootChild>> = childStack(
         source = navigation,
-        serializer = RootConfig.serializer(),
-        initialConfiguration = RootConfig.SplashScreen,
+        serializer = Config.serializer(),
+        initialConfiguration = Config.SplashScreen,
         handleBackButton = true,
         childFactory = ::createChild,
     ).toStateFlow()
@@ -71,17 +84,17 @@ internal class RootComponentImpl(
         }
     }
 
-    private fun createChild(config: RootConfig, componentContext: ComponentContext) =
+    private fun createChild(config: Config, componentContext: ComponentContext) =
         when (config) {
-            is RootConfig.SplashScreen -> RootChild.SplashScreen(
+            is Config.SplashScreen -> RootChild.SplashScreen(
                 buildSplashScreenComponent(componentContext)
             )
 
-            is RootConfig.Auth -> RootChild.Auth(
+            is Config.Auth -> RootChild.Auth(
                 buildAuthComponent(componentContext)
             )
 
-            is RootConfig.Main -> RootChild.Main(
+            is Config.Main -> RootChild.Main(
                 buildMainComponent(
                     config = config,
                     componentContext = componentContext,
@@ -96,9 +109,9 @@ internal class RootComponentImpl(
                 navigation.replaceCurrent(
                     when {
                         stateFlow.value.isAuthorizedUiState.isOk ->
-                            RootConfig.Main(AuthorizeType.SIGNED_IN)
+                            Config.Main(AuthorizeType.SIGNED_IN)
 
-                        else -> RootConfig.Auth
+                        else -> Config.Auth
                     }
                 )
             }
@@ -113,16 +126,16 @@ internal class RootComponentImpl(
                         navigation.pop()
 
                     is AuthComponent.BackResult.SignedIn ->
-                        navigation.replaceCurrent(RootConfig.Main(AuthorizeType.SIGNED_IN))
+                        navigation.replaceCurrent(Config.Main(AuthorizeType.SIGNED_IN))
 
                     is AuthComponent.BackResult.SignedUp ->
-                        navigation.replaceCurrent(RootConfig.Main(AuthorizeType.SIGNED_UP))
+                        navigation.replaceCurrent(Config.Main(AuthorizeType.SIGNED_UP))
                 }
             },
         )
 
     private fun buildMainComponent(
-        config: RootConfig.Main,
+        config: Config.Main,
         componentContext: ComponentContext,
     ) = mainRootComponentFactory.create(
         componentContext = componentContext,

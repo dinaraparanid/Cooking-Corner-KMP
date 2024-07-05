@@ -23,7 +23,6 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.component.root.RootChild
 import com.paranid5.cooking_corner.component.root.RootComponent
-import com.paranid5.cooking_corner.component.root.RootConfig
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthUi
 import com.paranid5.cooking_corner.feature.main.root.presentation.MainRootUi
 import com.paranid5.cooking_corner.feature.splash.presentation.SplashScreenUi
@@ -62,7 +61,7 @@ fun RootUi(
 
 @Composable
 private fun RootContent(
-    childStackState: State<ChildStack<RootConfig, RootChild>>,
+    childStackState: State<ChildStack<*, RootChild>>,
     modifier: Modifier = Modifier,
 ) {
     val childStack by childStackState

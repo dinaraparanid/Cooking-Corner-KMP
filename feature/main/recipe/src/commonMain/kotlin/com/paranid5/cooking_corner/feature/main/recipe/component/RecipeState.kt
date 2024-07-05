@@ -13,4 +13,16 @@ data class RecipeState(
     val recipe: RecipeDetailedUiState,
     val steps: ImmutableList<StepUiState>,
     val ingredients: ImmutableList<IngredientUiState>,
-)
+    val isKebabMenuVisible: Boolean,
+) {
+    constructor(
+        recipe: RecipeDetailedUiState,
+        steps: ImmutableList<StepUiState>,
+        ingredients: ImmutableList<IngredientUiState>,
+    ) : this(
+        recipe = recipe,
+        steps = steps,
+        ingredients = ingredients,
+        isKebabMenuVisible = false,
+    )
+}

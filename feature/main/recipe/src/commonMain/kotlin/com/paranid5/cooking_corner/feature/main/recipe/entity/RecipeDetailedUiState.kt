@@ -15,5 +15,7 @@ data class RecipeDetailedUiState(
     val isLiked: Boolean,
     val reviews: Int,
     val portions: Int,
+    val byUser: Boolean,
+    val isPublished: Boolean,
     val coverUrlState: UiState<String> = UiState.Undefined,
 )

@@ -48,8 +48,9 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.core.common)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.core)
+            api(libs.kotlinx.coroutines.core)
+            api(libs.kotlinx.collections.immutable)
+            api(libs.ktor.client.core)
         }
     }
 }

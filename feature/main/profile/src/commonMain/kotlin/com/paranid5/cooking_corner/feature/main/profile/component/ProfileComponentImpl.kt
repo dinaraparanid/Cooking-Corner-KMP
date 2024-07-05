@@ -6,8 +6,8 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.childSlot
 import com.paranid5.cooking_corner.component.getComponentState
 import com.paranid5.cooking_corner.component.toStateFlow
-import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent.Child
 import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
+import com.paranid5.cooking_corner.utils.doNothing
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,7 +41,7 @@ internal class ProfileComponentImpl(
 
     private val childSlotNavigation = SlotNavigation<Slot>()
 
-    override val childSlot: StateFlow<ChildSlot<*, Child>> = childSlot(
+    override val childSlot: StateFlow<ChildSlot<*, ProfileChild>> = childSlot(
         source = childSlotNavigation,
         serializer = Slot.serializer(),
         childFactory = ::createChildSlot,
@@ -49,7 +49,7 @@ internal class ProfileComponentImpl(
 
     override fun onUiIntent(intent: ProfileUiIntent) {
         when (intent) {
-            is ProfileUiIntent.Edit -> Unit // TODO: Edit profile
+            is ProfileUiIntent.Edit -> doNothing // TODO: Edit profile
         }
     }
 
@@ -57,7 +57,7 @@ internal class ProfileComponentImpl(
         configuration: Slot,
         componentContext: ComponentContext,
     ) = when (configuration) {
-        is Slot.Edit -> Child.Edit
+        is Slot.Edit -> ProfileChild.Edit
     }
 
     class Factory : ProfileComponent.Factory {
