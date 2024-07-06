@@ -126,7 +126,6 @@ private fun MainSplashScreenBeginButton(
         color = AppTheme.colors.button.primary,
     ),
     modifier = modifier.simpleShadow(
-        elevation = AppTheme.dimensions.elevation.extraBig,
         radius = AppTheme.dimensions.corners.extraSmall,
     ),
     colors = ButtonDefaults.buttonColors(

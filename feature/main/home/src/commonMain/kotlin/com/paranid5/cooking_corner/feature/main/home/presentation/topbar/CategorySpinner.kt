@@ -40,14 +40,14 @@ internal fun CategorySpinner(
             .align(Alignment.CenterStart)
             .padding(
                 vertical = AppTheme.dimensions.padding.small,
-                horizontal = AppTheme.dimensions.padding.extraMedium,
+                horizontal = AppTheme.dimensions.padding.small,
             ),
     )
 
     CategorySpinnerArrow(
         modifier = Modifier
             .align(Alignment.CenterEnd)
-            .padding(end = AppTheme.dimensions.padding.extraBig),
+            .padding(end = AppTheme.dimensions.padding.big),
     )
 }
 

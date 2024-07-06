@@ -12,7 +12,7 @@ import com.paranid5.cooking_corner.ui.MainBlack
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 fun Modifier.simpleShadow(
-    elevation: Dp = 64.dp,
+    elevation: Dp = 4.dp,
     color: Color? = null,
     radius: Dp? = null,
 ) = this.composed {
@@ -20,19 +20,17 @@ fun Modifier.simpleShadow(
         elevation = elevation,
         shape = RoundedCornerShape(radius ?: AppTheme.dimensions.corners.medium),
         ambientColor = color ?: MainBlack,
-        spotColor = color ?: MainBlack
+        spotColor = color ?: MainBlack,
     )
 }
 
 fun Modifier.simpleShadow(
     shape: Shape,
-    elevation: Dp = 64.dp,
+    elevation: Dp = 16.dp,
     color: Color? = null,
-) = this.composed {
-    shadow(
-        elevation = elevation,
-        shape = shape ?: RoundedCornerShape(AppTheme.dimensions.corners.medium),
-        ambientColor = color ?: MainBlack,
-        spotColor = color ?: MainBlack
-    )
-}
+) = this then shadow(
+    elevation = elevation,
+    shape = shape,
+    ambientColor = color ?: MainBlack,
+    spotColor = color ?: MainBlack,
+)

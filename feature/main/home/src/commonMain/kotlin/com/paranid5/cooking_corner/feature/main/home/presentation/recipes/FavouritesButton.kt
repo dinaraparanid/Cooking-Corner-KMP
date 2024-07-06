@@ -48,7 +48,6 @@ internal fun FavouritesButton(
             disabledContainerColor = AppTheme.colors.button.secondary,
         ),
         modifier = modifier.simpleShadow(
-            elevation = AppTheme.dimensions.elevation.extraBig,
             radius = AppTheme.dimensions.corners.small,
         ),
     ) {

@@ -22,7 +22,6 @@ internal fun AuthConfirmButton(
     isEnabled = isEnabled,
     rippleColor = AppTheme.colors.button.primary,
     modifier = modifier.simpleShadow(
-        elevation = AppTheme.dimensions.elevation.extraBig,
         radius = AppTheme.dimensions.corners.minimum
     ),
     shape = RoundedCornerShape(AppTheme.dimensions.corners.small),

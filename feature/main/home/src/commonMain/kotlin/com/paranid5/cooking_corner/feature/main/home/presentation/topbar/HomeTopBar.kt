@@ -2,13 +2,13 @@ package com.paranid5.cooking_corner.feature.main.home.presentation.topbar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_add
 import com.paranid5.cooking_corner.core.resources.ic_descending_filter
+import com.paranid5.cooking_corner.core.resources.ic_import
 import com.paranid5.cooking_corner.core.resources.like
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
@@ -48,17 +49,25 @@ private fun HomeTopBarImpl(
     modifier: Modifier = Modifier,
 ) {
     val spinnerShape = RoundedCornerShape(AppTheme.dimensions.corners.small)
+    val margin = AppTheme.dimensions.padding.extraSmall
 
-    Row(modifier = modifier.background(AppTheme.colors.background.primaryDarker)) {
-        Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
-
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(margin),
+        modifier = modifier
+            .background(AppTheme.colors.background.primaryDarker)
+            .padding(horizontal = margin)
+    ) {
         AppIconButton(
             icon = vectorResource(Res.drawable.ic_add),
             modifier = Modifier.align(Alignment.CenterVertically),
             onClick = { onUiIntent(UiIntent.AddRecipe) },
         )
 
-        Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
+        AppIconButton(
+            icon = vectorResource(Res.drawable.ic_import),
+            modifier = Modifier.align(Alignment.CenterVertically),
+            onClick = { onUiIntent(UiIntent.ImportRecipe) },
+        )
 
         CategorySpinner(
             state = state,
@@ -75,15 +84,11 @@ private fun HomeTopBarImpl(
                 ),
         )
 
-        Spacer(Modifier.width(AppTheme.dimensions.padding.extraMedium))
-
         AppIconButton(
             icon = vectorResource(Res.drawable.ic_descending_filter),
             modifier = Modifier.align(Alignment.CenterVertically),
             onClick = { onUiIntent(UiIntent.DescendingFilterClick) },
         )
-
-        Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
 
         AppIconButton(
             icon = vectorResource(Res.drawable.like),
@@ -91,8 +96,6 @@ private fun HomeTopBarImpl(
             modifier = Modifier.align(Alignment.CenterVertically),
             onClick = { onUiIntent(UiIntent.ShowFavourites) },
         )
-
-        Spacer(Modifier.width(AppTheme.dimensions.padding.medium))
     }
 }
 
