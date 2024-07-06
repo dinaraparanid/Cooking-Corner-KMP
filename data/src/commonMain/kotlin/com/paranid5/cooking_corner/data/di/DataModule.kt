@@ -3,7 +3,9 @@ package com.paranid5.cooking_corner.data.di
 import com.paranid5.cooking_corner.data.auth.AuthRepositoryImpl
 import com.paranid5.cooking_corner.data.di.network.networkModule
 import com.paranid5.cooking_corner.data.di.storage.storageModule
+import com.paranid5.cooking_corner.data.recipe.RecipeRepositoryImpl
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
+import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
@@ -17,5 +19,9 @@ val dataModule = DI.Module("dataModule") {
             authApi = instance(tag = AUTH_API),
             authDataSource = instance(tag = AUTH_DATA_SOURCE),
         )
+    }
+
+    bind<RecipeRepository>() with multiton {
+        RecipeRepositoryImpl(recipeApi = instance(tag = RECIPE_API))
     }
 }

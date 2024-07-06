@@ -3,9 +3,8 @@ package com.paranid5.cooking_corner
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.di.initKodein
-import com.paranid5.cooking_corner.domain.auth.AuthApi
-import com.paranid5.cooking_corner.domain.auth.AuthDataSource
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
+import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
 import com.paranid5.cooking_corner.feature.splash.component.SplashScreenComponent
@@ -22,9 +21,8 @@ class DITest : DIAware {
     @Test
     fun dataModuleTest() {
         assertNotNull(instanceOrNull<HttpClient>())
-        assertNotNull(instanceOrNull<AuthApi>())
-        assertNotNull(instanceOrNull<AuthDataSource>())
         assertNotNull(instanceOrNull<AuthRepository>())
+        assertNotNull(instanceOrNull<RecipeRepository>())
     }
 
     @Test

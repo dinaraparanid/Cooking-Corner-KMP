@@ -10,6 +10,8 @@ import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.paranid5.cooking_corner.component.componentScope
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
+import com.paranid5.cooking_corner.domain.auth.getAccessTokenOrNull
+import com.paranid5.cooking_corner.domain.auth.getRefreshTokenOrNull
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent.AuthorizeType
@@ -20,7 +22,6 @@ import com.paranid5.cooking_corner.utils.updateState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -67,8 +68,8 @@ internal class RootComponentImpl(
     }
 
     private suspend fun checkAuthorized(): UiState<Unit> {
-        val accessToken = authRepository.accessTokenFlow.firstOrNull()
-        val refreshToken = authRepository.refreshTokenFlow.firstOrNull()
+        val accessToken = authRepository.getAccessTokenOrNull()
+        val refreshToken = authRepository.getRefreshTokenOrNull()
 
         return when {
             accessToken == null || refreshToken == null -> UiState.Error()

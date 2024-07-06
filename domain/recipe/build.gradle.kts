@@ -10,7 +10,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "data"
+        moduleName = "domainRecipe"
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -41,51 +41,23 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "data"
+            baseName = "recipe"
             isStatic = true
         }
     }
 
     sourceSets {
-        val desktopMain by getting
-
-        androidMain.dependencies {
-            implementation(libs.androidx.datastore.preferences.android)
-            implementation(libs.kodein.android)
-            implementation(libs.ktor.client.okhttp)
-        }
         commonMain.dependencies {
-            implementation(projects.core.utils)
-            api(projects.domain.auth)
-            api(projects.domain.recipe)
-
-            implementation(libs.androidx.datastore.core.okio)
-            implementation(libs.androidx.datastore.preferences.core)
+            api(projects.core.common)
 
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
-
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.client.logging)
-            implementation(libs.ktor.serialization.kotlinx.json)
-
-            implementation(libs.kodein)
-        }
-        desktopMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
-        wasmJsMain.dependencies {
-            implementation(libs.ktor.client.js)
         }
     }
 }
 
 android {
-    namespace = "com.paranid5.cooking_corner.data"
+    namespace = "com.paranid5.cooking_corner.domain.recipe"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

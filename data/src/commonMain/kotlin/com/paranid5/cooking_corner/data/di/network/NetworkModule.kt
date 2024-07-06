@@ -5,6 +5,7 @@ import org.kodein.di.DI
 internal val networkModule = DI.Module("networkModule") {
     importAll(
         authApiModule,
+        recipeApiModule,
         ktorClientModule,
     )
 }

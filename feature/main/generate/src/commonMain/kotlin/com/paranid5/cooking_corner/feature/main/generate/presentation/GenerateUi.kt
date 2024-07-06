@@ -63,7 +63,7 @@ fun GenerateUi(
 
         GenerateButton(
             onUiIntent = onUiIntent,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
         )
     }
 }
@@ -87,7 +87,7 @@ private fun GenerateLinkInput(
     modifier = modifier,
     value = state.link,
     placeholder = stringResource(Res.string.generate_link_placeholder),
-    onValueChange = { onUiIntent(GenerateUiIntent.UpdateLink(link = it)) }
+    onValueChange = { onUiIntent(GenerateUiIntent.UpdateLink(link = it)) },
 )
 
 @Composable
