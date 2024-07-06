@@ -2,27 +2,18 @@ package com.paranid5.cooking_corner.feature.main.home.component
 
 import androidx.paging.PagingData
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.slot.ChildSlot
-import com.arkivanov.decompose.router.slot.SlotNavigation
-import com.arkivanov.decompose.router.slot.activate
-import com.arkivanov.decompose.router.slot.childSlot
-import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.paranid5.cooking_corner.component.getComponentStore
-import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent.BackResult
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.serialization.Serializable
 
 internal class HomeComponentImpl(
     componentContext: ComponentContext,
@@ -53,9 +44,14 @@ internal class HomeComponentImpl(
     override fun onUiIntent(intent: UiIntent) = store.accept(intent)
 
     private fun onLabel(label: Label) = when (label) {
-        is Label.ShowRecipe -> onBack(
-            BackResult.ShowRecipeDetails(recipeUiState = label.recipeUiState)
-        )
+        is Label.ShowAddRecipe ->
+            onBack(BackResult.ShowAddRecipe)
+
+        is Label.ShowGenerateRecipe ->
+            onBack(BackResult.ShowImportRecipe)
+
+        is Label.ShowRecipe ->
+            onBack(BackResult.ShowRecipeDetails(recipeUiState = label.recipeUiState))
     }
 
     class Factory(private val storeFactory: HomeStoreProvider.Factory) : HomeComponent.Factory {

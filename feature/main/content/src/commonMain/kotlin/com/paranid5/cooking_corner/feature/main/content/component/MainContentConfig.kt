@@ -16,4 +16,10 @@ sealed interface MainContentConfig {
 
     @Serializable
     data class RecipeDetails(val recipeUiState: RecipeUiState) : MainContentConfig
+
+    @Serializable
+    data object AddRecipe : MainContentConfig
+
+    @Serializable
+    data object GenerateRecipe : MainContentConfig
 }

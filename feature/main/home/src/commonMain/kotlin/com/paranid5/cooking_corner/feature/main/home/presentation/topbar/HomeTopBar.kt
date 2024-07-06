@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.clip
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_add
 import com.paranid5.cooking_corner.core.resources.ic_descending_filter
-import com.paranid5.cooking_corner.core.resources.ic_import
+import com.paranid5.cooking_corner.core.resources.ic_generate
 import com.paranid5.cooking_corner.core.resources.like
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
@@ -64,9 +64,9 @@ private fun HomeTopBarImpl(
         )
 
         AppIconButton(
-            icon = vectorResource(Res.drawable.ic_import),
+            icon = vectorResource(Res.drawable.ic_generate),
             modifier = Modifier.align(Alignment.CenterVertically),
-            onClick = { onUiIntent(UiIntent.ImportRecipe) },
+            onClick = { onUiIntent(UiIntent.GenerateRecipe) },
         )
 
         CategorySpinner(

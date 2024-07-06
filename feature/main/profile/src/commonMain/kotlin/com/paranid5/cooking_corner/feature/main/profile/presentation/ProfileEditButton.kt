@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_edit
 import com.paranid5.cooking_corner.core.resources.profile_edit
+import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.OutlinedRippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -30,7 +30,7 @@ internal fun ProfileEditButton(
     val shape = RoundedCornerShape(AppTheme.dimensions.corners.small)
     val interactionSource = remember { MutableInteractionSource() }
 
-    OutlinedRippleButton(
+    AppOutlinedRippleButton(
         onClick = onClick,
         shape = shape,
         interactionSource = interactionSource,

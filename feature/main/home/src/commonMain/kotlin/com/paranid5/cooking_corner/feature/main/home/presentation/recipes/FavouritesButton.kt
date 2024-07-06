@@ -20,8 +20,8 @@ import com.paranid5.cooking_corner.core.resources.home_add_to_favourites
 import com.paranid5.cooking_corner.core.resources.home_remove_from_favourites
 import com.paranid5.cooking_corner.core.resources.ic_like
 import com.paranid5.cooking_corner.core.resources.ic_liked
+import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.OutlinedRippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -36,7 +36,7 @@ internal fun FavouritesButton(
 ) {
     val appPadding = AppTheme.dimensions.padding
 
-    OutlinedRippleButton(
+    AppOutlinedRippleButton(
         onClick = onLikedChanged,
         shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
         border = BorderStroke(

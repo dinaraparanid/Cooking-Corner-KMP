@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.ui.utils
+package com.paranid5.cooking_corner.ui.foundation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.indication
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Shape
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 @Composable
-fun RippleButton(
+fun AppRippleButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     rippleColor: Color = AppTheme.colors.orange,
@@ -55,7 +55,7 @@ fun RippleButton(
 )
 
 @Composable
-fun OutlinedRippleButton(
+fun AppOutlinedRippleButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     rippleColor: Color = AppTheme.colors.orange,

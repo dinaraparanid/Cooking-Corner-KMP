@@ -2,14 +2,13 @@ package com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,8 +17,10 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_kebab
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
+import com.paranid5.cooking_corner.ui.foundation.AppOutlinedBackButton
+import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.OutlinedRippleButton
+import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.vectorResource
 
 private val BUTTON_SIZE = 36.dp
@@ -31,17 +32,21 @@ internal fun RecipeTopBar(
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) = Box(modifier) {
-    BackButton(
+    val buttonModifier = Modifier
+        .size(BUTTON_SIZE)
+        .simpleShadow()
+        .background(AppTheme.colors.background.primary)
+
+    AppOutlinedBackButton(
         onClick = { onUiIntent(RecipeUiIntent.Back) },
-        modifier = Modifier
-            .size(BUTTON_SIZE)
-            .align(Alignment.CenterStart),
+        iconModifier = Modifier.size(ICON_SIZE),
+        modifier = buttonModifier.align(Alignment.CenterStart),
     )
 
     Column(Modifier.align(Alignment.CenterEnd)) {
         KebabButton(
             onClick = { onUiIntent(RecipeUiIntent.ChangeKebabMenuVisibility(isVisible = true)) },
-            modifier = Modifier.size(BUTTON_SIZE),
+            modifier = buttonModifier,
         )
 
         RecipeKebabMenu(
@@ -52,16 +57,6 @@ internal fun RecipeTopBar(
 }
 
 @Composable
-private fun BackButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) = TopButton(
-    onClick = onClick,
-    modifier = modifier,
-    content = { BackIcon(Modifier.size(ICON_SIZE)) },
-)
-
-@Composable
 private fun KebabButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -69,13 +64,6 @@ private fun KebabButton(
     onClick = onClick,
     modifier = modifier,
     content = { KebabIcon(Modifier.size(ICON_SIZE)) },
-)
-
-@Composable
-private fun BackIcon(modifier: Modifier = Modifier) = Image(
-    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-    contentDescription = null,
-    modifier = modifier,
 )
 
 @Composable
@@ -90,7 +78,7 @@ private fun TopButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
-) = OutlinedRippleButton(
+) = AppOutlinedRippleButton(
     onClick = onClick,
     content = content,
     modifier = modifier,

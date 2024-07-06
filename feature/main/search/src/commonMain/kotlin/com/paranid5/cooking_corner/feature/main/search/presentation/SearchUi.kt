@@ -17,8 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import app.cash.paging.compose.LazyPagingItems
 import app.cash.paging.compose.collectAsLazyPagingItems
 import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.search_best_rated
 import com.paranid5.cooking_corner.core.resources.search_last_recipes
-import com.paranid5.cooking_corner.core.resources.search_recommended
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
@@ -80,7 +80,7 @@ private fun SearchUiContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.big))
 
     RecipesLabel(
-        text = stringResource(Res.string.search_recommended),
+        text = stringResource(Res.string.search_best_rated),
         modifier = Modifier.fillMaxWidth(),
     )
 

@@ -15,6 +15,8 @@ interface HomeComponent : StateSource<State>, UiIntentHandler<UiIntent> {
     sealed interface BackResult {
         data object Dismiss : BackResult
         data class ShowRecipeDetails(val recipeUiState: RecipeUiState) : BackResult
+        data object ShowAddRecipe : BackResult
+        data object ShowImportRecipe : BackResult
     }
 
     interface Factory {

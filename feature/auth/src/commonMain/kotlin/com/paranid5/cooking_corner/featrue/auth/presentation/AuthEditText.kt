@@ -37,7 +37,9 @@ internal fun AuthEditText(
     value = value,
     onValueChange = onValueChange,
     modifier = modifier,
-    textStyle = AppTheme.typography.h.h3,
+    textStyle = AppTheme.typography.h.h3.copy(
+        fontFamily = AppTheme.typography.InterFontFamily,
+    ),
     singleLine = true,
     isError = isError,
     visualTransformation = VisualTransformation(

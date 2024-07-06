@@ -7,8 +7,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.paranid5.cooking_corner.ui.foundation.AppRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.RippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 
 @Composable
@@ -17,7 +17,7 @@ internal fun AuthConfirmButton(
     isEnabled: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-) = RippleButton(
+) = AppRippleButton(
     onClick = onClick,
     isEnabled = isEnabled,
     rippleColor = AppTheme.colors.button.primary,

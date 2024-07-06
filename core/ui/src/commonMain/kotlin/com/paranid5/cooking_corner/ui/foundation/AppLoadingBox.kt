@@ -19,7 +19,6 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.retry
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.RippleButton
 import com.paranid5.cooking_corner.ui.utils.applyIf
 import com.paranid5.cooking_corner.ui.utils.shimmerEffect
 import org.jetbrains.compose.resources.stringResource
@@ -77,7 +76,7 @@ fun AppLoadingBoxError(
     onErrorButtonClick?.let {
         Spacer(Modifier.height(AppTheme.dimensions.padding.extraSmall))
 
-        RippleButton(
+        AppRippleButton(
             onClick = onErrorButtonClick,
             rippleColor = AppTheme.colors.background.alternative,
             shape = RoundedCornerShape(AppTheme.dimensions.corners.small),

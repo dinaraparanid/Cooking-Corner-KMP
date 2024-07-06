@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.search_add_to_recipes
+import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.OutlinedRippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.stringResource
 
@@ -18,7 +18,7 @@ import org.jetbrains.compose.resources.stringResource
 internal fun AddToYourRecipesButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-) = OutlinedRippleButton(
+) = AppOutlinedRippleButton(
     onClick = onClick,
     shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
     border = BorderStroke(

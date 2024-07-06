@@ -7,6 +7,7 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.paranid5.cooking_corner.component.toStateFlow
+import com.paranid5.cooking_corner.feature.main.generate.component.GenerateComponent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
@@ -19,6 +20,7 @@ internal class MainContentComponentImpl(
     private val homeComponentFactory: HomeComponent.Factory,
     private val profileComponentFactory: ProfileComponent.Factory,
     private val recipeComponentFactory: RecipeComponent.Factory,
+    private val generateComponentFactory: GenerateComponent.Factory,
     private val onBack: () -> Unit,
 ) : MainContentComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<MainContentConfig>()
@@ -56,6 +58,12 @@ internal class MainContentComponentImpl(
             is MainContentConfig.RecipeDetails -> MainContentChild.RecepieDetails(
                 component = buildRecipeDetailsComponent(config, componentContext)
             )
+
+            is MainContentConfig.AddRecipe -> MainContentChild.AddRecipe
+
+            is MainContentConfig.GenerateRecipe -> MainContentChild.GenerateRecipe(
+                component = buildGenerateRecipeComponent(componentContext)
+            )
         }
 
     private fun buildHomeComponent(
@@ -70,6 +78,12 @@ internal class MainContentComponentImpl(
 
                 is HomeComponent.BackResult.ShowRecipeDetails ->
                     navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
+
+                is HomeComponent.BackResult.ShowAddRecipe ->
+                    navigation.bringToFront(MainContentConfig.AddRecipe)
+
+                is HomeComponent.BackResult.ShowImportRecipe ->
+                    navigation.bringToFront(MainContentConfig.GenerateRecipe)
             }
         },
     )
@@ -107,11 +121,21 @@ internal class MainContentComponentImpl(
         onBack = navigation::pop,
     )
 
+    private fun buildGenerateRecipeComponent(componentContext: ComponentContext) =
+        generateComponentFactory.create(
+            componentContext = componentContext,
+            onBack = { result ->
+                // TODO: handle generation result
+                navigation.pop()
+            }
+        )
+
     class Factory(
         private val searchComponentFactory: SearchComponent.Factory,
         private val homeComponentFactory: HomeComponent.Factory,
         private val profileComponentFactory: ProfileComponent.Factory,
         private val recipeComponentFactory: RecipeComponent.Factory,
+        private val generateComponentFactory: GenerateComponent.Factory,
     ) : MainContentComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
@@ -122,6 +146,7 @@ internal class MainContentComponentImpl(
             homeComponentFactory = homeComponentFactory,
             profileComponentFactory = profileComponentFactory,
             recipeComponentFactory = recipeComponentFactory,
+            generateComponentFactory = generateComponentFactory,
             onBack = onBack,
         )
     }

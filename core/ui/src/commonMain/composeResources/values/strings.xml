@@ -42,7 +42,7 @@
     <string name="search_filter_placeholder">Search for new cooking recipes</string>
     <string name="search_last_recipes">Last recipes</string>
     <string name="search_add_to_recipes">Add to your recipes</string>
-    <string name="search_recommended">Recommended</string>
+    <string name="search_best_rated">Best rated</string>
 
     <!-- Recipe -->
     <string name="recipe_reviews" formatted="false">%1$s reviews</string>
@@ -58,6 +58,11 @@
     <string name="recipe_kebab_publish">Publish your recipe</string>
     <string name="recipe_kebab_edit">Edit your recipe</string>
     <string name="recipe_kebab_delete">Delete your recipe</string>
+
+    <!-- Generate -->
+    <string name="generate_provide_link">Provide a link to a site that has a cooking recipe and we will create a recipe from it and add it to your list.</string>
+    <string name="generate_link_placeholder">Link</string>
+    <string name="generate_apply_button">Generate</string>
 
     <!-- Units -->
     <string name="unit_minute">min</string>

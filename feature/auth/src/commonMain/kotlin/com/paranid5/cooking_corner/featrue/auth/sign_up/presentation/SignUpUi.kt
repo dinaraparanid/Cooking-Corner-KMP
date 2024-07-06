@@ -79,7 +79,7 @@ private fun SignUpContent(
         )
 
         AppBackButton(
-            onBack = { onUiIntent(UiIntent.Back) },
+            onClick = { onUiIntent(UiIntent.Back) },
             modifier = Modifier.constrainAs(backButton) {
                 centerVerticallyTo(title)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)

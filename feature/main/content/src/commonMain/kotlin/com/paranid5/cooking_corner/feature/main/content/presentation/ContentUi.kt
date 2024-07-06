@@ -1,6 +1,7 @@
 package com.paranid5.cooking_corner.feature.main.content.presentation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -10,7 +11,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.paranid5.cooking_corner.feature.main.content.component.MainContentChild
-import com.paranid5.cooking_corner.feature.main.content.component.MainContentConfig
+import com.paranid5.cooking_corner.feature.main.generate.presentation.GenerateUi
 import com.paranid5.cooking_corner.feature.main.home.presentation.HomeUi
 import com.paranid5.cooking_corner.feature.main.profile.presentation.ProfileUi
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.RecipeDetailsUi
@@ -18,7 +19,7 @@ import com.paranid5.cooking_corner.feature.main.search.presentation.SearchUi
 
 @Composable
 internal fun ContentUi(
-    childStack: State<ChildStack<MainContentConfig, MainContentChild>>,
+    childStack: State<ChildStack<*, MainContentChild>>,
     modifier: Modifier = Modifier,
 ) {
     val stack by childStack
@@ -45,6 +46,16 @@ internal fun ContentUi(
             )
 
             is MainContentChild.RecepieDetails -> RecipeDetailsUi(
+                component = child.component,
+                modifier = Modifier.fillMaxSize(),
+            )
+
+            is MainContentChild.AddRecipe -> Text(
+                text = "TODO: Add Recipe Ui",
+                modifier = Modifier.fillMaxSize(),
+            )
+
+            is MainContentChild.GenerateRecipe -> GenerateUi(
                 component = child.component,
                 modifier = Modifier.fillMaxSize(),
             )

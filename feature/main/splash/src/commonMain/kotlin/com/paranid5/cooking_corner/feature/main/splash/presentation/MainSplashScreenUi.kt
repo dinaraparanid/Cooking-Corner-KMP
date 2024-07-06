@@ -22,8 +22,8 @@ import com.paranid5.cooking_corner.core.resources.main_splash_text
 import com.paranid5.cooking_corner.core.resources.main_splash_title
 import com.paranid5.cooking_corner.feature.main.splash.component.MainSplashScreenComponent
 import com.paranid5.cooking_corner.feature.main.splash.component.MainSplashScreenUiIntent
+import com.paranid5.cooking_corner.ui.foundation.AppRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.RippleButton
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -118,7 +118,7 @@ private fun MainSplashScreenImage(modifier: Modifier = Modifier) = Image(
 private fun MainSplashScreenBeginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-) = RippleButton(
+) = AppRippleButton(
     onClick = onClick,
     shape = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall),
     border = BorderStroke(

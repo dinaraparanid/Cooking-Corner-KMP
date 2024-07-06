@@ -17,7 +17,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
         data class SelectCategory(val index: Int) : UiIntent
         data class ShowRecipe(val recipeUiState: RecipeUiState) : UiIntent
         data object AddRecipe : UiIntent
-        data object ImportRecipe : UiIntent
+        data object GenerateRecipe : UiIntent
         data object DescendingFilterClick : UiIntent
         data object ShowFavourites : UiIntent
         data object LikeClick : UiIntent
@@ -39,5 +39,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
 
     sealed interface Label {
         data class ShowRecipe(val recipeUiState: RecipeUiState) : Label
+        data object ShowAddRecipe : Label
+        data object ShowGenerateRecipe : Label
     }
 }
