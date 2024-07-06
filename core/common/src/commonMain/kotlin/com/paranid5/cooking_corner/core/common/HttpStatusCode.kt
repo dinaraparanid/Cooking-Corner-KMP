@@ -1,6 +1,10 @@
 package com.paranid5.cooking_corner.core.common
 
-data class HttpStatusCode(val value: Int)
+data class HttpStatusCode(val value: Int) {
+    companion object {
+        const val FORBIDDEN_403 = 403
+    }
+}
 
 inline val HttpStatusCode.isSuccess
     get() = value in 200 until 300
@@ -13,3 +17,6 @@ inline val HttpStatusCode.isClientError
 
 inline val HttpStatusCode.isServerError
     get() = value >= 500
+
+inline val HttpStatusCode.isForbidden
+    get() = value == HttpStatusCode.FORBIDDEN_403

@@ -4,6 +4,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.di.initKodein
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
+import com.paranid5.cooking_corner.domain.auth.TokenInteractor
+import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
@@ -21,7 +23,9 @@ class DITest : DIAware {
     @Test
     fun dataModuleTest() {
         assertNotNull(instanceOrNull<HttpClient>())
+        assertNotNull(instanceOrNull<GlobalEventRepository>())
         assertNotNull(instanceOrNull<AuthRepository>())
+        assertNotNull(instanceOrNull<TokenInteractor>())
         assertNotNull(instanceOrNull<RecipeRepository>())
     }
 

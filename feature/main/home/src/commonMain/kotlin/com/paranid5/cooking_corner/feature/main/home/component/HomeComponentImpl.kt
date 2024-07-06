@@ -30,11 +30,6 @@ internal class HomeComponentImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override val stateFlow = store.stateFlow
 
-    override val recepiesPagedFlow by lazy {
-        // TODO: paging from network
-        stub()
-    }
-
     init {
         bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
             store.labels bindTo ::onLabel

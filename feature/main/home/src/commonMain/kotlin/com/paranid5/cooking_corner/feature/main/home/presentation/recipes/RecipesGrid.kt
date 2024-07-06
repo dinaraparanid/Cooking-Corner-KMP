@@ -1,21 +1,26 @@
 package com.paranid5.cooking_corner.feature.main.home.presentation.recipes
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import app.cash.paging.compose.LazyPagingItems
+import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.RecipeItem
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
 
@@ -26,9 +31,31 @@ private val PADDING_BETWEEN_RECIPES = 8.dp
 
 @Composable
 internal fun RecipesGrid(
-    recipes: LazyPagingItems<RecipeUiState>,
+    state: State,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier
+) = Box(modifier) {
+    when (state.uiState) {
+        is UiState.Data, is UiState.Refreshing, is UiState.Success ->
+            RecipesGridImpl(
+                state = state,
+                onUiIntent = onUiIntent,
+                modifier = Modifier.fillMaxSize()
+            )
+
+        is UiState.Error ->
+            Text("TODO: Error Stub", Modifier.align(Alignment.Center))
+
+        is UiState.Loading, is UiState.Undefined ->
+            AppProgressIndicator(Modifier.align(Alignment.Center))
+    }
+}
+
+@Composable
+private fun RecipesGridImpl(
+    state: State,
+    onUiIntent: (UiIntent) -> Unit,
+    modifier: Modifier = Modifier,
 ) = BoxWithConstraints(modifier) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
@@ -36,24 +63,22 @@ internal fun RecipesGrid(
         horizontalArrangement = Arrangement.spacedBy(PADDING_BETWEEN_RECIPES),
         columns = GridCells.Adaptive(getMinCellWidth(constraints.maxWidth))
     ) {
-        items(count = recipes.itemCount) { index ->
-            recipes[index]?.let { recipe ->
-                RecipeItem(
-                    recipe = recipe,
-                    onErrorButtonClick = { }, // TODO: Error handling
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(RECIPE_HEIGHT)
-                        .clickableWithRipple(bounded = true) {
-                            onUiIntent(UiIntent.ShowRecipe(recipe))
-                        },
-                ) { modifier ->
-                    FavouritesButton(
-                        isLiked = recipe.isLiked,
-                        onLikedChanged = { onUiIntent(UiIntent.LikeClick) },
-                        modifier = modifier,
-                    )
-                }
+        items(items = state.recipes) { recipe ->
+            RecipeItem(
+                recipe = recipe,
+                onErrorButtonClick = { }, // TODO: Error handling
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(RECIPE_HEIGHT)
+                    .clickableWithRipple(bounded = true) {
+                        onUiIntent(UiIntent.ShowRecipe(recipe))
+                    },
+            ) { modifier ->
+                FavouritesButton(
+                    isLiked = recipe.isLiked,
+                    onLikedChanged = { onUiIntent(UiIntent.LikeClick) },
+                    modifier = modifier,
+                )
             }
         }
     }

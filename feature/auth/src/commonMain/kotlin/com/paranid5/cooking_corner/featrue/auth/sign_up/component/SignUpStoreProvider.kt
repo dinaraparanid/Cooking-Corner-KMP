@@ -3,6 +3,7 @@ package com.paranid5.cooking_corner.featrue.auth.sign_up.component
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
+import com.paranid5.cooking_corner.domain.auth.TokenInteractor
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
@@ -10,6 +11,7 @@ import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Ui
 internal class SignUpStoreProvider(
     private val storeFactory: StoreFactory,
     private val authRepository: AuthRepository,
+    private val tokenInteractor: TokenInteractor,
 ) {
     sealed interface Msg {
         data class UpdateLoginText(val login: String) : Msg
@@ -26,17 +28,24 @@ internal class SignUpStoreProvider(
         Store<UiIntent, State, Label> by storeFactory.create(
             name = "SignInStore",
             initialState = initialState,
-            executorFactory = { SignUpExecutor(authRepository = authRepository) },
+            executorFactory = {
+                SignUpExecutor(
+                    authRepository = authRepository,
+                    tokenInteractor = tokenInteractor,
+                )
+            },
             reducer = SignUpReducer,
         ) {}
 
     class Factory(
         private val storeFactory: StoreFactory,
         private val authRepository: AuthRepository,
+        private val tokenInteractor: TokenInteractor,
     ) {
         fun create() = SignUpStoreProvider(
             storeFactory = storeFactory,
             authRepository = authRepository,
+            tokenInteractor = tokenInteractor,
         )
     }
 }

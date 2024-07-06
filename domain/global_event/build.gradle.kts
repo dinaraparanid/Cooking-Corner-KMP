@@ -4,15 +4,13 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "featureMainHome"
+        moduleName = "domainGlobalEvent"
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -43,47 +41,23 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "home"
+            baseName = "globalEvent"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.ui)
-            implementation(projects.core.utils)
-            api(projects.core.component)
+            api(projects.core.common)
 
-            implementation(projects.domain.globalEvent)
-            implementation(projects.domain.recipe)
-
-            implementation(projects.feature.main.recipe)
-
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-
-            implementation(libs.coil.compose.core)
-
-            implementation(libs.constraintlayout)
-
-            implementation(libs.paging.common)
-            implementation(libs.paging.compose)
-
-            implementation(libs.kotlinx.collections.immutable)
-
-            implementation(libs.decompose.extensions.compose)
-
-            implementation(libs.bundles.component)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
         }
     }
 }
 
 android {
-    namespace = "com.paranid5.cooking_corner.feature.main.home"
+    namespace = "com.paranid5.cooking_corner.domain.global_event"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -91,8 +65,5 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    buildFeatures {
-        compose = true
     }
 }

@@ -12,6 +12,8 @@ import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.getAccessTokenOrNull
 import com.paranid5.cooking_corner.domain.auth.getRefreshTokenOrNull
+import com.paranid5.cooking_corner.domain.global_event.Event
+import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent.AuthorizeType
@@ -28,6 +30,7 @@ import kotlinx.serialization.Serializable
 internal class RootComponentImpl(
     componentContext: ComponentContext,
     private val authRepository: AuthRepository,
+    private val globalEventRepository: GlobalEventRepository,
     private val splashScreenComponentFactory: SplashScreenComponent.Factory,
     private val authComponentFactory: AuthComponent.Factory,
     private val mainRootComponentFactory: MainRootComponent.Factory,
@@ -63,6 +66,18 @@ internal class RootComponentImpl(
             componentScope.launch {
                 val authState = checkAuthorized()
                 _stateFlow.updateState { copy(isAuthorizedUiState = authState) }
+            }
+
+            componentScope.launch { subscribeOnGlobalEventChanges() }
+        }
+    }
+
+    private suspend fun subscribeOnGlobalEventChanges() {
+        globalEventRepository.eventFlow.collect { event ->
+            when (event) {
+                is Event.LogOut -> navigation.replaceCurrent(Config.Auth) {
+                    // TODO: Show logout snackbar
+                }
             }
         }
     }
@@ -146,6 +161,7 @@ internal class RootComponentImpl(
 
     internal class Factory(
         private val authRepository: AuthRepository,
+        private val globalEventRepository: GlobalEventRepository,
         private val splashScreenComponentFactory: SplashScreenComponent.Factory,
         private val authComponentFactory: AuthComponent.Factory,
         private val mainRootComponentFactory: MainRootComponent.Factory,
@@ -154,6 +170,7 @@ internal class RootComponentImpl(
             RootComponentImpl(
                 componentContext = componentContext,
                 authRepository = authRepository,
+                globalEventRepository = globalEventRepository,
                 splashScreenComponentFactory = splashScreenComponentFactory,
                 authComponentFactory = authComponentFactory,
                 mainRootComponentFactory = mainRootComponentFactory,

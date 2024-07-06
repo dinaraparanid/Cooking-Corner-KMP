@@ -55,6 +55,8 @@ inline fun <reified D : Any> D.toUiState() =
 inline fun <reified D : Any> D?.toUiStateIfNotNull() =
     this?.toUiState() ?: UiState.Error()
 
+inline fun Throwable.toUiState() = UiState.Error(this::class.qualifiedName)
+
 inline val <T> UiState<T>.isUndefinedOrLoading
     get() = this is UiState.Undefined || this is UiState.Loading
 

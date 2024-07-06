@@ -15,5 +15,5 @@ data class RecipeResponse(
     @SerialName("dishes") val dishes: Int,
     @SerialName("is_my_recipe") val isMyRecipe: Boolean,
     @SerialName("is_private") val isPrivate: Boolean,
-    @SerialName("icon_path") val iconPath: String,
+    @SerialName("icon_path") val iconPath: String?,
 )

@@ -58,6 +58,7 @@ kotlin {
             implementation(projects.core.utils)
             api(projects.domain.auth)
             api(projects.domain.recipe)
+            api(projects.domain.globalEvent)
 
             implementation(libs.androidx.datastore.core.okio)
             implementation(libs.androidx.datastore.preferences.core)

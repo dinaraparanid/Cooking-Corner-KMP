@@ -13,7 +13,7 @@ import com.paranid5.cooking_corner.utils.toAppStatusCode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
-import io.ktor.client.request.post
+import io.ktor.client.request.get
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.withContext
 
@@ -25,7 +25,7 @@ internal class RecipeApiImpl(
     override suspend fun getRecentRecipes(): ApiResultWithCode<List<RecipeResponse>> =
         Either.catch {
             suspend fun sendRequest(accessToken: String) = withContext(AppDispatchers.Data) {
-                ktorClient.post(urlBuilder.buildGetRecentRecipesUrl()) { bearerAuth(accessToken) }
+                ktorClient.get(urlBuilder.buildGetRecentRecipesUrl()) { bearerAuth(accessToken) }
             }
 
             either {
@@ -39,7 +39,7 @@ internal class RecipeApiImpl(
     override suspend fun getMyRecipes(): ApiResultWithCode<List<RecipeResponse>> =
         Either.catch {
             suspend fun sendRequest(accessToken: String) = withContext(AppDispatchers.Data) {
-                ktorClient.post(urlBuilder.buildMyRecipesUrl()) { bearerAuth(accessToken) }
+                ktorClient.get(urlBuilder.buildMyRecipesUrl()) { bearerAuth(accessToken) }
             }
 
             either {

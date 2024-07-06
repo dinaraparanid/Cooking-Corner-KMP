@@ -1,56 +1,46 @@
 package com.paranid5.cooking_corner.featrue.auth.sign_in.component
 
-import arrow.core.Either
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
+import com.paranid5.cooking_corner.domain.auth.TokenInteractor
+import com.paranid5.cooking_corner.domain.auth.TokenInteractor.TokenResult
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStoreProvider.Msg
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 internal class SignInExecutor(
     private val authRepository: AuthRepository,
+    private val tokenInteractor: TokenInteractor,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     override fun executeIntent(intent: UiIntent) {
         when (intent) {
             is UiIntent.Back -> publish(Label.Back)
-
-            is UiIntent.ConfirmCredentials -> scope.launch { checkCredentials() }
-
+            is UiIntent.ConfirmCredentials -> scope.launch { tryAcquireTokens() }
             is UiIntent.ShowSignUp -> publish(Label.ShowSignUp)
-
             is UiIntent.UpdateLoginText -> dispatch(Msg.UpdateLoginText(intent.login))
-
             is UiIntent.UpdatePasswordText -> dispatch(Msg.UpdatePasswordText(intent.password))
-
             is UiIntent.UpdatePasswordVisibility -> dispatch(Msg.UpdatePasswordVisibility)
         }
     }
 
-    private suspend fun checkCredentials() = when (
-        val loginRes = withContext(AppDispatchers.Data) {
-            authRepository.login(
-                username = state().login,
-                password = state().password,
-            )
-        }
+    private suspend fun tryAcquireTokens() = when (
+        tokenInteractor.tryAcquireTokens(
+            login = state().login,
+            password = state().password,
+        )
     ) {
-        is Either.Left -> {
-            loginRes.value.printStackTrace()
-            dispatch(Msg.UpdateErrorDialogVisibility(isVisible = true))
+        is TokenResult.CredentialsMissing -> error("Credentials missing")
+
+        is TokenResult.InvalidPassword -> dispatch(Msg.InvalidPassword)
+
+        is TokenResult.Success -> {
+            authRepository.storeLogin(state().login)
+            authRepository.storePassword(state().password)
+            publish(Label.ConfirmedCredentials)
         }
 
-        is Either.Right -> when (val res = loginRes.value) {
-            is Either.Left -> dispatch(Msg.InvalidPassword)
-
-            is Either.Right -> {
-                authRepository.storeAccessToken(accessToken = res.value.accessToken)
-                authRepository.storeRefreshToken(refreshToken = res.value.refreshToken)
-                publish(Label.ConfirmedCredentials)
-            }
-        }
+        is TokenResult.UnhandledError -> dispatch(Msg.UpdateErrorDialogVisibility(isVisible = true))
     }
 }
