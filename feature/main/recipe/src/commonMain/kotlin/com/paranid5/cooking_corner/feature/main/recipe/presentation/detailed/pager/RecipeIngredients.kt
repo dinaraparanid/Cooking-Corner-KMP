@@ -3,11 +3,11 @@ package com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.pa
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,17 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.recipe_ingredient
 import com.paranid5.cooking_corner.feature.main.recipe.entity.IngredientUiState
-import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
-import org.jetbrains.compose.resources.stringResource
-
-private val COVER_WIDTH = 232.dp
-private val COVER_HEIGHT = 133.dp
 
 @Composable
 internal fun RecipeIngredients(
@@ -36,9 +28,8 @@ internal fun RecipeIngredients(
     modifier = modifier,
     verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium),
 ) {
-    ingredients.forEachIndexed { index, ingredient ->
+    ingredients.forEach { ingredient ->
         RecipeIngredient(
-            stepNumber = index + 1,
             ingredientUiState = ingredient,
             modifier = Modifier.fillMaxWidth(),
         )
@@ -49,13 +40,13 @@ internal fun RecipeIngredients(
 
 @Composable
 private fun RecipeIngredient(
-    stepNumber: Int,
     ingredientUiState: IngredientUiState,
     modifier: Modifier = Modifier,
 ) {
     val shape = RoundedCornerShape(AppTheme.dimensions.corners.extraMedium)
+    val itemsModifier = Modifier.padding(vertical = AppTheme.dimensions.padding.small)
 
-    Column(
+    Row(
         modifier = modifier
             .clip(shape)
             .border(
@@ -64,58 +55,45 @@ private fun RecipeIngredient(
                 shape = shape,
             )
     ) {
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
-
-        RecipeIngredientLabel(
-            stepNumber = stepNumber,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+        RecipeIngredientTitle(
+            title = ingredientUiState.title,
+            modifier = itemsModifier
+                .weight(1F)
+                .align(Alignment.CenterVertically),
         )
 
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
-
-        RecipeClippedCover(
-            coverUrlState = ingredientUiState.coverUrlState,
-            onErrorButtonClick = {}, // TODO: Error handle
-            modifier = Modifier
-                .size(width = COVER_WIDTH, height = COVER_HEIGHT)
-                .align(Alignment.CenterHorizontally),
+        RecipeIngredientPortion(
+            portions = ingredientUiState.portion,
+            modifier = itemsModifier
+                .weight(1F)
+                .align(Alignment.CenterVertically),
         )
-
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
-
-        RecipeIngredientDescription(
-            description = ingredientUiState.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
-        )
-
-        Spacer(Modifier.height(AppTheme.dimensions.padding.small))
     }
 }
 
 @Composable
-private fun RecipeIngredientLabel(
-    stepNumber: Int,
+private fun RecipeIngredientTitle(
+    title: String,
     modifier: Modifier = Modifier,
 ) = Text(
-    text = stringResource(Res.string.recipe_ingredient, stepNumber),
+    text = "$title:",
+    textAlign = TextAlign.End,
     fontWeight = FontWeight.Bold,
     color = AppTheme.colors.text.primary,
-    style = AppTheme.typography.body,
+    style = AppTheme.typography.h.h3,
     fontFamily = AppTheme.typography.RalewayFontFamily,
     modifier = modifier,
 )
 
 @Composable
-private fun RecipeIngredientDescription(
-    description: String,
+private fun RecipeIngredientPortion(
+    portions: String,
     modifier: Modifier = Modifier,
 ) = Text(
-    text = description,
+    text = portions,
     textAlign = TextAlign.Center,
     color = AppTheme.colors.text.primary,
-    style = AppTheme.typography.body,
+    style = AppTheme.typography.h.h3,
     fontFamily = AppTheme.typography.RalewayFontFamily,
     modifier = modifier,
 )

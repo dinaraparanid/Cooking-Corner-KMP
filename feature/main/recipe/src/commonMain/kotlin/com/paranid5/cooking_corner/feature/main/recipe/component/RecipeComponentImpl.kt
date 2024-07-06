@@ -117,11 +117,13 @@ private fun stepsStub() = persistentListOf(
 )
 
 private fun ingredientsStub() = persistentListOf(
-    IngredientUiState(title = "Shrimps"),
-    IngredientUiState(title = "Shrimps"),
-    IngredientUiState(title = "Shrimps"),
-    IngredientUiState(title = "Shrimps"),
-    IngredientUiState(title = "Shrimps"),
+    IngredientUiState(title = "Shrimps", portion = "1 kg"),
+    IngredientUiState(title = "Water", portion = "2 l"),
+    IngredientUiState(title = "Salt", portion = "90 g"),
+    IngredientUiState(title = "Dill", portion = "10 g"),
+    IngredientUiState(title = "Parsley", portion = "10 g"),
+    IngredientUiState(title = "Allspice", portion = "5 whispers"),
+    IngredientUiState(title = "Peppercorns", portion = "15 pieces"),
 )
 
 private fun stepStub() = "Prepare the necessary ingredients. The shrimp should be approximately the same size, whole, the ice coat should not be thick, otherwise the shrimp will lose a lot of weight during the defrosting process. Typically, shrimp on sale are already pre-boiled, so they cook quite quickly."

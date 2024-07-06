@@ -51,7 +51,7 @@ internal fun RecipePager(
         ) { page ->
             val pageModifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = AppTheme.dimensions.padding.large)
+                .padding(horizontal = AppTheme.dimensions.padding.extraLarge)
 
             when (page) {
                 PAGE_STEPS -> RecipeCookingSteps(

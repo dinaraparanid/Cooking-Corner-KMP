@@ -27,7 +27,7 @@ internal fun RecipesRow(
 ) = LazyRow(
     modifier = modifier,
     horizontalArrangement = Arrangement.spacedBy(PADDING_BETWEEN_RECIPES),
-    contentPadding = PaddingValues(horizontal = PADDING_BETWEEN_RECIPES)
+    contentPadding = PaddingValues(horizontal = PADDING_BETWEEN_RECIPES),
 ) {
     items(count = recipes.itemCount) { index ->
         recipes[index]?.let { recipe ->
