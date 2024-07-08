@@ -75,8 +75,11 @@ internal class RootComponentImpl(
     private suspend fun subscribeOnGlobalEventChanges() {
         globalEventRepository.eventFlow.collect { event ->
             when (event) {
-                is Event.LogOut -> navigation.replaceCurrent(Config.Auth) {
-                    // TODO: Show logout snackbar
+                is Event.LogOut -> {
+                    authRepository.clear()
+                    navigation.replaceCurrent(Config.Auth) {
+                        // TODO: Show logout snackbar
+                    }
                 }
             }
         }

@@ -85,11 +85,13 @@ data class AppTextColors(
 data class AppButtonColors(
     val primary: Color,
     val secondary: Color,
+    val secondaryDarker: Color,
 ) {
     companion object {
         internal val default = AppButtonColors(
             primary = MainBlack,
             secondary = MainPastel,
+            secondaryDarker = DarkerPastel,
         )
     }
 }

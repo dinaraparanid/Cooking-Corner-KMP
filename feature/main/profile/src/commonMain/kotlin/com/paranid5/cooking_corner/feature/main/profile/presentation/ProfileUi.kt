@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,16 +22,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.ic_edit
 import com.paranid5.cooking_corner.core.resources.profile_cooking_experience
+import com.paranid5.cooking_corner.core.resources.profile_edit
 import com.paranid5.cooking_corner.core.resources.profile_email
+import com.paranid5.cooking_corner.core.resources.profile_logout
 import com.paranid5.cooking_corner.core.resources.profile_name
+import com.paranid5.cooking_corner.core.resources.profile_placeholder_unknown
 import com.paranid5.cooking_corner.core.resources.profile_surname
 import com.paranid5.cooking_corner.core.resources.profile_username
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileState
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileUiIntent
+import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.ui.getOrThrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 private val PHOTO_SIZE = 200.dp
 private val SEPARATOR_HEIGHT = 1.dp
@@ -42,20 +53,52 @@ fun ProfileUi(
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
 
-    Box(modifier) {
+    @Composable
+    fun BoxScope.Content() {
         ProfileUiImpl(
             state = state,
             modifier = Modifier.align(Alignment.TopCenter),
         )
 
-        ProfileEditButton(
-            onClick = { onUiIntent(ProfileUiIntent.Edit) },
-            modifier = Modifier
+        Column(
+            Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = AppTheme.dimensions.padding.large)
-                .padding(horizontal = AppTheme.dimensions.padding.extraLarge),
-        )
+                .padding(horizontal = AppTheme.dimensions.padding.extraLarge)
+        ) {
+            ProfileButton(
+                text = stringResource(Res.string.profile_edit),
+                icon = vectorResource(Res.drawable.ic_edit),
+                onClick = { onUiIntent(ProfileUiIntent.Edit) },
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(Modifier.height(AppTheme.dimensions.padding.large))
+
+            ProfileButton(
+                text = stringResource(Res.string.profile_logout),
+                onClick = { onUiIntent(ProfileUiIntent.LogOut) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = AppTheme.colors.button.secondaryDarker,
+                    disabledContainerColor = AppTheme.colors.button.secondaryDarker,
+                )
+            )
+        }
+    }
+
+    Box(modifier) {
+        when (state.uiState) {
+            is UiState.Data, is UiState.Refreshing, is UiState.Success ->
+                Content()
+
+            is UiState.Error ->
+                Text("TODO: Error stub", Modifier.align(Alignment.Center))
+
+            is UiState.Loading, is UiState.Undefined ->
+                AppProgressIndicator(Modifier.align(Alignment.Center))
+        }
     }
 }
 
@@ -65,7 +108,7 @@ private fun ProfileUiImpl(
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     ProfilePhoto(
-        photoUrlState = state.profileUiState.photoUrl,
+        photoUrlState = state.uiState.getOrThrow().photoUrl,
         modifier = Modifier
             .size(PHOTO_SIZE)
             .align(Alignment.CenterHorizontally)
@@ -103,34 +146,39 @@ private fun Separator(modifier: Modifier = Modifier) = Spacer(
 private fun ProfileUiContent(
     state: ProfileState,
     modifier: Modifier = Modifier,
-) = Column(
-    modifier = modifier,
-    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium),
 ) {
-    ProfileUiContentItem(
-        title = stringResource(Res.string.profile_username),
-        value = state.profileUiState.username,
-    )
+    val profileUiState = state.uiState.getOrNull() ?: return
+    val placeholderUnknown = stringResource(Res.string.profile_placeholder_unknown)
 
-    ProfileUiContentItem(
-        title = stringResource(Res.string.profile_name),
-        value = state.profileUiState.name,
-    )
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium),
+    ) {
+        ProfileUiContentItem(
+            title = stringResource(Res.string.profile_username),
+            value = profileUiState.username,
+        )
 
-    ProfileUiContentItem(
-        title = stringResource(Res.string.profile_surname),
-        value = state.profileUiState.surname,
-    )
+        ProfileUiContentItem(
+            title = stringResource(Res.string.profile_name),
+            value = profileUiState.name ?: placeholderUnknown,
+        )
 
-    ProfileUiContentItem(
-        title = stringResource(Res.string.profile_email),
-        value = state.profileUiState.email,
-    )
+        ProfileUiContentItem(
+            title = stringResource(Res.string.profile_surname),
+            value = profileUiState.surname ?: placeholderUnknown,
+        )
 
-    ProfileUiContentItem(
-        title = stringResource(Res.string.profile_cooking_experience),
-        value = "${state.profileUiState.cookingExperience} years", // TODO: figure out units
-    )
+        ProfileUiContentItem(
+            title = stringResource(Res.string.profile_email),
+            value = profileUiState.email ?: placeholderUnknown,
+        )
+
+        ProfileUiContentItem(
+            title = stringResource(Res.string.profile_cooking_experience),
+            value = profileUiState.cookingExperience ?: placeholderUnknown,
+        )
+    }
 }
 
 @Composable

@@ -8,9 +8,11 @@ import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.domain.auth.AuthApi
 import com.paranid5.cooking_corner.domain.auth.dto.AuthorizeRequest
 import com.paranid5.cooking_corner.domain.auth.dto.LoginResponse
+import com.paranid5.cooking_corner.domain.auth.dto.ProfileResponse
 import com.paranid5.cooking_corner.utils.toAppStatusCode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -89,4 +91,19 @@ internal class AuthApiImpl(
             ensure(response.status.isSuccess()) { response.toAppStatusCode() }
         }
     }
+
+    override suspend fun getMe(accessToken: String): ApiResultWithCode<ProfileResponse> =
+        Either.catch {
+            suspend fun sendRequest() = withContext(AppDispatchers.Data) {
+                ktorClient.post(urlBuilder.buildGetMeUrl()) {
+                    bearerAuth(accessToken)
+                }
+            }
+
+            either {
+                val response = sendRequest()
+                ensure(response.status.isSuccess()) { response.toAppStatusCode() }
+                response.body()
+            }
+        }
 }

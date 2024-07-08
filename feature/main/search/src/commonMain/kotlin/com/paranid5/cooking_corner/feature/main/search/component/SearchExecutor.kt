@@ -7,6 +7,7 @@ import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
 import com.paranid5.cooking_corner.domain.global_event.Event
+import com.paranid5.cooking_corner.domain.global_event.Event.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.entity.RecipeResponse
@@ -77,11 +78,9 @@ internal class SearchExecutor(
         status: Either<HttpStatusCode, List<RecipeResponse>>,
         onRecipesReceived: (recipes: ImmutableList<RecipeUiState>) -> Unit,
     ) = when (status) {
-        is Either.Left -> {
-            when {
-                status.value.isForbidden -> globalEventRepository.sendEvent(Event.LogOut)
-                else -> dispatch(Msg.UpdateUiState(UiState.Error()))
-            }
+        is Either.Left -> when {
+            status.value.isForbidden -> globalEventRepository.sendEvent(Event.LogOut(Reason.MANUAL))
+            else -> dispatch(Msg.UpdateUiState(UiState.Error()))
         }
 
         is Either.Right -> {

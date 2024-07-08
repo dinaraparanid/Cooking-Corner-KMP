@@ -38,6 +38,8 @@
     <string name="profile_email">Email</string>
     <string name="profile_cooking_experience">Cooking experience</string>
     <string name="profile_edit">Edit</string>
+    <string name="profile_placeholder_unknown">Unknown</string>
+    <string name="profile_logout">Log out</string>
 
     <!-- Search -->
     <string name="search_filter_placeholder">Search for new cooking recipes</string>

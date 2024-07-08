@@ -7,25 +7,28 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.ic_edit
-import com.paranid5.cooking_corner.core.resources.profile_edit
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
-internal fun ProfileEditButton(
+internal fun ProfileButton(
+    text: String,
     onClick: () -> Unit,
+    icon: ImageVector? = null,
     modifier: Modifier = Modifier,
+    colors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = AppTheme.colors.button.secondary,
+        disabledContainerColor = AppTheme.colors.button.secondary,
+    ),
 ) {
     val shape = RoundedCornerShape(AppTheme.dimensions.corners.small)
     val interactionSource = remember { MutableInteractionSource() }
@@ -38,10 +41,7 @@ internal fun ProfileEditButton(
             width = AppTheme.dimensions.borders.minimum,
             color = AppTheme.colors.button.primary,
         ),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = AppTheme.colors.button.secondary,
-            disabledContainerColor = AppTheme.colors.button.secondary,
-        ),
+        colors = colors,
         modifier = modifier.simpleShadow(
             radius = AppTheme.dimensions.corners.small,
         ),
@@ -50,24 +50,31 @@ internal fun ProfileEditButton(
             .padding(vertical = AppTheme.dimensions.padding.small)
             .align(Alignment.CenterVertically)
 
-        ProfileEditButtonLabel(itemsModifier)
-        Spacer(Modifier.width(AppTheme.dimensions.padding.small))
-        ProfileEditButtonIcon(itemsModifier)
+        ProfileButtonLabel(text = text, modifier = itemsModifier)
+
+        icon?.let { image ->
+            Spacer(Modifier.width(AppTheme.dimensions.padding.small))
+            ProfileButtonIcon(imageVector = image, modifier = itemsModifier)
+        }
     }
 }
 
 @Composable
-private fun ProfileEditButtonLabel(modifier: Modifier = Modifier) = Text(
+private fun ProfileButtonLabel(
+    text: String,
+    modifier: Modifier = Modifier,
+) = AppMainText(
     modifier = modifier,
-    text = stringResource(Res.string.profile_edit),
-    color = AppTheme.colors.text.primary,
+    text = text,
     style = AppTheme.typography.h.h2,
-    fontFamily = AppTheme.typography.RalewayFontFamily,
 )
 
 @Composable
-private fun ProfileEditButtonIcon(modifier: Modifier = Modifier) = Image(
-    imageVector = vectorResource(Res.drawable.ic_edit),
+private fun ProfileButtonIcon(
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+) = Image(
+    imageVector = imageVector,
     contentDescription = null,
     modifier = modifier,
 )

@@ -15,6 +15,8 @@ interface AuthDataSource {
 
     suspend fun storeAccessToken(accessToken: String)
     suspend fun storeRefreshToken(refreshToken: String)
+
+    suspend fun clear()
 }
 
 suspend fun AuthDataSource.getLoginOrNull() = loginFlow.firstOrNull()

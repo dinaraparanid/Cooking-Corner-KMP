@@ -54,6 +54,9 @@ kotlin {
             api(projects.core.utils)
             api(projects.core.component)
 
+            implementation(projects.domain.auth)
+            implementation(projects.domain.globalEvent)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

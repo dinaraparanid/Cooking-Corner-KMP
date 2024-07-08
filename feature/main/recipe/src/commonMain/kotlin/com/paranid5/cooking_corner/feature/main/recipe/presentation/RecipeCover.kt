@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,7 +69,7 @@ internal fun RecipeCover(
 )
 
 @Composable
-private fun RecipeUndefinedPlaceholder(modifier: Modifier = Modifier) =
+private fun RecipePlaceholder(modifier: Modifier = Modifier) =
     Box(modifier = modifier) {
         Image(
             imageVector = vectorResource(Res.drawable.placeholder_recipe),
@@ -80,19 +79,14 @@ private fun RecipeUndefinedPlaceholder(modifier: Modifier = Modifier) =
     }
 
 @Composable
-private fun RecipeErrorPlaceholder(modifier: Modifier = Modifier) =
-    Text("TODO: Recipe error placeholder", modifier)
-
-@Composable
 private fun RecipeThumbnail(
     coverUrlState: UiState<String>,
     modifier: Modifier = Modifier,
 ) = when (coverUrlState) {
     is UiState.Undefined,
     is UiState.Data,
-    is UiState.Success -> RecipeUndefinedPlaceholder(modifier)
-
-    is UiState.Error -> RecipeErrorPlaceholder(modifier)
+    is UiState.Success,
+    is UiState.Error -> RecipePlaceholder(modifier)
 
     is UiState.Loading,
     is UiState.Refreshing -> AppProgressIndicator(modifier)

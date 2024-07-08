@@ -66,4 +66,15 @@ internal class AuthDataSourceImpl(private val dataStoreClient: DataStoreClient) 
             preferences[REFRESH_TOKEN_KEY] = refreshToken
         }
     }
+
+    override suspend fun clear() {
+        dataStoreClient.dataStore.edit { preferences ->
+            preferences.run {
+                remove(LOGIN_KEY)
+                remove(PASSWORD_KEY)
+                remove(ACCESS_TOKEN_KEY)
+                remove(REFRESH_TOKEN_KEY)
+            }
+        }
+    }
 }

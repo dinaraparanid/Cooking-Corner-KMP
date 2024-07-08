@@ -8,9 +8,9 @@ import kotlinx.serialization.Serializable
 @Immutable
 data class ProfileUiState(
     val username: String,
-    val name: String,
-    val surname: String,
-    val email: String,
-    val cookingExperience: Long,
+    val name: String?,
+    val surname: String?,
+    val email: String?,
+    val cookingExperience: String?,
     val photoUrl: UiState<String> = UiState.Undefined,
 )

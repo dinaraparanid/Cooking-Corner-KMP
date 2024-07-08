@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +47,7 @@ internal fun ProfilePhoto(
 }
 
 @Composable
-private fun ProfilePhotoUndefinedPlaceholder(modifier: Modifier = Modifier) =
+private fun ProfilePhotoPlaceholder(modifier: Modifier = Modifier) =
     Box(modifier = modifier.background(AppTheme.colors.background.primary)) {
         Image(
             imageVector = vectorResource(Res.drawable.placeholder_profile),
@@ -58,19 +57,14 @@ private fun ProfilePhotoUndefinedPlaceholder(modifier: Modifier = Modifier) =
     }
 
 @Composable
-private fun ProfilePhotoErrorPlaceholder(modifier: Modifier = Modifier) =
-    Text("TODO: ProfilePhoto error placeholder", modifier)
-
-@Composable
 private fun ProfilePhotoThumbnail(
     photoUrlState: UiState<String>,
     modifier: Modifier = Modifier,
 ) = when (photoUrlState) {
     is UiState.Undefined,
     is UiState.Data,
-    is UiState.Success -> ProfilePhotoUndefinedPlaceholder(modifier)
-
-    is UiState.Error -> ProfilePhotoErrorPlaceholder(modifier)
+    is UiState.Success,
+    is UiState.Error -> ProfilePhotoPlaceholder(modifier)
 
     is UiState.Loading,
     is UiState.Refreshing -> AppProgressIndicator(modifier)
