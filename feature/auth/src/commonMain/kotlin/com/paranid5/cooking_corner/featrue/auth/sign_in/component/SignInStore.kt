@@ -20,6 +20,7 @@ internal interface SignInStore : Store<UiIntent, State, Label> {
         data object UpdatePasswordVisibility : UiIntent
         data object ConfirmCredentials : UiIntent
         data object ShowSignUp : UiIntent
+        data object DismissErrorDialog : UiIntent
     }
 
     @Serializable

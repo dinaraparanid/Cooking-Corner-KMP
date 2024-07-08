@@ -22,6 +22,7 @@ internal class SignInExecutor(
             is UiIntent.UpdateLoginText -> dispatch(Msg.UpdateLoginText(intent.login))
             is UiIntent.UpdatePasswordText -> dispatch(Msg.UpdatePasswordText(intent.password))
             is UiIntent.UpdatePasswordVisibility -> dispatch(Msg.UpdatePasswordVisibility)
+            is UiIntent.DismissErrorDialog -> dispatch(Msg.UpdateErrorDialogVisibility(false))
         }
     }
 

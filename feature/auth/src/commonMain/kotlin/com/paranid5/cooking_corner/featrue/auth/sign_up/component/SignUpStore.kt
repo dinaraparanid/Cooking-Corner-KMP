@@ -20,6 +20,7 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
         data object UpdatePasswordVisibility : UiIntent
         data class UpdateConfirmPasswordText(val confirmPassword: String) : UiIntent
         data object ConfirmCredentials : UiIntent
+        data object DismissErrorDialog : UiIntent
     }
 
     @Serializable

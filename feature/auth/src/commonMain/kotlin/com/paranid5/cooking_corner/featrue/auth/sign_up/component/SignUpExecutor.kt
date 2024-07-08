@@ -29,6 +29,8 @@ internal class SignUpExecutor(
 
             is UiIntent.UpdatePasswordVisibility -> dispatch(Msg.UpdatePasswordVisibility)
 
+            is UiIntent.DismissErrorDialog -> dispatch(Msg.DismissErrorDialog)
+
             is UiIntent.UpdateConfirmPasswordText ->
                 dispatch(Msg.UpdateConfirmPasswordText(intent.confirmPassword))
         }

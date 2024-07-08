@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.Text
@@ -15,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
@@ -23,6 +25,7 @@ import com.paranid5.cooking_corner.core.resources.auth_password
 import com.paranid5.cooking_corner.core.resources.auth_sign_in
 import com.paranid5.cooking_corner.core.resources.auth_sign_up
 import com.paranid5.cooking_corner.core.resources.auth_wrong_password
+import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
 import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordVisibilityHandling
@@ -31,6 +34,8 @@ import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.St
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
 import com.paranid5.cooking_corner.ui.foundation.CookingCornerLabel
 import com.paranid5.cooking_corner.ui.foundation.CookingIcon
+import com.paranid5.cooking_corner.ui.foundation.alert_dialog.AppAlertDialog
+import com.paranid5.cooking_corner.ui.foundation.alert_dialog.AppAlertDialogCallbacks
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -61,9 +66,17 @@ internal fun SignInUi(
                 .padding(bottom = AppTheme.dimensions.padding.extraMedium),
         )
 
-        if (state.isErrorDialogVisible) {
-            // TODO: Error dialog
-        }
+        if (state.isErrorDialogVisible)
+            AppAlertDialog(
+                text = stringResource(Res.string.something_went_wrong),
+                callbacks = AppAlertDialogCallbacks(
+                    onDismissRequest = { onUiIntent(UiIntent.DismissErrorDialog) },
+                    onConfirmButtonClick = { onUiIntent(UiIntent.DismissErrorDialog) }
+                ),
+                modifier = Modifier.clip(
+                    RoundedCornerShape(AppTheme.dimensions.corners.extraMedium)
+                ),
+            )
     }
 }
 

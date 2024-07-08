@@ -25,7 +25,8 @@ fun AppTheme(
         LocalColors provides colors,
         LocalDimensions provides dimensions,
         LocalTypography provides typography,
-        LocalRippleTheme provides AppRippleTheme,
+        LocalRippleTheme provides NoRippleTheme,
+        LocalIndication provides NoRipple,
         LocalIndication provides rippleIndication,
         LocalTextSelectionColors provides AppTextSelectionColors,
     ) {

@@ -18,14 +18,14 @@ internal object SignUpReducer : Reducer<State, Msg> {
 
         is Msg.InvalidCredentials -> copy(
             isErrorDialogVisible = true,
-            errorDialogReason = UserAlreadyExistsException::class.simpleName,
+            errorDialogReason = UserAlreadyExistsException::class.qualifiedName,
         )
 
         is Msg.DismissErrorDialog -> copy(isErrorDialogVisible = false)
 
         is Msg.UnknownError -> copy(
             isErrorDialogVisible = true,
-            errorDialogReason = UnknownErrorException::class.simpleName,
+            errorDialogReason = UnknownErrorException::class.qualifiedName,
         )
     }
 }

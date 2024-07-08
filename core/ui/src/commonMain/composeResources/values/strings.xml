@@ -12,6 +12,7 @@
     <string name="auth_username_too_short">Username must be at least 6 characters long</string>
     <string name="auth_password_too_short">Password must be at least 6 characters long</string>
     <string name="auth_password_not_confirmed">Password does not match</string>
+    <string name="auth_user_already_exists">User with given credentials already exists</string>
 
     <!-- Main Splash Screen -->
     <string name="main_splash_title">Keep your recipes wherever you go</string>
@@ -69,5 +70,7 @@
 
     <!-- General -->
     <string name="retry">Retry</string>
-    <string name="something_went_wrong">Something went wrong</string>
+    <string name="something_went_wrong">Something went wrong. Try again</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 </resources>
