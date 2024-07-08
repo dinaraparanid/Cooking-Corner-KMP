@@ -7,5 +7,8 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStoreProv
 internal object SearchReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg) = when (msg) {
         is Msg.UpdateSearchText -> copy(searchText = msg.text)
+        is Msg.UpdateBestRatedRecipes -> copy(bestRatedRecipes = msg.recipes)
+        is Msg.UpdateRecentRecipes -> copy(recentRecipes = msg.recipes)
+        is Msg.UpdateUiState -> copy(uiState = msg.uiState)
     }
 }

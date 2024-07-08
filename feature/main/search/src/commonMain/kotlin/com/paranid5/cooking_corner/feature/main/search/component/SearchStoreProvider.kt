@@ -1,26 +1,53 @@
 package com.paranid5.cooking_corner.feature.main.search.component
 
+import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
+import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import kotlinx.collections.immutable.ImmutableList
 
-internal class SearchStoreProvider(private val storeFactory: StoreFactory) {
+internal class SearchStoreProvider(
+    private val storeFactory: StoreFactory,
+    private val recipeRepository: RecipeRepository,
+    private val globalEventRepository: GlobalEventRepository,
+) {
     sealed interface Msg {
         data class UpdateSearchText(val text: String) : Msg
+        data class UpdateUiState(val uiState: UiState<Unit>) : Msg
+        data class UpdateRecentRecipes(val recipes: ImmutableList<RecipeUiState>) : Msg
+        data class UpdateBestRatedRecipes(val recipes: ImmutableList<RecipeUiState>) : Msg
     }
 
-    fun provide(initialState: SearchStore.State): SearchStore = object :
+    fun provide(initialState: State): SearchStore = object :
         SearchStore,
         Store<UiIntent, State, Label> by storeFactory.create(
             name = "HomeStore",
             initialState = initialState,
-            executorFactory = ::SearchExecutor,
+            executorFactory = {
+                SearchExecutor(
+                    recipeRepository = recipeRepository,
+                    globalEventRepository = globalEventRepository
+                )
+            },
             reducer = SearchReducer,
+            bootstrapper = SimpleBootstrapper(Unit),
         ) {}
 
-    class Factory(private val storeFactory: StoreFactory) {
-        fun create() = SearchStoreProvider(storeFactory)
+    class Factory(
+        private val storeFactory: StoreFactory,
+        private val recipeRepository: RecipeRepository,
+        private val globalEventRepository: GlobalEventRepository,
+    ) {
+        fun create() = SearchStoreProvider(
+            storeFactory = storeFactory,
+            recipeRepository = recipeRepository,
+            globalEventRepository = globalEventRepository,
+        )
     }
 }

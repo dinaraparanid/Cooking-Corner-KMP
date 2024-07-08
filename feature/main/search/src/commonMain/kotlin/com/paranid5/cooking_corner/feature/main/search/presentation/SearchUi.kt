@@ -1,7 +1,9 @@
 package com.paranid5.cooking_corner.feature.main.search.presentation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,18 +13,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import app.cash.paging.compose.LazyPagingItems
-import app.cash.paging.compose.collectAsLazyPagingItems
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.search_best_rated
 import com.paranid5.cooking_corner.core.resources.search_last_recipes
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -33,24 +35,29 @@ fun SearchUi(
 ) {
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
-    val latestRecipes = component.lastRecepiesPagedFlow.collectAsLazyPagingItems()
-    val recommendedRecipes = component.recommendedRecepiesPagedFlow.collectAsLazyPagingItems()
 
-    SearchUiContent(
-        state = state,
-        onUiIntent = onUiIntent,
-        latestRecipes = latestRecipes,
-        recommendedRecipes = recommendedRecipes,
-        modifier = modifier.verticalScroll(rememberScrollState()),
-    )
+    Box(modifier.verticalScroll(rememberScrollState())) {
+        when (state.uiState) {
+            is UiState.Data, is UiState.Success, is UiState.Refreshing ->
+                SearchUiContent(
+                    state = state,
+                    onUiIntent = onUiIntent,
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+            is UiState.Error ->
+                Text("TODO: Error Stub", Modifier.align(Alignment.Center))
+
+            is UiState.Loading, is UiState.Undefined ->
+                AppProgressIndicator(Modifier.align(Alignment.Center))
+        }
+    }
 }
 
 @Composable
 private fun SearchUiContent(
     state: SearchStore.State,
     onUiIntent: (UiIntent) -> Unit,
-    latestRecipes: LazyPagingItems<RecipeUiState>,
-    recommendedRecipes: LazyPagingItems<RecipeUiState>,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
@@ -73,7 +80,7 @@ private fun SearchUiContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
     RecipesRow(
-        recipes = latestRecipes,
+        recipes = state.recentRecipes,
         onUiIntent = onUiIntent,
     )
 
@@ -87,7 +94,7 @@ private fun SearchUiContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
     RecipesRow(
-        recipes = recommendedRecipes,
+        recipes = state.bestRatedRecipes,
         onUiIntent = onUiIntent,
     )
 

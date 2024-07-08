@@ -2,27 +2,18 @@ package com.paranid5.cooking_corner.feature.main.search.component
 
 import androidx.paging.PagingData
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.slot.ChildSlot
-import com.arkivanov.decompose.router.slot.SlotNavigation
-import com.arkivanov.decompose.router.slot.activate
-import com.arkivanov.decompose.router.slot.childSlot
-import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.paranid5.cooking_corner.component.getComponentStore
-import com.paranid5.cooking_corner.component.toStateFlow
-import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent.BackResult
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.serialization.Serializable
 
 internal class SearchComponentImpl(
     componentContext: ComponentContext,
@@ -38,16 +29,6 @@ internal class SearchComponentImpl(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val stateFlow = store.stateFlow
-
-    override val lastRecepiesPagedFlow by lazy {
-        // TODO: paging from network
-        stub()
-    }
-
-    override val recommendedRecepiesPagedFlow by lazy {
-        // TODO: paging from network
-        stub()
-    }
 
     init {
         bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {

@@ -14,6 +14,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.withContext
 
@@ -24,29 +25,43 @@ internal class RecipeApiImpl(
 ) : RecipeApi {
     override suspend fun getRecentRecipes(): ApiResultWithCode<List<RecipeResponse>> =
         Either.catch {
-            suspend fun sendRequest(accessToken: String) = withContext(AppDispatchers.Data) {
-                ktorClient.get(urlBuilder.buildGetRecentRecipesUrl()) { bearerAuth(accessToken) }
+            handeRequest { accessToken ->
+                withContext(AppDispatchers.Data) {
+                    ktorClient.get(urlBuilder.buildGetRecentRecipesUrl()) {
+                        bearerAuth(accessToken)
+                    }
+                }
             }
+        }
 
-            either {
-                val accessToken = authRepository.requireAccessToken()
-                val response = sendRequest(accessToken)
-                ensure(response.status.isSuccess()) { response.toAppStatusCode() }
-                response.body()
+    override suspend fun getBestRatedRecipes(): ApiResultWithCode<List<RecipeResponse>> =
+        Either.catch {
+            handeRequest { accessToken ->
+                withContext(AppDispatchers.Data) {
+                    ktorClient.get(urlBuilder.buildGetBestRatedRecipesUrl()) {
+                        bearerAuth(accessToken)
+                    }
+                }
             }
         }
 
     override suspend fun getMyRecipes(): ApiResultWithCode<List<RecipeResponse>> =
         Either.catch {
-            suspend fun sendRequest(accessToken: String) = withContext(AppDispatchers.Data) {
-                ktorClient.get(urlBuilder.buildMyRecipesUrl()) { bearerAuth(accessToken) }
-            }
-
-            either {
-                val accessToken = authRepository.requireAccessToken()
-                val response = sendRequest(accessToken)
-                ensure(response.status.isSuccess()) { response.toAppStatusCode() }
-                response.body()
+            handeRequest { accessToken ->
+                withContext(AppDispatchers.Data) {
+                    ktorClient.get(urlBuilder.buildMyRecipesUrl()) {
+                        bearerAuth(accessToken)
+                    }
+                }
             }
         }
+
+    private suspend inline fun <reified T> handeRequest(
+        sendRequest: (accessToken: String) -> HttpResponse,
+    ) = either {
+        val accessToken = authRepository.requireAccessToken()
+        val response = sendRequest(accessToken)
+        ensure(response.status.isSuccess()) { response.toAppStatusCode() }
+        response.body<T>()
+    }
 }

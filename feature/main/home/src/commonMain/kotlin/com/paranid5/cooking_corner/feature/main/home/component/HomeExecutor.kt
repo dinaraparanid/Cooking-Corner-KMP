@@ -41,43 +41,9 @@ internal class HomeExecutor(
     }
 
     override fun executeAction(action: Unit) {
-        suspend fun handleStatus(status: Either<HttpStatusCode, List<RecipeResponse>>) =
-            when (status) {
-                is Either.Left -> {
-                    when {
-                        status.value.isForbidden -> globalEventRepository.sendEvent(Event.LogOut)
-                        else -> dispatch(Msg.UpdateUiState(UiState.Error()))
-                    }
-                }
-
-                is Either.Right -> {
-                    dispatch(
-                        Msg.UpdateRecipes(
-                            withContext(AppDispatchers.Eval) {
-                                status.value
-                                    .map(RecipeUiState.Companion::fromResponse)
-                                    .toImmutableList()
-                            }
-                        )
-                    )
-
-                    dispatch(Msg.UpdateUiState(UiState.Success))
-                }
-            }
-
-        suspend fun handleApiResult(result: ApiResultWithCode<List<RecipeResponse>>) =
-            when (result) {
-                is Either.Left -> {
-                    result.value.printStackTrace()
-                    dispatch(Msg.UpdateUiState(result.value.toUiState()))
-                }
-
-                is Either.Right -> handleStatus(result.value)
-            }
+        dispatch(Msg.UpdateUiState(UiState.Loading))
 
         scope.launch {
-            dispatch(Msg.UpdateUiState(UiState.Loading))
-
             handleApiResult(
                 result = withContext(AppDispatchers.Data) {
                     recipeRepository.getMyRecipes()
@@ -85,4 +51,38 @@ internal class HomeExecutor(
             )
         }
     }
+
+    private suspend inline fun handleStatus(status: Either<HttpStatusCode, List<RecipeResponse>>) =
+        when (status) {
+            is Either.Left -> {
+                when {
+                    status.value.isForbidden -> globalEventRepository.sendEvent(Event.LogOut)
+                    else -> dispatch(Msg.UpdateUiState(UiState.Error()))
+                }
+            }
+
+            is Either.Right -> {
+                dispatch(
+                    Msg.UpdateRecipes(
+                        withContext(AppDispatchers.Eval) {
+                            status.value
+                                .map(RecipeUiState.Companion::fromResponse)
+                                .toImmutableList()
+                        }
+                    )
+                )
+
+                dispatch(Msg.UpdateUiState(UiState.Success))
+            }
+        }
+
+    private suspend inline fun handleApiResult(result: ApiResultWithCode<List<RecipeResponse>>) =
+        when (result) {
+            is Either.Left -> {
+                result.value.printStackTrace()
+                dispatch(Msg.UpdateUiState(result.value.toUiState()))
+            }
+
+            is Either.Right -> handleStatus(result.value)
+        }
 }

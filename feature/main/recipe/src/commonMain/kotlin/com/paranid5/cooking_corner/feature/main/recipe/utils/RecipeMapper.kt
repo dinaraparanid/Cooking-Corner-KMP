@@ -9,8 +9,8 @@ fun RecipeUiState.Companion.fromResponse(response: RecipeResponse) =
     RecipeUiState(
         title = response.name,
         rating = response.rating,
-        preparingTime = response.preparingTime,
-        cookingTime = response.cookingTime,
+        preparingTime = response.preparingTime ?: 0,
+        cookingTime = response.cookingTime ?: 0,
         author = response.username,
         isLiked = response.isFavourite,
         coverUrlState = response.iconPath?.toUiState() ?: UiState.Success

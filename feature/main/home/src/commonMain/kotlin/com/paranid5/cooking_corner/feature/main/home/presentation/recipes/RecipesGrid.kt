@@ -37,7 +37,7 @@ internal fun RecipesGrid(
 ) = Box(modifier) {
     when (state.uiState) {
         is UiState.Data, is UiState.Refreshing, is UiState.Success ->
-            RecipesGridImpl(
+            RecipesGridContent(
                 state = state,
                 onUiIntent = onUiIntent,
                 modifier = Modifier.fillMaxSize()
@@ -52,7 +52,7 @@ internal fun RecipesGrid(
 }
 
 @Composable
-private fun RecipesGridImpl(
+private fun RecipesGridContent(
     state: State,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
