@@ -26,6 +26,7 @@ import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthUi
 import com.paranid5.cooking_corner.feature.main.root.presentation.MainRootUi
 import com.paranid5.cooking_corner.feature.splash.presentation.SplashScreenUi
+import com.paranid5.cooking_corner.presentation.snackbar.AppSnackbarHost
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 @OptIn(ExperimentalCoilApi::class)
@@ -33,28 +34,35 @@ import com.paranid5.cooking_corner.ui.theme.AppTheme
 fun RootUi(
     rootComponent: RootComponent,
     modifier: Modifier = Modifier,
-) = AppTheme {
-    setSingletonImageLoaderFactory { context ->
-        ImageLoader.Builder(context).build()
-    }
+) {
+    val globalEventState = rootComponent
+        .globalGlobalEventFlow
+        .collectAsState(null)
 
-    Scaffold(
-        containerColor = Color.Transparent,
-        modifier = modifier
-            .background(AppTheme.colors.background.primary)
-            .windowInsetsPadding(WindowInsets.safeDrawing),
-    ) { screenPadding ->
-        Surface(
-            color = Color.Transparent,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(screenPadding)
-                .background(color = AppTheme.colors.background.primary),
-        ) {
-            RootContent(
-                childStackState = rootComponent.stack.collectAsState(),
-                modifier = Modifier.fillMaxSize(),
-            )
+    AppTheme {
+        setSingletonImageLoaderFactory { context ->
+            ImageLoader.Builder(context).build()
+        }
+
+        Scaffold(
+            containerColor = Color.Transparent,
+            snackbarHost = { AppSnackbarHost(globalEventState = globalEventState) },
+            modifier = modifier
+                .background(AppTheme.colors.background.primary)
+                .windowInsetsPadding(WindowInsets.safeDrawing),
+        ) { screenPadding ->
+            Surface(
+                color = Color.Transparent,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(screenPadding)
+                    .background(color = AppTheme.colors.background.primary),
+            ) {
+                RootContent(
+                    childStackState = rootComponent.stack.collectAsState(),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }

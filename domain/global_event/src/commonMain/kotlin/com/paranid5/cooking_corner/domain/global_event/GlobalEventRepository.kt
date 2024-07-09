@@ -3,7 +3,7 @@ package com.paranid5.cooking_corner.domain.global_event
 import kotlinx.coroutines.flow.Flow
 
 interface GlobalEventRepository {
-    val eventFlow: Flow<Event>
+    val globalEventFlow: Flow<GlobalEvent>
 
-    suspend fun sendEvent(event: Event)
+    suspend fun sendEvent(globalEvent: GlobalEvent)
 }

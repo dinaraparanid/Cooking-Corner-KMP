@@ -6,8 +6,8 @@ import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
-import com.paranid5.cooking_corner.domain.global_event.Event
-import com.paranid5.cooking_corner.domain.global_event.Event.LogOut.Reason
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.entity.RecipeResponse
@@ -57,7 +57,7 @@ internal class HomeExecutor(
         when (status) {
             is Either.Left -> when {
                 status.value.isForbidden ->
-                    globalEventRepository.sendEvent(Event.LogOut(Reason.ERROR))
+                    globalEventRepository.sendEvent(GlobalEvent.LogOut(Reason.ERROR))
 
                 else -> dispatch(Msg.UpdateUiState(UiState.Error()))
             }

@@ -6,6 +6,10 @@ import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor.TokenResult
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
+import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
@@ -15,13 +19,14 @@ import kotlinx.coroutines.withContext
 
 internal class SignUpExecutor(
     private val authRepository: AuthRepository,
+    private val globalEventRepository: GlobalEventRepository,
     private val tokenInteractor: TokenInteractor,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     override fun executeIntent(intent: UiIntent) {
         when (intent) {
             is UiIntent.Back -> publish(Label.Back)
 
-            is UiIntent.ConfirmCredentials -> scope.launch { checkCredentials() }
+            is UiIntent.ConfirmCredentials -> scope.launch { checkCredentials(intent = intent) }
 
             is UiIntent.UpdateLoginText -> dispatch(Msg.UpdateLoginText(intent.login))
 
@@ -29,14 +34,12 @@ internal class SignUpExecutor(
 
             is UiIntent.UpdatePasswordVisibility -> dispatch(Msg.UpdatePasswordVisibility)
 
-            is UiIntent.DismissErrorDialog -> dispatch(Msg.DismissErrorDialog)
-
             is UiIntent.UpdateConfirmPasswordText ->
                 dispatch(Msg.UpdateConfirmPasswordText(intent.confirmPassword))
         }
     }
 
-    private suspend fun checkCredentials() {
+    private suspend fun checkCredentials(intent: UiIntent.ConfirmCredentials) {
         when (
             val registerRes = withContext(AppDispatchers.Data) {
                 authRepository.register(
@@ -47,17 +50,17 @@ internal class SignUpExecutor(
         ) {
             is Either.Left -> {
                 registerRes.value.printStackTrace()
-                dispatch(Msg.UnknownError)
+                sendErrorSnackbar(message = intent.generalErrorMessage)
             }
 
             is Either.Right -> when (registerRes.value) {
-                is Either.Left -> dispatch(Msg.InvalidCredentials)
-                is Either.Right -> tryAcquireTokens()
+                is Either.Left -> sendErrorSnackbar(message = intent.invalidCredentialsMessage)
+                is Either.Right -> tryAcquireTokens(intent = intent)
             }
         }
     }
 
-    private suspend fun tryAcquireTokens() = when (
+    private suspend fun tryAcquireTokens(intent: UiIntent.ConfirmCredentials) = when (
         tokenInteractor.tryAcquireTokens(
             login = state().login,
             password = state().password,
@@ -71,6 +74,17 @@ internal class SignUpExecutor(
             publish(Label.ConfirmedCredentials)
         }
 
-        is TokenResult.InvalidPassword, is TokenResult.UnhandledError -> dispatch(Msg.UnknownError)
+        is TokenResult.InvalidPassword, is TokenResult.UnhandledError ->
+            sendErrorSnackbar(message = intent.generalErrorMessage)
     }
+
+    private suspend fun sendErrorSnackbar(message: String) = globalEventRepository.sendEvent(
+        GlobalEvent.ShowSnackbar(
+            SnackbarMessage(
+                message = message,
+                snackbarType = SnackbarType.NEGATIVE,
+                withDismissAction = true,
+            )
+        )
+    )
 }

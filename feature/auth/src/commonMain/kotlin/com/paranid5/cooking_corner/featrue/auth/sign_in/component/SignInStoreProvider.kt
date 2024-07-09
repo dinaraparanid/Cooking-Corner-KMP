@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor
+import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
@@ -11,6 +12,7 @@ import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.Ui
 internal class SignInStoreProvider(
     private val storeFactory: StoreFactory,
     private val authRepository: AuthRepository,
+    private val globalEventRepository: GlobalEventRepository,
     private val tokenInteractor: TokenInteractor,
 ) {
     sealed interface Msg {
@@ -18,7 +20,6 @@ internal class SignInStoreProvider(
         data class UpdatePasswordText(val password: String) : Msg
         data object UpdatePasswordVisibility : Msg
         data object InvalidPassword : Msg
-        data class UpdateErrorDialogVisibility(val isVisible: Boolean) : Msg
     }
 
     fun provide(initialState: State): SignInStore = object :
@@ -29,6 +30,7 @@ internal class SignInStoreProvider(
             executorFactory = {
                 SignInExecutor(
                     authRepository = authRepository,
+                    globalEventRepository = globalEventRepository,
                     tokenInteractor = tokenInteractor,
                 )
             },
@@ -38,11 +40,13 @@ internal class SignInStoreProvider(
     class Factory(
         private val storeFactory: StoreFactory,
         private val authRepository: AuthRepository,
+        private val globalEventRepository: GlobalEventRepository,
         private val tokenInteractor: TokenInteractor,
     ) {
         fun create() = SignInStoreProvider(
             storeFactory = storeFactory,
             authRepository = authRepository,
+            globalEventRepository = globalEventRepository,
             tokenInteractor = tokenInteractor,
         )
     }

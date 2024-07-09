@@ -15,12 +15,19 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
 
     sealed interface UiIntent {
         data object Back : UiIntent
+
         data class UpdateLoginText(val login: String) : UiIntent
+
         data class UpdatePasswordText(val password: String) : UiIntent
+
         data object UpdatePasswordVisibility : UiIntent
+
         data class UpdateConfirmPasswordText(val confirmPassword: String) : UiIntent
-        data object ConfirmCredentials : UiIntent
-        data object DismissErrorDialog : UiIntent
+
+        data class ConfirmCredentials(
+            val generalErrorMessage: String,
+            val invalidCredentialsMessage: String,
+        ) : UiIntent
     }
 
     @Serializable
@@ -30,8 +37,6 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
         val password: String,
         val confirmPassword: String,
         val isPasswordVisible: Boolean,
-        val isErrorDialogVisible: Boolean,
-        val errorDialogReason: String?,
     ) {
         @Transient
         val isUsernameShort = login.length < MIN_INPUT_LENGTH
@@ -60,8 +65,6 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
             password = "",
             confirmPassword = "",
             isPasswordVisible = false,
-            isErrorDialogVisible = false,
-            errorDialogReason = null,
         )
     }
 

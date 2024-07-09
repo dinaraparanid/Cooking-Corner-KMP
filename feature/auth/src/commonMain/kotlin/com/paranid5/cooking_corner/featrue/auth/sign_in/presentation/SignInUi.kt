@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.Text
@@ -16,7 +15,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
@@ -34,8 +32,6 @@ import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.St
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
 import com.paranid5.cooking_corner.ui.foundation.CookingCornerLabel
 import com.paranid5.cooking_corner.ui.foundation.CookingIcon
-import com.paranid5.cooking_corner.ui.foundation.alert_dialog.AppAlertDialog
-import com.paranid5.cooking_corner.ui.foundation.alert_dialog.AppAlertDialogCallbacks
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -65,18 +61,6 @@ internal fun SignInUi(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = AppTheme.dimensions.padding.extraMedium),
         )
-
-        if (state.isErrorDialogVisible)
-            AppAlertDialog(
-                text = stringResource(Res.string.something_went_wrong),
-                callbacks = AppAlertDialogCallbacks(
-                    onDismissRequest = { onUiIntent(UiIntent.DismissErrorDialog) },
-                    onConfirmButtonClick = { onUiIntent(UiIntent.DismissErrorDialog) }
-                ),
-                modifier = Modifier.clip(
-                    RoundedCornerShape(AppTheme.dimensions.corners.extraMedium)
-                ),
-            )
     }
 }
 
@@ -85,57 +69,63 @@ private fun SignInContent(
     state: State,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
-) = Column(modifier) {
-    CookingIcon(
-        Modifier
-            .width(COOKING_ICON_WIDTH)
-            .height(COOKING_ICON_HEIGHT)
-            .align(Alignment.CenterHorizontally),
-    )
+) {
+    val unhandledErrorMessage = stringResource(Res.string.something_went_wrong)
 
-    Spacer(Modifier.height(AppTheme.dimensions.padding.extraSmall))
+    Column(modifier) {
+        CookingIcon(
+            Modifier
+                .width(COOKING_ICON_WIDTH)
+                .height(COOKING_ICON_HEIGHT)
+                .align(Alignment.CenterHorizontally),
+        )
 
-    CookingCornerLabel(Modifier.align(Alignment.CenterHorizontally))
+        Spacer(Modifier.height(AppTheme.dimensions.padding.extraSmall))
 
-    Spacer(Modifier.height(AppTheme.dimensions.padding.large))
+        CookingCornerLabel(Modifier.align(Alignment.CenterHorizontally))
 
-    AuthEditText(
-        value = state.login,
-        onValueChange = { onUiIntent(UiIntent.UpdateLoginText(login = it)) },
-        placeholder = stringResource(Res.string.auth_login),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
-    )
+        Spacer(Modifier.height(AppTheme.dimensions.padding.large))
 
-    Spacer(Modifier.height(AppTheme.dimensions.padding.extraBig))
+        AuthEditText(
+            value = state.login,
+            onValueChange = { onUiIntent(UiIntent.UpdateLoginText(login = it)) },
+            placeholder = stringResource(Res.string.auth_login),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
+        )
 
-    AuthEditText(
-        value = state.password,
-        onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
-        placeholder = stringResource(Res.string.auth_password),
-        isError = state.isPasswordInvalid,
-        passwordVisibilityHandling = PasswordVisibilityHandling(
-            isPasswordVisible = state.isPasswordVisible,
-            onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
-    )
+        Spacer(Modifier.height(AppTheme.dimensions.padding.extraBig))
 
-    Spacer(Modifier.height(AppTheme.dimensions.padding.extraBig))
+        AuthEditText(
+            value = state.password,
+            onValueChange = { onUiIntent(UiIntent.UpdatePasswordText(password = it)) },
+            placeholder = stringResource(Res.string.auth_password),
+            isError = state.isPasswordInvalid,
+            passwordVisibilityHandling = PasswordVisibilityHandling(
+                isPasswordVisible = state.isPasswordVisible,
+                onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
+        )
 
-    AuthConfirmButton(
-        isEnabled = state.isInputNotShort,
-        text = stringResource(
-            confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
-        ),
-        onClick = { onUiIntent(UiIntent.ConfirmCredentials) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
-    )
+        Spacer(Modifier.height(AppTheme.dimensions.padding.extraBig))
+
+        AuthConfirmButton(
+            isEnabled = state.isInputNotShort,
+            text = stringResource(
+                confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
+            ),
+            onClick = {
+                onUiIntent(UiIntent.ConfirmCredentials(unhandledErrorMessage = unhandledErrorMessage))
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
+        )
+    }
 }
 
 @Composable

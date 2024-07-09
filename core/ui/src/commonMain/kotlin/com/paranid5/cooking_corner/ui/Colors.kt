@@ -11,5 +11,9 @@ internal val OrangeSelect = Color(0xFFFE7F00)
 internal val Error = Color(0xFFFF0606)
 internal val MainWhite = Color(0xFFFFFAF1)
 
+internal val BackgroundSnackbarPositive = Color(0xFF52C78F)
+internal val BackgroundSnackbarNegative = Error
+internal val BackgroundSnackbarNeutral = OrangeSelect
+
 internal val TransparentUtilityDark = Color.White.copy(alpha = 0.25F)
 internal val TransparentUtilityLight = Color.Black.copy(alpha = 0.2F)

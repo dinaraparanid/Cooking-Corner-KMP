@@ -52,7 +52,9 @@ kotlin {
         commonMain.dependencies {
             api(projects.core.component)
             api(projects.core.ui)
+
             implementation(projects.domain.auth)
+            implementation(projects.domain.globalEvent)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

@@ -5,6 +5,9 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import com.paranid5.cooking_corner.ui.BackgroundSnackbarNegative
+import com.paranid5.cooking_corner.ui.BackgroundSnackbarNeutral
+import com.paranid5.cooking_corner.ui.BackgroundSnackbarPositive
 import com.paranid5.cooking_corner.ui.DarkerPastel
 import com.paranid5.cooking_corner.ui.DarkestPastel
 import com.paranid5.cooking_corner.ui.Error
@@ -22,6 +25,7 @@ data class AppColors(
     val background: AppBackgroundColors,
     val text: AppTextColors,
     val button: AppButtonColors,
+    val snackbar: AppSnackbarColors,
 ) {
     companion object {
         private val ColorScheme = darkColorScheme(
@@ -39,6 +43,7 @@ data class AppColors(
             background = AppBackgroundColors.default,
             text = AppTextColors.default,
             button = AppButtonColors.default,
+            snackbar = AppSnackbarColors.default,
         )
     }
 
@@ -92,6 +97,49 @@ data class AppButtonColors(
             primary = MainBlack,
             secondary = MainPastel,
             secondaryDarker = DarkerPastel,
+        )
+    }
+}
+
+@Immutable
+data class AppSnackbarColors(
+    val background: AppSnackbarBackgroundColors,
+    val text: AppSnackbarTextColors,
+) {
+    companion object {
+        internal val default = AppSnackbarColors(
+            background = AppSnackbarBackgroundColors.default,
+            text = AppSnackbarTextColors.default,
+        )
+    }
+}
+
+@Immutable
+data class AppSnackbarBackgroundColors(
+    val positive: Color,
+    val negative: Color,
+    val neutral: Color,
+) {
+    companion object {
+        internal val default = AppSnackbarBackgroundColors(
+            positive = BackgroundSnackbarPositive,
+            negative = BackgroundSnackbarNegative,
+            neutral = BackgroundSnackbarNeutral,
+        )
+    }
+}
+
+@Immutable
+data class AppSnackbarTextColors(
+    val positive: Color,
+    val negative: Color,
+    val neutral: Color,
+) {
+    companion object {
+        internal val default = AppSnackbarTextColors(
+            positive = Color.White,
+            negative = Color.White,
+            neutral = MainBlack,
         )
     }
 }

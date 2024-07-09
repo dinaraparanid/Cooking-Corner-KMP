@@ -12,7 +12,7 @@ import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.getAccessTokenOrNull
 import com.paranid5.cooking_corner.domain.auth.getRefreshTokenOrNull
-import com.paranid5.cooking_corner.domain.global_event.Event
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
@@ -20,6 +20,7 @@ import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
 import com.paranid5.cooking_corner.feature.splash.component.SplashScreenComponent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.isOk
+import com.paranid5.cooking_corner.utils.doNothing
 import com.paranid5.cooking_corner.utils.updateState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -61,6 +62,10 @@ internal class RootComponentImpl(
     private val _stateFlow = MutableStateFlow(RootState())
     override val stateFlow = _stateFlow.asStateFlow()
 
+    override val globalGlobalEventFlow by lazy {
+        globalEventRepository.globalEventFlow
+    }
+
     init {
         doOnCreate {
             componentScope.launch {
@@ -73,14 +78,14 @@ internal class RootComponentImpl(
     }
 
     private suspend fun subscribeOnGlobalEventChanges() {
-        globalEventRepository.eventFlow.collect { event ->
+        globalEventRepository.globalEventFlow.collect { event ->
             when (event) {
-                is Event.LogOut -> {
+                is GlobalEvent.LogOut -> {
                     authRepository.clear()
-                    navigation.replaceCurrent(Config.Auth) {
-                        // TODO: Show logout snackbar
-                    }
+                    navigation.replaceCurrent(Config.Auth)
                 }
+
+                is GlobalEvent.ShowSnackbar -> doNothing
             }
         }
     }

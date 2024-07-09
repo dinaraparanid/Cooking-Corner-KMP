@@ -1,14 +1,10 @@
 package com.paranid5.cooking_corner.featrue.auth.sign_up.presentation
 
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.core.resources.Res
@@ -27,10 +23,7 @@ import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordVisibilityH
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpComponent
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
-import com.paranid5.cooking_corner.featrue.auth.sign_up.error.UserAlreadyExistsException
 import com.paranid5.cooking_corner.ui.foundation.AppBackButton
-import com.paranid5.cooking_corner.ui.foundation.alert_dialog.AppAlertDialog
-import com.paranid5.cooking_corner.ui.foundation.alert_dialog.AppAlertDialogCallbacks
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -47,15 +40,6 @@ internal fun SignUpUi(
         onUiIntent = onUiIntent,
         modifier = modifier,
     )
-
-    if (state.isErrorDialogVisible)
-        ErrorDialog(
-            state = state,
-            onUiIntent = onUiIntent,
-            modifier = Modifier.clip(
-                RoundedCornerShape(AppTheme.dimensions.corners.extraMedium)
-            ),
-        )
 }
 
 @Composable
@@ -70,6 +54,9 @@ private fun SignUpContent(
         isPasswordVisible = state.isPasswordVisible,
         onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
     )
+
+    val generalErrorMessage = stringResource(Res.string.something_went_wrong)
+    val invalidCredentialsMessage = stringResource(Res.string.auth_user_already_exists)
 
     ConstraintLayout(modifier = modifier) {
         val (
@@ -147,7 +134,14 @@ private fun SignUpContent(
         AuthConfirmButton(
             isEnabled = state.isInputNotShort && state.isPasswordConfirmed,
             text = stringResource(Res.string.auth_sign_up),
-            onClick = { onUiIntent(UiIntent.ConfirmCredentials) },
+            onClick = {
+                onUiIntent(
+                    UiIntent.ConfirmCredentials(
+                        generalErrorMessage = generalErrorMessage,
+                        invalidCredentialsMessage = invalidCredentialsMessage,
+                    )
+                )
+            },
             modifier = Modifier.constrainAs(confirmButton) {
                 top.linkTo(confirmPassword.bottom, margin = appPadding.large)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
@@ -156,31 +150,4 @@ private fun SignUpContent(
             },
         )
     }
-}
-
-@Composable
-private fun ErrorDialog(
-    state: State,
-    onUiIntent: (UiIntent) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val errorMessageRes by remember(state.errorDialogReason) {
-        derivedStateOf {
-            when (state.errorDialogReason) {
-                UserAlreadyExistsException::class.qualifiedName ->
-                    Res.string.auth_user_already_exists
-
-                else -> Res.string.something_went_wrong
-            }
-        }
-    }
-
-    AppAlertDialog(
-        modifier = modifier,
-        text = stringResource(errorMessageRes),
-        callbacks = AppAlertDialogCallbacks(
-            onDismissRequest = { onUiIntent(UiIntent.DismissErrorDialog) },
-            onConfirmButtonClick = { onUiIntent(UiIntent.DismissErrorDialog) }
-        ),
-    )
 }
