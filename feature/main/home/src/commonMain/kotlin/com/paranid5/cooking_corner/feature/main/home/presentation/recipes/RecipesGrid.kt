@@ -63,7 +63,7 @@ private fun RecipesGridContent(
         horizontalArrangement = Arrangement.spacedBy(PADDING_BETWEEN_RECIPES),
         columns = GridCells.Adaptive(getMinCellWidth(constraints.maxWidth))
     ) {
-        items(items = state.recipes) { recipe ->
+        items(items = state.filteredRecipes) { recipe ->
             RecipeItem(
                 recipe = recipe,
                 onErrorButtonClick = { }, // TODO: Error handling

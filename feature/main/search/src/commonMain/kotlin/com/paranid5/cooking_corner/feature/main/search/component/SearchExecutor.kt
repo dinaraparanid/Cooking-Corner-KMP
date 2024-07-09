@@ -10,7 +10,7 @@ import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
-import com.paranid5.cooking_corner.domain.recipe.entity.RecipeResponse
+import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
@@ -31,13 +31,15 @@ internal class SearchExecutor(
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     override fun executeIntent(intent: UiIntent) {
         when (intent) {
+            is UiIntent.LoadRecipes -> loadRecipes()
             is UiIntent.AddToRecipesClick -> doNothing // TODO: Add to recipes
+            is UiIntent.SearchRecipes -> doNothing // TODO: Search recipes by name
             is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeUiState))
             is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(intent.text))
         }
     }
 
-    override fun executeAction(action: Unit) {
+    private fun loadRecipes() {
         dispatch(Msg.UpdateUiState(UiState.Loading))
 
         scope.launch {
@@ -53,7 +55,7 @@ internal class SearchExecutor(
             handleRecipesApiResult(
                 onRecipesReceived = { dispatch(Msg.UpdateRecentRecipes(recipes = it)) },
                 result = withContext(AppDispatchers.Data) {
-                    recipeRepository.getMyRecipes()
+                    recipeRepository.getRecentRecipes()
                 }
             )
         }

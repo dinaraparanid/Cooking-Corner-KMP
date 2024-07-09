@@ -2,10 +2,13 @@ package com.paranid5.cooking_corner.feature.main.search.component
 
 import androidx.paging.PagingData
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnPause
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.paranid5.cooking_corner.component.componentScope
 import com.paranid5.cooking_corner.component.getComponentStore
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent.BackResult
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
@@ -13,7 +16,12 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Sta
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 internal class SearchComponentImpl(
     componentContext: ComponentContext,
@@ -30,9 +38,20 @@ internal class SearchComponentImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override val stateFlow = store.stateFlow
 
+    private var subscribeStateJob: Job? = null
+
     init {
         bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
             store.labels bindTo ::onLabel
+        }
+
+        doOnResume {
+            subscribeStateJob = subscribeOnStateUpdates()
+        }
+
+        doOnPause {
+            subscribeStateJob?.cancel()
+            subscribeStateJob = null
         }
     }
 
@@ -42,6 +61,20 @@ internal class SearchComponentImpl(
         is Label.ShowRecipe -> onBack(
             BackResult.ShowRecipeDetails(recipeUiState = label.recipeUiState)
         )
+    }
+
+    private fun subscribeOnStateUpdates() = componentScope.launch {
+        stateFlow
+            .map { it.searchText }
+            .distinctUntilChanged()
+            .collectLatest { searchText ->
+                val intent = when {
+                    searchText.isBlank() -> UiIntent.LoadRecipes
+                    else -> UiIntent.SearchRecipes
+                }
+
+                onUiIntent(intent)
+            }
     }
 
     class Factory(private val storeFactory: SearchStoreProvider.Factory) : SearchComponent.Factory {

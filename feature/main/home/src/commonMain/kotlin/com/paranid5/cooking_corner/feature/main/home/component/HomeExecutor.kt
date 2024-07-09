@@ -10,7 +10,7 @@ import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
-import com.paranid5.cooking_corner.domain.recipe.entity.RecipeResponse
+import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
@@ -30,24 +30,28 @@ internal class HomeExecutor(
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     override fun executeIntent(intent: UiIntent) {
         when (intent) {
+            is UiIntent.LoadMyRecipes -> loadMyRecipes()
             is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeUiState))
             is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(intent.text))
             is UiIntent.SelectCategory -> dispatch(Msg.SelectCategory(intent.index))
             is UiIntent.AddRecipe -> publish(Label.ShowAddRecipe)
             is UiIntent.GenerateRecipe -> publish(Label.ShowGenerateRecipe)
-            is UiIntent.DescendingFilterClick -> doNothing // TODO: Descending filter
+            is UiIntent.OrderClick -> dispatch(Msg.UpdateOrder)
             is UiIntent.ShowFavourites -> doNothing // TODO: Show favourites
             is UiIntent.LikeClick -> doNothing // TODO: Like click
         }
     }
 
-    override fun executeAction(action: Unit) {
+    private fun loadMyRecipes() {
         dispatch(Msg.UpdateUiState(UiState.Loading))
 
         scope.launch {
             handleApiResult(
                 result = withContext(AppDispatchers.Data) {
-                    recipeRepository.getMyRecipes()
+                    recipeRepository.getMyRecipes(
+                        categoryName = state().selectedCategoryTitle,
+                        ascendingOrder = state().isAscendingOrder,
+                    )
                 }
             )
         }

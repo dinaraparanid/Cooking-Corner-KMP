@@ -87,7 +87,7 @@ private fun HomeTopBarImpl(
         AppIconButton(
             icon = vectorResource(Res.drawable.ic_descending_filter),
             modifier = Modifier.align(Alignment.CenterVertically),
-            onClick = { onUiIntent(UiIntent.DescendingFilterClick) },
+            onClick = { onUiIntent(UiIntent.OrderClick) },
         )
 
         AppIconButton(

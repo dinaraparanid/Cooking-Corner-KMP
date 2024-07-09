@@ -1,6 +1,5 @@
 package com.paranid5.cooking_corner.feature.main.home.component
 
-import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
@@ -19,6 +18,7 @@ internal class HomeStoreProvider(
 ) {
     sealed interface Msg {
         data class UpdateSearchText(val text: String) : Msg
+        data object UpdateOrder : Msg
         data class SelectCategory(val index: Int) : Msg
         data class UpdateRecipes(val recipes: ImmutableList<RecipeUiState>) : Msg
         data class UpdateUiState(val uiState: UiState<Unit>) : Msg
@@ -36,7 +36,6 @@ internal class HomeStoreProvider(
                 )
             },
             reducer = HomeReducer,
-            bootstrapper = SimpleBootstrapper(Unit),
         ) {}
 
     class Factory(

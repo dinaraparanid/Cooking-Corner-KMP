@@ -1,6 +1,6 @@
 package com.paranid5.cooking_corner.feature.main.recipe.utils
 
-import com.paranid5.cooking_corner.domain.recipe.entity.RecipeResponse
+import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
