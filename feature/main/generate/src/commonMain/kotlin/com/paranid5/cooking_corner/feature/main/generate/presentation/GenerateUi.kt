@@ -1,7 +1,6 @@
 package com.paranid5.cooking_corner.feature.main.generate.presentation
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,6 +21,7 @@ import com.paranid5.cooking_corner.core.resources.generate_provide_link
 import com.paranid5.cooking_corner.feature.main.generate.component.GenerateComponent
 import com.paranid5.cooking_corner.feature.main.generate.component.GenerateState
 import com.paranid5.cooking_corner.feature.main.generate.component.GenerateUiIntent
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedEditText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -36,7 +35,7 @@ fun GenerateUi(
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
 
-    Column(modifier.background(AppTheme.colors.background.primary)) {
+    Column(modifier) {
         GenerateTopBar(
             onUiIntent = onUiIntent,
             modifier = Modifier
@@ -69,13 +68,11 @@ fun GenerateUi(
 }
 
 @Composable
-private fun GenerateLabel(modifier: Modifier = Modifier) = Text(
+private fun GenerateLabel(modifier: Modifier = Modifier) = AppMainText(
     modifier = modifier,
     text = stringResource(Res.string.generate_provide_link),
     fontWeight = FontWeight.Bold,
-    color = AppTheme.colors.text.primary,
     style = AppTheme.typography.regular,
-    fontFamily = AppTheme.typography.RalewayFontFamily,
 )
 
 @Composable
@@ -107,10 +104,8 @@ private fun GenerateButton(
     ),
     onClick = { onUiIntent(GenerateUiIntent.GenerateClick) },
 ) {
-    Text(
+    AppMainText(
         text = stringResource(Res.string.generate_apply_button),
-        color = AppTheme.colors.text.primary,
         style = AppTheme.typography.h.h2,
-        fontFamily = AppTheme.typography.InterFontFamily,
     )
 }

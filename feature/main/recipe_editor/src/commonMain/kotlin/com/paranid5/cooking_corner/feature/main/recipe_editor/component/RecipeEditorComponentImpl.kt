@@ -38,7 +38,6 @@ internal class RecipeEditorComponentImpl(
 
     private fun onLabel(label: Label) = when (label) {
         is Label.Back -> onBack(BackResult.Dismiss)
-        is Label.PickCover -> doNothing() // TODO: launch picker
     }
 
     class Factory(

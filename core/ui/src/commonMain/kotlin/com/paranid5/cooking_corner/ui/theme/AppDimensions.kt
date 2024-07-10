@@ -53,10 +53,10 @@ data class AppDimensions(
         val small: Dp,
         val medium: Dp,
         val extraMedium: Dp,
-        val large: Dp,
-        val extraLarge: Dp,
         val big: Dp,
         val extraBig: Dp,
+        val large: Dp,
+        val extraLarge: Dp,
         val enormous: Dp,
     )
 

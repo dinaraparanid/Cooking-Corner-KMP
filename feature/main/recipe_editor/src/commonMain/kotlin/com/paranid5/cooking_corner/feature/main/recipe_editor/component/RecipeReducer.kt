@@ -14,7 +14,6 @@ internal object RecipeReducer : Reducer<State, Msg> {
         is Msg.RemoveStep -> copy(steps = steps without msg.step)
         is Msg.UpdateCarbohydrates -> copy(carbohydratesInput = msg.carbohydratesInput)
         is Msg.UpdateCategoriesUiState -> copy(categoriesUiState = msg.categoriesUiState)
-        is Msg.UpdateCategory -> copy(category = msg.category)
         is Msg.UpdateCookingTime -> copy(cookingTimeInput = msg.cookingTimeInput)
         is Msg.UpdateCover -> copy(cover = msg.cover)
         is Msg.UpdateDescription -> copy(description = msg.description)
@@ -26,8 +25,9 @@ internal object RecipeReducer : Reducer<State, Msg> {
         is Msg.UpdatePreparationTime -> copy(preparationTimeInput = msg.preparationTimeInput)
         is Msg.UpdateProteins -> copy(proteinsInput = msg.proteinsInput)
         is Msg.UpdateRestTime -> copy(restTimeInput = msg.restTimeInput)
+        is Msg.UpdateSelectedCategory -> copy(selectedCategoryIndex = msg.index)
+        is Msg.UpdateSelectedTag -> copy(selectedTagIndex = msg.index)
         is Msg.UpdateSource -> copy(source = msg.source)
-        is Msg.UpdateTag -> copy(tag = msg.tag)
         is Msg.UpdateTagsUiState -> copy(tagsUiState = msg.tagsUiState)
         is Msg.UpdateVideoLink -> copy(videoLink = msg.videoLink)
     }

@@ -67,6 +67,27 @@
     <string name="generate_link_placeholder">Link</string>
     <string name="generate_apply_button">Generate</string>
 
+    <!-- Recipe Editor -->
+    <string name="recipe_editor_save">Save</string>
+    <string name="recipe_select_cover">Select Cover</string>
+    <string name="recipe_editor_name">Name</string>
+    <string name="recipe_editor_description">Description</string>
+    <string name="recipe_editor_category">Category</string>
+    <string name="recipe_editor_tag">Tag</string>
+    <string name="recipe_editor_preparation_time">Preparation time</string>
+    <string name="recipe_editor_cooking_time">Cooking time</string>
+    <string name="recipe_editor_rest_time">Rest time</string>
+    <string name="recipe_editor_portions">Portions</string>
+    <string name="recipe_editor_nutritions">Nutritional value</string>
+    <string name="recipe_editor_proteins">Proteins value</string>
+    <string name="recipe_editor_fats">Fats value</string>
+    <string name="recipe_editor_carbohydrates">Carbohydrates value</string>
+    <string name="recipe_editor_dishes">Dishes</string>
+    <string name="recipe_editor_video_link">Video link</string>
+    <string name="recipe_editor_source">Source</string>
+    <string name="recipe_editor_ingredients">Ingredients</string>
+    <string name="recipe_editor_steps">Cooking steps</string>
+
     <!-- Units -->
     <string name="unit_minute">min</string>
 

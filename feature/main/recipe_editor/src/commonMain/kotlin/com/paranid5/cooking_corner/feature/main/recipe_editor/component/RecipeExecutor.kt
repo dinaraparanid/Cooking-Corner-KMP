@@ -19,12 +19,10 @@ internal class RecipeExecutor(
             is UiIntent.AddIngredient -> dispatch(Msg.AddIngredient(intent.ingredient))
             is UiIntent.AddStep -> dispatch(Msg.AddStep(intent.step))
             is UiIntent.Back -> publish(Label.Back)
-            is UiIntent.PickThubnail -> publish(Label.PickCover)
             is UiIntent.RemoveIngredient -> dispatch(Msg.RemoveIngredient(intent.ingredient))
             is UiIntent.RemoveStep -> dispatch(Msg.RemoveStep(intent.step))
             is UiIntent.Save -> scope.launch { onSave() }
             is UiIntent.UpdateCarbohydrates -> dispatch(Msg.UpdateCarbohydrates(intent.carbohydratesInput))
-            is UiIntent.UpdateCategory -> dispatch(Msg.UpdateCategory(intent.category))
             is UiIntent.UpdateCookingTime -> dispatch(Msg.UpdateCookingTime(intent.cookingTimeInput))
             is UiIntent.UpdateDescription -> dispatch(Msg.UpdateDescription(intent.description))
             is UiIntent.UpdateDishes -> dispatch(Msg.UpdateDishes(intent.dishesInput))
@@ -35,8 +33,9 @@ internal class RecipeExecutor(
             is UiIntent.UpdatePreparationTime -> dispatch(Msg.UpdatePreparationTime(intent.preparationTimeInput))
             is UiIntent.UpdateProteins -> dispatch(Msg.UpdateProteins(intent.proteinsInput))
             is UiIntent.UpdateRestTime -> dispatch(Msg.UpdateRestTime(intent.restTimeInput))
+            is UiIntent.UpdateSelectedCategory -> dispatch(Msg.UpdateSelectedCategory(intent.index))
+            is UiIntent.UpdateSelectedTag -> dispatch(Msg.UpdateSelectedTag(intent.index))
             is UiIntent.UpdateSource -> dispatch(Msg.UpdateSource(intent.source))
-            is UiIntent.UpdateTag -> dispatch(Msg.UpdateTag(intent.tag))
             is UiIntent.UpdateThumbnail -> dispatch(Msg.UpdateCover(intent.thumbnail))
             is UiIntent.UpdateVideoLink -> dispatch(Msg.UpdateVideoLink(intent.videoLink))
         }

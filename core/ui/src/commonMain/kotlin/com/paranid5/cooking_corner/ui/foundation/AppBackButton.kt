@@ -29,9 +29,9 @@ fun AppBackButton(
 
 @Composable
 fun AppOutlinedBackButton(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier.size(DEFAULT_ICON_SIZE),
+    onClick: () -> Unit,
 ) = AppOutlinedRippleButton(
     onClick = onClick,
     modifier = modifier,

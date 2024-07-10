@@ -22,8 +22,8 @@ internal class RecipeEditorStoreProvider(
     sealed interface Msg {
         data class UpdateName(val name: String) : Msg
         data class UpdateDescription(val description: String) : Msg
-        data class UpdateCategory(val category: String) : Msg
-        data class UpdateTag(val tag: String) : Msg
+        data class UpdateSelectedCategory(val index: Int) : Msg
+        data class UpdateSelectedTag(val index: Int) : Msg
         data class UpdatePreparationTime(val preparationTimeInput: String) : Msg
         data class UpdateCookingTime(val cookingTimeInput: String) : Msg
         data class UpdateRestTime(val restTimeInput: String) : Msg
