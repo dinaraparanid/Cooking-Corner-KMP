@@ -5,6 +5,7 @@ import com.paranid5.cooking_corner.feature.main.generate.component.GenerateCompo
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 
 @Immutable
@@ -35,5 +36,10 @@ sealed interface MainContentChild {
     @Immutable
     class GenerateRecipe internal constructor(
         internal val component: GenerateComponent
+    ) : MainContentChild
+
+    @Immutable
+    class RecipeEditor internal constructor(
+        internal val component: RecipeEditorComponent
     ) : MainContentChild
 }

@@ -22,4 +22,7 @@ sealed interface MainContentConfig {
 
     @Serializable
     data object GenerateRecipe : MainContentConfig
+
+    @Serializable
+    data object RecipeEditor : MainContentConfig
 }

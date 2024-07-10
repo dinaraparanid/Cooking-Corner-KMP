@@ -17,7 +17,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_kebab_edit
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_publish
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
-import com.paranid5.cooking_corner.feature.main.recipe.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.utils.persistentListOfNotNull

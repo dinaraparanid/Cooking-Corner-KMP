@@ -15,6 +15,7 @@ import com.paranid5.cooking_corner.feature.main.generate.presentation.GenerateUi
 import com.paranid5.cooking_corner.feature.main.home.presentation.HomeUi
 import com.paranid5.cooking_corner.feature.main.profile.presentation.ProfileUi
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.RecipeDetailsUi
+import com.paranid5.cooking_corner.feature.main.recipe_editor.presentation.RecipeEditorUi
 import com.paranid5.cooking_corner.feature.main.search.presentation.SearchUi
 
 @Composable
@@ -56,6 +57,11 @@ internal fun ContentUi(
             )
 
             is MainContentChild.GenerateRecipe -> GenerateUi(
+                component = child.component,
+                modifier = Modifier.fillMaxSize(),
+            )
+
+            is MainContentChild.RecipeEditor -> RecipeEditorUi(
                 component = child.component,
                 modifier = Modifier.fillMaxSize(),
             )

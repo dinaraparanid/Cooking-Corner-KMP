@@ -27,12 +27,12 @@ internal class SearchStoreProvider(
     fun provide(initialState: State): SearchStore = object :
         SearchStore,
         Store<UiIntent, State, Label> by storeFactory.create(
-            name = "HomeStore",
+            name = "SearchStore",
             initialState = initialState,
             executorFactory = {
                 SearchExecutor(
                     recipeRepository = recipeRepository,
-                    globalEventRepository = globalEventRepository
+                    globalEventRepository = globalEventRepository,
                 )
             },
             reducer = SearchReducer,

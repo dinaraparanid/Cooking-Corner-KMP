@@ -63,5 +63,6 @@ interface HomeStore : Store<UiIntent, State, Label> {
         data class ShowRecipe(val recipeUiState: RecipeUiState) : Label
         data object ShowAddRecipe : Label
         data object ShowGenerateRecipe : Label
+        data object ShowRecipeEditor : Label
     }
 }

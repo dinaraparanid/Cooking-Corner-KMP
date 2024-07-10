@@ -1,20 +1,21 @@
 package com.paranid5.cooking_corner.feature.main.recipe.component
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.slot.ChildSlot
 import com.paranid5.cooking_corner.component.StateSource
 import com.paranid5.cooking_corner.component.UiIntentHandler
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
-import kotlinx.coroutines.flow.StateFlow
 
 interface RecipeComponent : StateSource<RecipeState>, UiIntentHandler<RecipeUiIntent> {
-    val childSlot: StateFlow<ChildSlot<*, RecipeChild>>
+    sealed interface BackResult {
+        data object Dismiss : BackResult
+        data object Edit : BackResult
+    }
 
     interface Factory {
         fun create(
             componentContext: ComponentContext,
             recipeUiState: RecipeUiState,
-            onBack: () -> Unit,
+            onBack: (BackResult) -> Unit,
         ): RecipeComponent
     }
 }

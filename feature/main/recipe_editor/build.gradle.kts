@@ -12,7 +12,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "featureMainContent"
+        moduleName = "featureMainRecipeEditor"
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -43,21 +43,22 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "content"
+            baseName = "recipe_editor"
             isStatic = true
         }
     }
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(libs.peekaboo.image.picker)
+        }
         commonMain.dependencies {
+            implementation(projects.core.ui)
+            implementation(projects.core.utils)
             api(projects.core.component)
-            implementation(projects.feature.main.splash)
-            implementation(projects.feature.main.search)
-            implementation(projects.feature.main.home)
-            implementation(projects.feature.main.profile)
-            implementation(projects.feature.main.recipe)
-            implementation(projects.feature.main.generate)
-            implementation(projects.feature.main.recipeEditor)
+
+            api(projects.domain.recipe)
+            api(projects.domain.globalEvent)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -66,15 +67,24 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
+            implementation(libs.kotlinx.collections.immutable)
+
+            implementation(libs.constraintlayout)
+
+            implementation(libs.coil.compose.core)
+
             implementation(libs.decompose.extensions.compose)
 
             implementation(libs.bundles.component)
+        }
+        iosMain.dependencies {
+            implementation(libs.peekaboo.image.picker)
         }
     }
 }
 
 android {
-    namespace = "com.paranid5.cooking_corner.feature.main.content"
+    namespace = "com.paranid5.cooking_corner.feature.main.recipe"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

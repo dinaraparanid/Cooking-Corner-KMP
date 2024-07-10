@@ -1,4 +1,4 @@
-package com.paranid5.cooking_corner.feature.main.recipe.entity
+package com.paranid5.cooking_corner.ui.entity
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable

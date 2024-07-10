@@ -11,6 +11,7 @@ import com.paranid5.cooking_corner.feature.main.generate.component.GenerateCompo
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 import kotlinx.coroutines.flow.StateFlow
 
@@ -21,6 +22,7 @@ internal class MainContentComponentImpl(
     private val profileComponentFactory: ProfileComponent.Factory,
     private val recipeComponentFactory: RecipeComponent.Factory,
     private val generateComponentFactory: GenerateComponent.Factory,
+    private val recipeEditorComponentFactory: RecipeEditorComponent.Factory,
     private val onBack: () -> Unit,
 ) : MainContentComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<MainContentConfig>()
@@ -44,15 +46,15 @@ internal class MainContentComponentImpl(
     private fun createChild(config: MainContentConfig, componentContext: ComponentContext) =
         when (config) {
             is MainContentConfig.Home -> MainContentChild.Home(
-                component = buildHomeComponent(config, componentContext)
+                component = buildHomeComponent(componentContext)
             )
 
             is MainContentConfig.Profile -> MainContentChild.Profile(
-                component = buildProfileComponent(config, componentContext)
+                component = buildProfileComponent(componentContext)
             )
 
             is MainContentConfig.Search -> MainContentChild.Search(
-                component = buildSearchComponent(config, componentContext)
+                component = buildSearchComponent(componentContext)
             )
 
             is MainContentConfig.RecipeDetails -> MainContentChild.RecepieDetails(
@@ -64,53 +66,54 @@ internal class MainContentComponentImpl(
             is MainContentConfig.GenerateRecipe -> MainContentChild.GenerateRecipe(
                 component = buildGenerateRecipeComponent(componentContext)
             )
+
+            is MainContentConfig.RecipeEditor -> MainContentChild.RecipeEditor(
+                component = buildRecipeEditorComponent(componentContext)
+            )
         }
 
-    private fun buildHomeComponent(
-        config: MainContentConfig.Home,
-        componentContext: ComponentContext,
-    ) = homeComponentFactory.create(
-        componentContext = componentContext,
-        onBack = { result ->
-            when (result) {
-                is HomeComponent.BackResult.Dismiss ->
-                    navigation.pop()
+    private fun buildHomeComponent(componentContext: ComponentContext) =
+        homeComponentFactory.create(
+            componentContext = componentContext,
+            onBack = { result ->
+                when (result) {
+                    is HomeComponent.BackResult.Dismiss ->
+                        navigation.pop()
 
-                is HomeComponent.BackResult.ShowRecipeDetails ->
-                    navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
+                    is HomeComponent.BackResult.ShowRecipeDetails ->
+                        navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
 
-                is HomeComponent.BackResult.ShowAddRecipe ->
-                    navigation.bringToFront(MainContentConfig.AddRecipe)
+                    is HomeComponent.BackResult.ShowAddRecipe ->
+                        navigation.bringToFront(MainContentConfig.AddRecipe)
 
-                is HomeComponent.BackResult.ShowImportRecipe ->
-                    navigation.bringToFront(MainContentConfig.GenerateRecipe)
-            }
-        },
-    )
+                    is HomeComponent.BackResult.ShowImportRecipe ->
+                        navigation.bringToFront(MainContentConfig.GenerateRecipe)
 
-    private fun buildSearchComponent(
-        config: MainContentConfig.Search,
-        componentContext: ComponentContext,
-    ) = searchComponentFactory.create(
-        componentContext = componentContext,
-        onBack = { result ->
-            when (result) {
-                is SearchComponent.BackResult.Dismiss ->
-                    navigation.pop()
+                    is HomeComponent.BackResult.ShowRecipeEditor ->
+                        navigation.bringToFront(MainContentConfig.RecipeEditor)
+                }
+            },
+        )
 
-                is SearchComponent.BackResult.ShowRecipeDetails ->
-                    navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
-            }
-        },
-    )
+    private fun buildSearchComponent(componentContext: ComponentContext) =
+        searchComponentFactory.create(
+            componentContext = componentContext,
+            onBack = { result ->
+                when (result) {
+                    is SearchComponent.BackResult.Dismiss ->
+                        navigation.pop()
 
-    private fun buildProfileComponent(
-        config: MainContentConfig.Profile,
-        componentContext: ComponentContext,
-    ) = profileComponentFactory.create(
-        componentContext = componentContext,
-        onBack = navigation::pop,
-    )
+                    is SearchComponent.BackResult.ShowRecipeDetails ->
+                        navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
+                }
+            },
+        )
+
+    private fun buildProfileComponent(componentContext: ComponentContext) =
+        profileComponentFactory.create(
+            componentContext = componentContext,
+            onBack = navigation::pop,
+        )
 
     private fun buildRecipeDetailsComponent(
         config: MainContentConfig.RecipeDetails,
@@ -118,7 +121,15 @@ internal class MainContentComponentImpl(
     ) = recipeComponentFactory.create(
         componentContext = componentContext,
         recipeUiState = config.recipeUiState,
-        onBack = navigation::pop,
+        onBack = { result ->
+            when (result) {
+                is RecipeComponent.BackResult.Dismiss ->
+                    navigation.pop()
+
+                is RecipeComponent.BackResult.Edit ->
+                    navigation.bringToFront(MainContentConfig.RecipeEditor)
+            }
+        },
     )
 
     private fun buildGenerateRecipeComponent(componentContext: ComponentContext) =
@@ -130,12 +141,22 @@ internal class MainContentComponentImpl(
             }
         )
 
+    private fun buildRecipeEditorComponent(componentContext: ComponentContext) =
+        recipeEditorComponentFactory.create(
+            componentContext = componentContext,
+            onBack = { result ->
+                // TODO: show snackbar on success
+                navigation.pop()
+            }
+        )
+
     class Factory(
         private val searchComponentFactory: SearchComponent.Factory,
         private val homeComponentFactory: HomeComponent.Factory,
         private val profileComponentFactory: ProfileComponent.Factory,
         private val recipeComponentFactory: RecipeComponent.Factory,
         private val generateComponentFactory: GenerateComponent.Factory,
+        private val recipeEditorComponentFactory: RecipeEditorComponent.Factory,
     ) : MainContentComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
@@ -147,6 +168,7 @@ internal class MainContentComponentImpl(
             profileComponentFactory = profileComponentFactory,
             recipeComponentFactory = recipeComponentFactory,
             generateComponentFactory = generateComponentFactory,
+            recipeEditorComponentFactory = recipeEditorComponentFactory,
             onBack = onBack,
         )
     }

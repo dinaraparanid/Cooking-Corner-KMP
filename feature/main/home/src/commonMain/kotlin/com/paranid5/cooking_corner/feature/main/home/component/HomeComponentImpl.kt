@@ -67,6 +67,9 @@ internal class HomeComponentImpl(
 
         is Label.ShowRecipe ->
             onBack(BackResult.ShowRecipeDetails(recipeUiState = label.recipeUiState))
+
+        is Label.ShowRecipeEditor ->
+            onBack(BackResult.ShowRecipeEditor)
     }
 
     private fun subscribeOnStateUpdates() = componentScope.launch {

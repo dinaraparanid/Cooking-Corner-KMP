@@ -1,34 +1,22 @@
 package com.paranid5.cooking_corner.feature.main.recipe.component
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.slot.ChildSlot
-import com.arkivanov.decompose.router.slot.SlotNavigation
-import com.arkivanov.decompose.router.slot.activate
-import com.arkivanov.decompose.router.slot.childSlot
 import com.paranid5.cooking_corner.component.getComponentState
-import com.paranid5.cooking_corner.component.toStateFlow
-import com.paranid5.cooking_corner.feature.main.recipe.entity.IngredientUiState
-import com.paranid5.cooking_corner.feature.main.recipe.entity.RecipeDetailedUiState
-import com.paranid5.cooking_corner.feature.main.recipe.entity.StepUiState
+import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent.BackResult
+import com.paranid5.cooking_corner.ui.entity.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.StepUiState
 import com.paranid5.cooking_corner.utils.updateState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.serialization.Serializable
 
 internal class RecipeComponentImpl(
     componentContext: ComponentContext,
     recipeUiState: RecipeUiState,
-    private val onBack: () -> Unit,
+    private val onBack: (BackResult) -> Unit,
 ) : RecipeComponent, ComponentContext by componentContext {
-    @Serializable
-    sealed interface Slot {
-        @Serializable
-        data object Edit : Slot
-    }
-
     private val componentState = getComponentState(
         defaultState = RecipeState(
             // TODO: acquire from server
@@ -41,29 +29,14 @@ internal class RecipeComponentImpl(
     private val _stateFlow = MutableStateFlow(componentState.value)
     override val stateFlow = _stateFlow.asStateFlow()
 
-    private val childSlotNavigation = SlotNavigation<Slot>()
-
-    override val childSlot: StateFlow<ChildSlot<*, RecipeChild>> = childSlot(
-        source = childSlotNavigation,
-        serializer = Slot.serializer(),
-        childFactory = ::createChildSlot,
-    ).toStateFlow()
-
-    private fun createChildSlot(
-        configuration: Slot,
-        componentContext: ComponentContext,
-    ) = when (configuration) {
-        is Slot.Edit -> RecipeChild.Edit
-    }
-
     override fun onUiIntent(intent: RecipeUiIntent) {
         when (intent) {
-            is RecipeUiIntent.Back -> onBack()
+            is RecipeUiIntent.Back -> onBack(BackResult.Dismiss)
 
             is RecipeUiIntent.ChangeKebabMenuVisibility ->
                 changeKebabMenuVisibility(isVisible = intent.isVisible)
 
-            is RecipeUiIntent.Edit -> childSlotNavigation.activate(Slot.Edit)
+            is RecipeUiIntent.Edit -> onBack(BackResult.Edit)
 
             is RecipeUiIntent.Publish -> publishRecipe()
 
@@ -86,7 +59,7 @@ internal class RecipeComponentImpl(
         override fun create(
             componentContext: ComponentContext,
             recipeUiState: RecipeUiState,
-            onBack: () -> Unit,
+            onBack: (BackResult) -> Unit,
         ): RecipeComponent = RecipeComponentImpl(
             componentContext = componentContext,
             recipeUiState = recipeUiState,

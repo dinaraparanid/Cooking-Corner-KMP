@@ -1,9 +1,9 @@
 package com.paranid5.cooking_corner.feature.main.recipe.component
 
 import androidx.compose.runtime.Immutable
-import com.paranid5.cooking_corner.feature.main.recipe.entity.IngredientUiState
-import com.paranid5.cooking_corner.feature.main.recipe.entity.RecipeDetailedUiState
-import com.paranid5.cooking_corner.feature.main.recipe.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.entity.StepUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.Serializable
 

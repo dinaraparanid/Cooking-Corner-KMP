@@ -13,6 +13,7 @@ interface HomeComponent : StateSource<State>, UiIntentHandler<UiIntent> {
         data class ShowRecipeDetails(val recipeUiState: RecipeUiState) : BackResult
         data object ShowAddRecipe : BackResult
         data object ShowImportRecipe : BackResult
+        data object ShowRecipeEditor : BackResult
     }
 
     interface Factory {
