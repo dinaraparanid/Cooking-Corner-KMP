@@ -80,8 +80,9 @@ internal class MainContentComponentImpl(
                     is HomeComponent.BackResult.Dismiss ->
                         navigation.pop()
 
-                    is HomeComponent.BackResult.ShowRecipeDetails ->
-                        navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
+                    is HomeComponent.BackResult.ShowRecipeDetails -> navigation.bringToFront(
+                        MainContentConfig.RecipeDetails(recipeId = result.recipeId)
+                    )
 
                     is HomeComponent.BackResult.ShowAddRecipe ->
                         navigation.bringToFront(MainContentConfig.AddRecipe)
@@ -100,11 +101,11 @@ internal class MainContentComponentImpl(
             componentContext = componentContext,
             onBack = { result ->
                 when (result) {
-                    is SearchComponent.BackResult.Dismiss ->
-                        navigation.pop()
+                    is SearchComponent.BackResult.Dismiss -> navigation.pop()
 
-                    is SearchComponent.BackResult.ShowRecipeDetails ->
-                        navigation.bringToFront(MainContentConfig.RecipeDetails(result.recipeUiState))
+                    is SearchComponent.BackResult.ShowRecipeDetails -> navigation.bringToFront(
+                        MainContentConfig.RecipeDetails(recipeId = result.recipeId)
+                    )
                 }
             },
         )
@@ -120,7 +121,7 @@ internal class MainContentComponentImpl(
         componentContext: ComponentContext,
     ) = recipeComponentFactory.create(
         componentContext = componentContext,
-        recipeUiState = config.recipeUiState,
+        recipeId = config.recipeId,
         onBack = { result ->
             when (result) {
                 is RecipeComponent.BackResult.Dismiss ->

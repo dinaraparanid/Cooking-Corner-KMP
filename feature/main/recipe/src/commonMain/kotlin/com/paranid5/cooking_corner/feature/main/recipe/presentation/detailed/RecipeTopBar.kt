@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_kebab
-import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
+import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedBackButton
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -28,7 +28,8 @@ private val ICON_SIZE = 20.dp
 
 @Composable
 internal fun RecipeTopBar(
-    state: RecipeState,
+    recipeUiState: RecipeDetailedUiState,
+    isKebabMenuVisible: Boolean,
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) = Box(modifier) {
@@ -50,7 +51,8 @@ internal fun RecipeTopBar(
         )
 
         RecipeKebabMenu(
-            state = state,
+            recipeUiState = recipeUiState,
+            isKebabMenuVisible = isKebabMenuVisible,
             onUiIntent = onUiIntent,
         )
     }

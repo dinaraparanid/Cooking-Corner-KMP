@@ -17,4 +17,6 @@ data class RecipeResponse(
     @SerialName("reviews") val reviews: Int? = null,
     @SerialName("portions") val portions: Int? = null,
     @SerialName("icon_path") val iconPath: String? = null,
+    @SerialName("ingredients") val ingredients: List<IngredientResponse>? = null,
+    @SerialName("steps") val steps: List<StepResponse>? = null,
 )

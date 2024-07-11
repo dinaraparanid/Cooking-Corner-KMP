@@ -12,6 +12,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiInten
 import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 
 internal class HomeStoreProvider(
     private val storeFactory: StoreFactory,
@@ -27,11 +28,11 @@ internal class HomeStoreProvider(
         data class SelectCategory(val index: Int) : Msg
 
         data class UpdateRecipesUiState(
-            val recipesUiState: UiState<List<RecipeUiState>>,
+            val recipesUiState: UiState<SerializableImmutableList<RecipeUiState>>,
         ) : Msg
 
         data class UpdateCategoriesUiState(
-            val categoriesUiState: UiState<List<CategoryUiState>>,
+            val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>>,
         ) : Msg
     }
 

@@ -1,6 +1,5 @@
 package com.paranid5.cooking_corner.feature.main.content.component
 
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,7 +14,7 @@ sealed interface MainContentConfig {
     data object Profile : MainContentConfig
 
     @Serializable
-    data class RecipeDetails(val recipeUiState: RecipeUiState) : MainContentConfig
+    data class RecipeDetails(val recipeId: Long) : MainContentConfig
 
     @Serializable
     data object AddRecipe : MainContentConfig

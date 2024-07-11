@@ -7,9 +7,7 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Sta
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
-import com.paranid5.cooking_corner.utils.serializer.ImmutableListSerializer
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import kotlinx.serialization.Serializable
 
 interface SearchStore : Store<UiIntent, State, Label> {
@@ -20,7 +18,7 @@ interface SearchStore : Store<UiIntent, State, Label> {
 
         data class UpdateSearchText(val text: String) : UiIntent
 
-        data class ShowRecipe(val recipeUiState: RecipeUiState) : UiIntent
+        data class ShowRecipe(val recipeId: Long) : UiIntent
 
         data class AddToMyRecipesClick(
             val recipeUiState: RecipeUiState,
@@ -37,21 +35,19 @@ interface SearchStore : Store<UiIntent, State, Label> {
     @Immutable
     data class State(
         val searchText: String,
-        @Serializable(with = ImmutableListSerializer::class)
-        val recentRecipes: ImmutableList<RecipeUiState>, // TODO: ui state
-        @Serializable(with = ImmutableListSerializer::class)
-        val bestRatedRecipes: ImmutableList<RecipeUiState>, // TODO: ui state
+        val recentRecipes: SerializableImmutableList<RecipeUiState>,
+        val bestRatedRecipes: SerializableImmutableList<RecipeUiState>,
         val uiState: UiState<Unit>,
     ) {
         constructor() : this(
             searchText = "",
-            recentRecipes = persistentListOf(),
-            bestRatedRecipes = persistentListOf(),
+            recentRecipes = SerializableImmutableList(),
+            bestRatedRecipes = SerializableImmutableList(),
             uiState = UiState.Undefined,
         )
     }
 
     sealed interface Label {
-        data class ShowRecipe(val recipeUiState: RecipeUiState) : Label
+        data class ShowRecipe(val recipeId: Long) : Label
     }
 }

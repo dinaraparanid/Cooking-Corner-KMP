@@ -9,6 +9,7 @@ import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.filterToImmutableList
 import com.paranid5.cooking_corner.utils.orNil
 import kotlinx.collections.immutable.toImmutableList
@@ -23,7 +24,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
 
         data class SelectCategory(val index: Int) : UiIntent
 
-        data class ShowRecipe(val recipeUiState: RecipeUiState) : UiIntent
+        data class ShowRecipe(val recipeId: Long) : UiIntent
 
         data object AddRecipe : UiIntent
 
@@ -34,12 +35,12 @@ interface HomeStore : Store<UiIntent, State, Label> {
         data object ShowFavourites : UiIntent
 
         data class LikeClick(
-            val recipeUiState: RecipeUiState,
+            val recipeId: Long,
             val unhandledErrorMessage: String,
         ) : UiIntent
 
         data class DislikeClick(
-            val recipeUiState: RecipeUiState,
+            val recipeId: Long,
             val unhandledErrorMessage: String,
         ) : UiIntent
     }
@@ -49,8 +50,8 @@ interface HomeStore : Store<UiIntent, State, Label> {
     data class State(
         val searchText: String,
         val selectedCategoryIndex: Int,
-        val recipesUiState: UiState<List<RecipeUiState>>,
-        val categoriesUiState: UiState<List<CategoryUiState>>,
+        val recipesUiState: UiState<SerializableImmutableList<RecipeUiState>>,
+        val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>>,
         val isAscendingOrder: Boolean,
     ) {
         companion object {
@@ -58,31 +59,31 @@ interface HomeStore : Store<UiIntent, State, Label> {
         }
 
         @Transient
-        val selectedCategoryTitle =
-            selectedCategoryIndex
-                .takeIf { it != NOT_SELECTED }
-                ?.let { index ->
-                    categoriesUiState
-                        .getOrNull()
-                        ?.getOrNull(index)
-                        ?.title
-                }
-                .orEmpty()
+        val selectedCategoryTitle = selectedCategoryIndex
+            .takeIf { it != NOT_SELECTED }
+            ?.let { index ->
+                categoriesUiState
+                    .getOrNull()
+                    ?.value
+                    ?.getOrNull(index)
+                    ?.title
+            }
+            .orEmpty()
 
         @Transient
-        private val searchTextLowercase =
-            searchText.lowercase()
+        private val searchTextLowercase = searchText.lowercase()
 
         @Transient
-        val filteredRecipes =
-            recipesUiState
-                .getOrNull()
-                ?.filterToImmutableList { searchTextLowercase in it.title }
-                .orNil()
+        val filteredRecipes = recipesUiState
+            .getOrNull()
+            ?.value
+            ?.filterToImmutableList { searchTextLowercase in it.title }
+            .orNil()
 
         @Transient
         val categories = categoriesUiState
             .getOrNull()
+            ?.value
             ?.toImmutableList()
             .orNil()
 
@@ -96,7 +97,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
     }
 
     sealed interface Label {
-        data class ShowRecipe(val recipeUiState: RecipeUiState) : Label
+        data class ShowRecipe(val recipeId: Long) : Label
         data object ShowAddRecipe : Label
         data object ShowGenerateRecipe : Label
         data object ShowRecipeEditor : Label

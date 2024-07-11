@@ -23,7 +23,9 @@ import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.doNothing
+import com.paranid5.cooking_corner.utils.mapToImmutableList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -36,7 +38,7 @@ internal class HomeExecutor(
         when (intent) {
             is UiIntent.LoadMyRecipes -> loadMyRecipes()
 
-            is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeUiState))
+            is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(recipeId = intent.recipeId))
 
             is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(intent.text))
 
@@ -51,12 +53,12 @@ internal class HomeExecutor(
             is UiIntent.ShowFavourites -> doNothing // TODO: Show favourites
 
             is UiIntent.LikeClick -> addToFavourites(
-                recipeUiState = intent.recipeUiState,
+                recipeId = intent.recipeId,
                 unhandledErrorMessage = intent.unhandledErrorMessage,
             )
 
             is UiIntent.DislikeClick -> removeFromFavourites(
-                recipeUiState = intent.recipeUiState,
+                recipeId = intent.recipeId,
                 unhandledErrorMessage = intent.unhandledErrorMessage,
             )
         }
@@ -92,12 +94,12 @@ internal class HomeExecutor(
     }
 
     private fun addToFavourites(
-        recipeUiState: RecipeUiState,
+        recipeId: Long,
         unhandledErrorMessage: String,
     ) = scope.launch {
         handleModifyRecipeApiResult(
             result = withContext(AppDispatchers.Data) {
-                recipeRepository.addToFavourites(recipeId = recipeUiState.id)
+                recipeRepository.addToFavourites(recipeId = recipeId)
             },
             unhandledErrorMessage = unhandledErrorMessage,
             onSuccess = ::loadMyRecipes,
@@ -105,12 +107,12 @@ internal class HomeExecutor(
     }
 
     private fun removeFromFavourites(
-        recipeUiState: RecipeUiState,
+        recipeId: Long,
         unhandledErrorMessage: String,
     ) = scope.launch {
         handleModifyRecipeApiResult(
             result = withContext(AppDispatchers.Data) {
-                recipeRepository.removeFromFavourites(recipeId = recipeUiState.id)
+                recipeRepository.removeFromFavourites(recipeId = recipeId)
             },
             unhandledErrorMessage = unhandledErrorMessage,
             onSuccess = ::loadMyRecipes,
@@ -144,7 +146,8 @@ internal class HomeExecutor(
             Msg.UpdateRecipesUiState(
                 withContext(AppDispatchers.Eval) {
                     status.value
-                        .map(RecipeUiState.Companion::fromResponse)
+                        .mapToImmutableList(RecipeUiState.Companion::fromResponse)
+                        .let(::SerializableImmutableList)
                         .toUiState()
                 }
             )
@@ -171,7 +174,8 @@ internal class HomeExecutor(
             Msg.UpdateCategoriesUiState(
                 withContext(AppDispatchers.Eval) {
                     status.value
-                        .map(::CategoryUiState)
+                        .mapToImmutableList(::CategoryUiState)
+                        .let(::SerializableImmutableList)
                         .toUiState()
                 }
             )

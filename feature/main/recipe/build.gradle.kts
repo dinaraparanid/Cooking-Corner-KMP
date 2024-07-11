@@ -55,6 +55,7 @@ kotlin {
             api(projects.core.component)
 
             api(projects.domain.recipe)
+            api(projects.domain.globalEvent)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

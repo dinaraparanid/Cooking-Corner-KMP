@@ -72,7 +72,7 @@ private fun RecipesGridContent(
                     .fillMaxWidth()
                     .height(RECIPE_HEIGHT)
                     .clickableWithRipple(bounded = true) {
-                        onUiIntent(UiIntent.ShowRecipe(recipe))
+                        onUiIntent(UiIntent.ShowRecipe(recipeId = recipe.id))
                     },
             ) { modifier ->
                 FavouritesButton(

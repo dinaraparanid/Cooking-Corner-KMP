@@ -1,33 +1,47 @@
 package com.paranid5.cooking_corner.feature.main.recipe.component
 
+import arrow.core.Either
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnResume
+import com.paranid5.cooking_corner.component.componentScope
 import com.paranid5.cooking_corner.component.getComponentState
+import com.paranid5.cooking_corner.core.common.ApiResultWithCode
+import com.paranid5.cooking_corner.core.common.AppDispatchers
+import com.paranid5.cooking_corner.core.common.HttpStatusCode
+import com.paranid5.cooking_corner.core.common.isForbidden
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
+import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
+import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent.BackResult
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
+import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
+import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
-import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.updateState
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class RecipeComponentImpl(
     componentContext: ComponentContext,
-    recipeUiState: RecipeUiState,
+    recipeId: Long,
+    private val recipeRepository: RecipeRepository,
+    private val globalEventRepository: GlobalEventRepository,
     private val onBack: (BackResult) -> Unit,
 ) : RecipeComponent, ComponentContext by componentContext {
-    private val componentState = getComponentState(
-        defaultState = RecipeState(
-            // TODO: acquire from server
-            recipe = recipeStub(recipeUiState),
-            steps = stepsStub(),
-            ingredients = ingredientsStub(),
-        )
-    )
-
+    private val componentState = getComponentState(defaultState = RecipeState())
     private val _stateFlow = MutableStateFlow(componentState.value)
     override val stateFlow = _stateFlow.asStateFlow()
+
+    init {
+        doOnResume { loadRecipe(recipeId) }
+    }
 
     override fun onUiIntent(intent: RecipeUiIntent) {
         when (intent) {
@@ -55,48 +69,61 @@ internal class RecipeComponentImpl(
         // TODO: delete recipe
     }
 
-    class Factory : RecipeComponent.Factory {
+    private fun loadRecipe(recipeId: Long) = componentScope.launch {
+        handleLoadRecipeApiResult(
+            result = withContext(AppDispatchers.Data) {
+                recipeRepository.getRecipeById(recipeId)
+            }
+        ) { recipeResponse ->
+            _stateFlow.updateState {
+                copy(recipeUiState = RecipeDetailedUiState.fromResponse(recipeResponse).toUiState())
+            }
+        }
+    }
+
+    private suspend inline fun handleLoadRecipeApiResult(
+        result: ApiResultWithCode<RecipeResponse>,
+        onSuccess: (RecipeResponse) -> Unit,
+    ) = when (result) {
+        is Either.Left -> {
+            result.value.printStackTrace()
+            _stateFlow.updateState { copy(recipeUiState = UiState.Error()) }
+        }
+
+        is Either.Right -> handleLoadRecipeStatus(
+            status = result.value,
+            onSuccess = onSuccess,
+        )
+    }
+
+    private suspend inline fun handleLoadRecipeStatus(
+        status: Either<HttpStatusCode, RecipeResponse>,
+        onSuccess: (RecipeResponse) -> Unit,
+    ) = when (status) {
+        is Either.Left -> when {
+            status.value.isForbidden ->
+                globalEventRepository.sendEvent(GlobalEvent.LogOut(Reason.ERROR))
+
+            else -> _stateFlow.updateState { copy(recipeUiState = UiState.Error()) }
+        }
+
+        is Either.Right -> onSuccess(status.value)
+    }
+
+    class Factory(
+        private val recipeRepository: RecipeRepository,
+        private val globalEventRepository: GlobalEventRepository,
+    ) : RecipeComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
-            recipeUiState: RecipeUiState,
+            recipeId: Long,
             onBack: (BackResult) -> Unit,
         ): RecipeComponent = RecipeComponentImpl(
             componentContext = componentContext,
-            recipeUiState = recipeUiState,
+            recipeId = recipeId,
+            recipeRepository = recipeRepository,
+            globalEventRepository = globalEventRepository,
             onBack = onBack,
         )
     }
 }
-
-private fun recipeStub(recipeUiState: RecipeUiState) = RecipeDetailedUiState(
-    title = recipeUiState.title,
-    rating = recipeUiState.rating,
-    preparingTime = recipeUiState.preparingTime,
-    cookingTime = recipeUiState.cookingTime,
-    author = recipeUiState.author,
-    isLiked = recipeUiState.isLiked,
-    reviews = 15000,
-    portions = 5,
-    byUser = true,
-    isPublished = false,
-)
-
-private fun stepsStub() = persistentListOf(
-    StepUiState(text = stepStub()),
-    StepUiState(text = stepStub()),
-    StepUiState(text = stepStub()),
-    StepUiState(text = stepStub()),
-    StepUiState(text = stepStub()),
-)
-
-private fun ingredientsStub() = persistentListOf(
-    IngredientUiState(title = "Shrimps", portion = "1 kg"),
-    IngredientUiState(title = "Water", portion = "2 l"),
-    IngredientUiState(title = "Salt", portion = "90 g"),
-    IngredientUiState(title = "Dill", portion = "10 g"),
-    IngredientUiState(title = "Parsley", portion = "10 g"),
-    IngredientUiState(title = "Allspice", portion = "5 whispers"),
-    IngredientUiState(title = "Peppercorns", portion = "15 pieces"),
-)
-
-private fun stepStub() = "Prepare the necessary ingredients. The shrimp should be approximately the same size, whole, the ice coat should not be thick, otherwise the shrimp will lose a lot of weight during the defrosting process. Typically, shrimp on sale are already pre-boiled, so they cook quite quickly."

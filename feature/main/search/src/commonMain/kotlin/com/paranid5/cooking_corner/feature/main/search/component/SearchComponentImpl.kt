@@ -59,7 +59,7 @@ internal class SearchComponentImpl(
 
     private fun onLabel(label: Label) = when (label) {
         is Label.ShowRecipe -> onBack(
-            BackResult.ShowRecipeDetails(recipeUiState = label.recipeUiState)
+            BackResult.ShowRecipeDetails(recipeId = label.recipeId)
         )
     }
 

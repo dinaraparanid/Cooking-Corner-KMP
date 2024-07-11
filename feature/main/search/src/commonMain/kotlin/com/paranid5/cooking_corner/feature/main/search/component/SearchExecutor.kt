@@ -21,6 +21,7 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStoreProv
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.doNothing
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -47,7 +48,7 @@ internal class SearchExecutor(
 
             is UiIntent.SearchRecipes -> doNothing // TODO: Search recipes by name
 
-            is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeUiState))
+            is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeId))
 
             is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(intent.text))
         }
@@ -60,7 +61,9 @@ internal class SearchExecutor(
 
         scope.launch {
             handleRecipesApiResult(
-                onSuccess = { dispatch(Msg.UpdateBestRatedRecipes(recipes = it)) },
+                onSuccess = {
+                    dispatch(Msg.UpdateBestRatedRecipes(recipes = SerializableImmutableList(it)))
+                },
                 result = withContext(AppDispatchers.Data) {
                     recipeRepository.getBestRatedRecipes()
                 }
@@ -69,7 +72,9 @@ internal class SearchExecutor(
 
         scope.launch {
             handleRecipesApiResult(
-                onSuccess = { dispatch(Msg.UpdateRecentRecipes(recipes = it)) },
+                onSuccess = {
+                    dispatch(Msg.UpdateRecentRecipes(recipes = SerializableImmutableList(it)))
+                },
                 result = withContext(AppDispatchers.Data) {
                     recipeRepository.getRecentRecipes()
                 }

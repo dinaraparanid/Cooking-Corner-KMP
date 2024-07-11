@@ -36,7 +36,7 @@ internal fun RecipesRow(
             modifier = Modifier
                 .size(width = RECIPE_WIDTH, height = RECIPE_HEIGHT)
                 .clickableWithRipple(bounded = true) {
-                    onUiIntent(UiIntent.ShowRecipe(recipe))
+                    onUiIntent(UiIntent.ShowRecipe(recipeId = recipe.id))
                 },
         ) { modifier ->
             ModifyMyRecipesButton(

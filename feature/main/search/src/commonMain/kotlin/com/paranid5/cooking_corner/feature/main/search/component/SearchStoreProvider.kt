@@ -10,7 +10,7 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Sta
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
-import kotlinx.collections.immutable.ImmutableList
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 
 internal class SearchStoreProvider(
     private val storeFactory: StoreFactory,
@@ -19,9 +19,16 @@ internal class SearchStoreProvider(
 ) {
     sealed interface Msg {
         data class UpdateSearchText(val text: String) : Msg
+
         data class UpdateUiState(val uiState: UiState<Unit>) : Msg
-        data class UpdateRecentRecipes(val recipes: ImmutableList<RecipeUiState>) : Msg
-        data class UpdateBestRatedRecipes(val recipes: ImmutableList<RecipeUiState>) : Msg
+
+        data class UpdateRecentRecipes(
+            val recipes: SerializableImmutableList<RecipeUiState>
+        ) : Msg
+
+        data class UpdateBestRatedRecipes(
+            val recipes: SerializableImmutableList<RecipeUiState>
+        ) : Msg
     }
 
     fun provide(initialState: State): SearchStore = object :

@@ -44,14 +44,14 @@ internal fun FavouritesButton(
 
     fun onLikeClick() = onUiIntent(
         UiIntent.LikeClick(
-            recipeUiState = recipeUiState,
+            recipeId = recipeUiState.id,
             unhandledErrorMessage = unhandledErrorMessage,
         )
     )
 
     fun onDislikeClick() = onUiIntent(
         UiIntent.DislikeClick(
-            recipeUiState = recipeUiState,
+            recipeId = recipeUiState.id,
             unhandledErrorMessage = unhandledErrorMessage,
         )
     )

@@ -80,7 +80,7 @@ private fun SearchUiContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
     RecipesRow(
-        recipes = state.recentRecipes,
+        recipes = state.recentRecipes.value,
         onUiIntent = onUiIntent,
     )
 
@@ -94,7 +94,7 @@ private fun SearchUiContent(
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
     RecipesRow(
-        recipes = state.bestRatedRecipes,
+        recipes = state.bestRatedRecipes.value,
         onUiIntent = onUiIntent,
     )
 

@@ -111,4 +111,15 @@ internal class RecipeApiImpl(
                 }
             }
         }
+
+    override suspend fun getRecipeById(recipeId: Long): ApiResultWithCode<RecipeResponse> =
+        Either.catch {
+            authRepository.withAuth { accessToken ->
+                withContext(AppDispatchers.Data) {
+                    ktorClient.get(urlBuilder.buildGetRecipeByIdUrl(recipeId = recipeId)) {
+                        bearerAuth(accessToken)
+                    }
+                }
+            }
+        }
 }

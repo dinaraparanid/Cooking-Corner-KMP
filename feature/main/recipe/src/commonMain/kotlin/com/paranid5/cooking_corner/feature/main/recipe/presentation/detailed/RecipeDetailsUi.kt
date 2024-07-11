@@ -1,8 +1,10 @@
 package com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,6 +31,12 @@ import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.pager.RecipePager
+import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
+import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.ui.getOrThrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -55,17 +63,55 @@ private fun RecipeDetailsContent(
     state: RecipeState,
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
+) = Box(modifier) {
+    @Composable
+    fun Content(recipeUiState: RecipeDetailedUiState) = RecipeDetailsContentData(
+        recipeUiState = recipeUiState,
+        isKebabMenuVisible = state.isKebabMenuVisible,
+        onUiIntent = onUiIntent,
+        modifier = Modifier.fillMaxSize(),
+    )
+
+    @Composable
+    fun Loader() = AppProgressIndicator(modifier = Modifier.align(Alignment.Center))
+
+    when (val recipeUiState = state.recipeUiState) {
+        is UiState.Data -> Content(recipeUiState.getOrThrow())
+
+        is UiState.Error -> AppMainText(
+            text = "TODO: Error Stub",
+            style = AppTheme.typography.h.h1,
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        is UiState.Loading, is UiState.Undefined -> Loader()
+
+        is UiState.Success -> error("Illegal state: UiState.Success")
+
+        is UiState.Refreshing -> recipeUiState
+            .getOrNull()
+            ?.let { Content(recipeUiState = it) }
+            ?: Loader()
+    }
+}
+
+@Composable
+fun RecipeDetailsContentData(
+    recipeUiState: RecipeDetailedUiState,
+    isKebabMenuVisible: Boolean,
+    onUiIntent: (RecipeUiIntent) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val fillMaxWidthWithPaddingModifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = AppTheme.dimensions.padding.large)
+    val fillMaxWidthWithPaddingModifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = AppTheme.dimensions.padding.large)
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
         RecipeTopBar(
-            state = state,
+            recipeUiState = recipeUiState,
+            isKebabMenuVisible = isKebabMenuVisible,
             onUiIntent = onUiIntent,
             modifier = fillMaxWidthWithPaddingModifier,
         )
@@ -73,7 +119,7 @@ private fun RecipeDetailsContent(
         Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
         RecipeClippedCover(
-            coverUrlState = state.recipe.coverUrlState,
+            coverUrlState = recipeUiState.coverUrlState,
             onErrorButtonClick = {}, // TODO: Error handle
             modifier = Modifier
                 .size(width = COVER_WIDTH, height = COVER_HEIGHT)
@@ -83,33 +129,33 @@ private fun RecipeDetailsContent(
         Spacer(Modifier.height(AppTheme.dimensions.padding.big))
 
         RecipeTitle(
-            title = state.recipe.title,
+            title = recipeUiState.title,
             modifier = fillMaxWidthWithPaddingModifier,
         )
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
         RatingReviewsAuthor(
-            rating = state.recipe.rating,
-            reviews = state.recipe.reviews,
-            author = state.recipe.author,
+            rating = recipeUiState.rating,
+            reviews = recipeUiState.reviews,
+            author = recipeUiState.author,
             modifier = fillMaxWidthWithPaddingModifier,
         )
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.extraMedium))
 
         TimesAndPortions(
-            preparingTime = state.recipe.preparingTime,
-            cookingTime = state.recipe.cookingTime,
-            portions = state.recipe.portions,
+            preparingTime = recipeUiState.preparingTime,
+            cookingTime = recipeUiState.cookingTime,
+            portions = recipeUiState.portions,
             modifier = fillMaxWidthWithPaddingModifier,
         )
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.extraSmall))
 
         RecipePager(
-            steps = state.steps,
-            ingredients = state.ingredients,
+            steps = recipeUiState.steps.value,
+            ingredients = recipeUiState.ingredients.value,
             modifier = Modifier.fillMaxWidth(),
         )
     }

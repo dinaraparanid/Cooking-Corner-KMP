@@ -66,7 +66,7 @@ internal class HomeComponentImpl(
             onBack(BackResult.ShowImportRecipe)
 
         is Label.ShowRecipe ->
-            onBack(BackResult.ShowRecipeDetails(recipeUiState = label.recipeUiState))
+            onBack(BackResult.ShowRecipeDetails(recipeId = label.recipeId))
 
         is Label.ShowRecipeEditor ->
             onBack(BackResult.ShowRecipeEditor)

@@ -15,7 +15,6 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_delete
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_edit
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_publish
-import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -30,17 +29,18 @@ private data class RecipeKebabMenuItemData(
 
 @Composable
 internal fun RecipeKebabMenu(
-    state: RecipeState,
+    recipeUiState: RecipeDetailedUiState,
+    isKebabMenuVisible: Boolean,
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val menuItems = buildKebabMenuItems(
-        recipeUiState = state.recipe,
+        recipeUiState = recipeUiState,
         onUiIntent = onUiIntent,
     )
 
     DropdownMenu(
-        expanded = state.isKebabMenuVisible,
+        expanded = isKebabMenuVisible,
         modifier = modifier
             .border(
                 width = AppTheme.dimensions.borders.minimum,
