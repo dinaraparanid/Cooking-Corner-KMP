@@ -12,7 +12,6 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiInten
 import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
-import kotlinx.collections.immutable.ImmutableList
 
 internal class HomeStoreProvider(
     private val storeFactory: StoreFactory,
@@ -28,11 +27,11 @@ internal class HomeStoreProvider(
         data class SelectCategory(val index: Int) : Msg
 
         data class UpdateRecipesUiState(
-            val recipesUiState: UiState<ImmutableList<RecipeUiState>>,
+            val recipesUiState: UiState<List<RecipeUiState>>,
         ) : Msg
 
         data class UpdateCategoriesUiState(
-            val categoriesUiState: UiState<ImmutableList<CategoryUiState>>,
+            val categoriesUiState: UiState<List<CategoryUiState>>,
         ) : Msg
     }
 

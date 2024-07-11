@@ -24,8 +24,6 @@ import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.doNothing
-import com.paranid5.cooking_corner.utils.mapToImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -146,7 +144,7 @@ internal class HomeExecutor(
             Msg.UpdateRecipesUiState(
                 withContext(AppDispatchers.Eval) {
                     status.value
-                        .mapToImmutableList(RecipeUiState.Companion::fromResponse)
+                        .map(RecipeUiState.Companion::fromResponse)
                         .toUiState()
                 }
             )
@@ -173,7 +171,7 @@ internal class HomeExecutor(
             Msg.UpdateCategoriesUiState(
                 withContext(AppDispatchers.Eval) {
                     status.value
-                        .mapToImmutableList(::CategoryUiState)
+                        .map(::CategoryUiState)
                         .toUiState()
                 }
             )

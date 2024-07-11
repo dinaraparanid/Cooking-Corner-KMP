@@ -11,7 +11,7 @@ import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.utils.filterToImmutableList
 import com.paranid5.cooking_corner.utils.orNil
-import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -49,8 +49,8 @@ interface HomeStore : Store<UiIntent, State, Label> {
     data class State(
         val searchText: String,
         val selectedCategoryIndex: Int,
-        val recipesUiState: UiState<ImmutableList<RecipeUiState>>,
-        val categoriesUiState: UiState<ImmutableList<CategoryUiState>>,
+        val recipesUiState: UiState<List<RecipeUiState>>,
+        val categoriesUiState: UiState<List<CategoryUiState>>,
         val isAscendingOrder: Boolean,
     ) {
         companion object {
@@ -58,7 +58,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
         }
 
         @Transient
-        val selectedCategoryTitle: String =
+        val selectedCategoryTitle =
             selectedCategoryIndex
                 .takeIf { it != NOT_SELECTED }
                 ?.let { index ->
@@ -70,18 +70,21 @@ interface HomeStore : Store<UiIntent, State, Label> {
                 .orEmpty()
 
         @Transient
-        private val searchTextLowercase: String =
+        private val searchTextLowercase =
             searchText.lowercase()
 
         @Transient
-        val filteredRecipes: ImmutableList<RecipeUiState> =
+        val filteredRecipes =
             recipesUiState
                 .getOrNull()
                 ?.filterToImmutableList { searchTextLowercase in it.title }
                 .orNil()
 
         @Transient
-        val categories = categoriesUiState.getOrNull().orNil()
+        val categories = categoriesUiState
+            .getOrNull()
+            ?.toImmutableList()
+            .orNil()
 
         constructor() : this(
             searchText = "",

@@ -7,6 +7,7 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Sta
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.utils.serializer.ImmutableListSerializer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
@@ -36,8 +37,10 @@ interface SearchStore : Store<UiIntent, State, Label> {
     @Immutable
     data class State(
         val searchText: String,
-        val recentRecipes: ImmutableList<RecipeUiState>,
-        val bestRatedRecipes: ImmutableList<RecipeUiState>,
+        @Serializable(with = ImmutableListSerializer::class)
+        val recentRecipes: ImmutableList<RecipeUiState>, // TODO: ui state
+        @Serializable(with = ImmutableListSerializer::class)
+        val bestRatedRecipes: ImmutableList<RecipeUiState>, // TODO: ui state
         val uiState: UiState<Unit>,
     ) {
         constructor() : this(

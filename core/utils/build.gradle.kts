@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -50,6 +51,7 @@ kotlin {
             api(projects.core.common)
             api(libs.kotlinx.coroutines.core)
             api(libs.kotlinx.collections.immutable)
+            api(libs.kotlinx.serialization.json)
             api(libs.ktor.client.core)
         }
     }

@@ -9,6 +9,7 @@ import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
 import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.utils.serializer.ImmutableListSerializer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
@@ -59,10 +60,12 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val videoLink: String = "",
         val source: String = "",
         val cover: ByteArray? = null,
+        @Serializable(with = ImmutableListSerializer::class)
         val ingredients: ImmutableList<IngredientUiState> = persistentListOf(),
+        @Serializable(with = ImmutableListSerializer::class)
         val steps: ImmutableList<StepUiState> = persistentListOf(),
-        val categoriesUiState: UiState<ImmutableList<String>> = UiState.Undefined,
-        val tagsUiState: UiState<ImmutableList<String>> = UiState.Undefined,
+        val categoriesUiState: UiState<@Serializable(with = ImmutableListSerializer::class) ImmutableList<String>> = UiState.Undefined,
+        val tagsUiState: UiState<@Serializable(with = ImmutableListSerializer::class) ImmutableList<String>> = UiState.Undefined,
     ) {
         @Transient
         val selectedCategoryTitle = categoriesUiState
