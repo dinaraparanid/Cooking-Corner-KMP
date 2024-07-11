@@ -16,7 +16,7 @@ interface RecipeApi {
 
     suspend fun addToMyRecipes(recipeId: Long): ApiResultWithCode<Unit>
 
-    suspend fun deleteFromMyRecipes(recipeId: Long): ApiResultWithCode<Unit>
+    suspend fun removeFromMyRecipes(recipeId: Long): ApiResultWithCode<Unit>
 
     suspend fun addToFavourites(recipeId: Long): ApiResultWithCode<Unit>
 

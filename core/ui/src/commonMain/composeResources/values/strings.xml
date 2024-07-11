@@ -45,6 +45,7 @@
     <string name="search_filter_placeholder">Search for new cooking recipes</string>
     <string name="search_last_recipes">Last recipes</string>
     <string name="search_add_to_recipes">Add to your recipes</string>
+    <string name="search_remove_from_recipes">Remove from your recipes</string>
     <string name="search_best_rated">Best rated</string>
 
     <!-- Recipe -->

@@ -11,7 +11,7 @@ internal class RecipeApiUrlBuilder(private val baseUrl: String) {
         "$baseUrl/recipes/add_to_my_recipes?recipe_id=$recipeId"
 
     fun buildRemoveFromMyRecipesUrl(recipeId: Long) =
-        "$baseUrl/recipes/remove_from_my_recipes?recipe_id=$recipeId"
+        "$baseUrl/recipes/delete_from_my_recipes?recipe_id=$recipeId"
 
     fun buildAddToFavouritesUrl(recipeId: Long) =
         "$baseUrl/recipes/add_to_favourites?recipe_id=$recipeId"

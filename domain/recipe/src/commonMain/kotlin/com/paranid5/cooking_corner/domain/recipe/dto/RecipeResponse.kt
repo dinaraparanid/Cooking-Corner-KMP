@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RecipeResponse(
+    @SerialName("id") val id: Long,
     @SerialName("name") val name: String,
     @SerialName("rating") val rating: Float,
     @SerialName("creator_username") val username: String,
@@ -12,7 +13,7 @@ data class RecipeResponse(
     @SerialName("is_private") val isPrivate: Boolean,
     @SerialName("preparing_time") val preparingTime: Int? = null,
     @SerialName("cooking_time") val cookingTime: Int? = null,
-    @SerialName("is_favourite") val isFavourite: Boolean = false,
+    @SerialName("is_favorite") val isFavourite: Boolean = false,
     @SerialName("reviews") val reviews: Int? = null,
     @SerialName("portions") val portions: Int? = null,
     @SerialName("icon_path") val iconPath: String? = null,

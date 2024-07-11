@@ -55,25 +55,24 @@ internal class RecipeApiImpl(
         categoryName: String,
         isFavourite: Boolean,
         ascendingOrder: Boolean,
-    ): ApiResultWithCode<List<RecipeResponse>> =
-        Either.catch {
-            handeRequest { accessToken ->
-                withContext(AppDispatchers.Data) {
-                    ktorClient.post(urlBuilder.buildMyRecipesUrl()) {
-                        bearerAuth(accessToken)
-                        contentType(ContentType.Application.Json)
+    ): ApiResultWithCode<List<RecipeResponse>> = Either.catch {
+        handeRequest { accessToken ->
+            withContext(AppDispatchers.Data) {
+                ktorClient.post(urlBuilder.buildMyRecipesUrl()) {
+                    bearerAuth(accessToken)
+                    contentType(ContentType.Application.Json)
 
-                        setBody(
-                            MyRecipesRequest(
-                                categoryName = categoryName,
-                                isFavourite = isFavourite,
-                                ascendingOrder = ascendingOrder,
-                            )
+                    setBody(
+                        MyRecipesRequest(
+                            categoryName = categoryName,
+                            isFavourite = isFavourite,
+                            ascendingOrder = ascendingOrder,
                         )
-                    }
+                    )
                 }
             }
         }
+    }
 
     override suspend fun addToFavourites(recipeId: Long): ApiResultWithCode<Unit> = Either.catch {
         handeRequest { accessToken ->
@@ -108,7 +107,7 @@ internal class RecipeApiImpl(
         }
     }
 
-    override suspend fun deleteFromMyRecipes(recipeId: Long): ApiResultWithCode<Unit> =
+    override suspend fun removeFromMyRecipes(recipeId: Long): ApiResultWithCode<Unit> =
         Either.catch {
             handeRequest { accessToken ->
                 withContext(AppDispatchers.Data) {

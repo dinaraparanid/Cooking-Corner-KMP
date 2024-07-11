@@ -17,14 +17,30 @@ import kotlinx.serialization.Transient
 interface HomeStore : Store<UiIntent, State, Label> {
     sealed interface UiIntent {
         data object LoadMyRecipes : UiIntent
+
         data class UpdateSearchText(val text: String) : UiIntent
+
         data class SelectCategory(val index: Int) : UiIntent
+
         data class ShowRecipe(val recipeUiState: RecipeUiState) : UiIntent
+
         data object AddRecipe : UiIntent
+
         data object GenerateRecipe : UiIntent
+
         data object OrderClick : UiIntent
+
         data object ShowFavourites : UiIntent
-        data object LikeClick : UiIntent
+
+        data class LikeClick(
+            val recipeUiState: RecipeUiState,
+            val unhandledErrorMessage: String,
+        ) : UiIntent
+
+        data class DislikeClick(
+            val recipeUiState: RecipeUiState,
+            val unhandledErrorMessage: String,
+        ) : UiIntent
     }
 
     @Serializable

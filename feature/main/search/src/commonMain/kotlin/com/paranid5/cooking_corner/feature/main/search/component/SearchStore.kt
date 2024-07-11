@@ -14,10 +14,22 @@ import kotlinx.serialization.Serializable
 interface SearchStore : Store<UiIntent, State, Label> {
     sealed interface UiIntent {
         data object LoadRecipes : UiIntent
+
         data object SearchRecipes : UiIntent
+
         data class UpdateSearchText(val text: String) : UiIntent
+
         data class ShowRecipe(val recipeUiState: RecipeUiState) : UiIntent
-        data object AddToRecipesClick : UiIntent
+
+        data class AddToMyRecipesClick(
+            val recipeUiState: RecipeUiState,
+            val unhandledErrorMessage: String,
+        ) : UiIntent
+
+        data class RemoveFromMyRecipesClick(
+            val recipeUiState: RecipeUiState,
+            val unhandledErrorMessage: String,
+        ) : UiIntent
     }
 
     @Serializable

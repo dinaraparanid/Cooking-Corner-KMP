@@ -7,11 +7,13 @@ import com.paranid5.cooking_corner.ui.toUiState
 
 fun RecipeUiState.Companion.fromResponse(response: RecipeResponse) =
     RecipeUiState(
+        id = response.id,
         title = response.name,
         rating = response.rating,
         preparingTime = response.preparingTime ?: 0,
         cookingTime = response.cookingTime ?: 0,
         author = response.username,
         isLiked = response.isFavourite,
-        coverUrlState = response.iconPath?.toUiState() ?: UiState.Success
+        isMyRecipe = response.isMyRecipe,
+        coverUrlState = response.iconPath?.toUiState() ?: UiState.Success,
     )

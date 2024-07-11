@@ -75,8 +75,8 @@ private fun RecipesGridContent(
                     },
             ) { modifier ->
                 FavouritesButton(
-                    isLiked = recipe.isLiked,
-                    onLikedChanged = { onUiIntent(UiIntent.LikeClick) },
+                    recipeUiState = recipe,
+                    onUiIntent = onUiIntent,
                     modifier = modifier,
                 )
             }

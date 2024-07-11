@@ -12,6 +12,7 @@ import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.Recipe
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
+import com.paranid5.cooking_corner.utils.doNothing
 import kotlinx.collections.immutable.ImmutableList
 
 private val RECIPE_WIDTH = 185.dp
@@ -31,15 +32,16 @@ internal fun RecipesRow(
     items(items = recipes) { recipe ->
         RecipeItem(
             recipe = recipe,
-            onErrorButtonClick = { }, // TODO: Error handling
+            onErrorButtonClick = doNothing, // TODO: Error handling
             modifier = Modifier
                 .size(width = RECIPE_WIDTH, height = RECIPE_HEIGHT)
                 .clickableWithRipple(bounded = true) {
                     onUiIntent(UiIntent.ShowRecipe(recipe))
                 },
         ) { modifier ->
-            AddToYourRecipesButton(
-                onClick = { onUiIntent(UiIntent.AddToRecipesClick) },
+            ModifyMyRecipesButton(
+                recipeUiState = recipe,
+                onUiIntent = onUiIntent,
                 modifier = modifier,
             )
         }

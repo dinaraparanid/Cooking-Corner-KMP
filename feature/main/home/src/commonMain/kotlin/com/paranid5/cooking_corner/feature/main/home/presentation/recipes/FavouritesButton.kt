@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,6 +21,9 @@ import com.paranid5.cooking_corner.core.resources.home_add_to_favourites
 import com.paranid5.cooking_corner.core.resources.home_remove_from_favourites
 import com.paranid5.cooking_corner.core.resources.ic_like
 import com.paranid5.cooking_corner.core.resources.ic_liked
+import com.paranid5.cooking_corner.core.resources.something_went_wrong
+import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
@@ -30,14 +34,37 @@ private val ICON_SIZE = 21.dp
 
 @Composable
 internal fun FavouritesButton(
-    isLiked: Boolean,
-    onLikedChanged: () -> Unit,
+    recipeUiState: RecipeUiState,
+    onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val appPadding = AppTheme.dimensions.padding
 
+    val unhandledErrorMessage = stringResource(Res.string.something_went_wrong)
+
+    fun onLikeClick() = onUiIntent(
+        UiIntent.LikeClick(
+            recipeUiState = recipeUiState,
+            unhandledErrorMessage = unhandledErrorMessage,
+        )
+    )
+
+    fun onDislikeClick() = onUiIntent(
+        UiIntent.DislikeClick(
+            recipeUiState = recipeUiState,
+            unhandledErrorMessage = unhandledErrorMessage,
+        )
+    )
+
+    val onClick = remember(recipeUiState) {
+        when {
+            recipeUiState.isLiked -> ::onDislikeClick
+            else -> ::onLikeClick
+        }
+    }
+
     AppOutlinedRippleButton(
-        onClick = onLikedChanged,
+        onClick = onClick,
         shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
         border = BorderStroke(
             width = AppTheme.dimensions.borders.minimum,
@@ -59,7 +86,7 @@ internal fun FavouritesButton(
             val (label, image) = createRefs()
 
             FavouritesButtonLabel(
-                isLiked = isLiked,
+                isLiked = recipeUiState.isLiked,
                 modifier = Modifier.constrainAs(label) {
                     centerVerticallyTo(parent)
                     start.linkTo(parent.start, margin = appPadding.extraSmall)
@@ -69,7 +96,7 @@ internal fun FavouritesButton(
             )
 
             FavouritesButtonImage(
-                isLiked = isLiked,
+                isLiked = recipeUiState.isLiked,
                 modifier = Modifier
                     .size(ICON_SIZE)
                     .constrainAs(image) {
@@ -87,12 +114,12 @@ private fun FavouritesButtonLabel(
     modifier: Modifier = Modifier,
 ) = when {
     isLiked -> FavouritesButtonLabelImpl(
-        text = stringResource(Res.string.home_add_to_favourites),
+        text = stringResource(Res.string.home_remove_from_favourites),
         modifier = modifier,
     )
 
     else -> FavouritesButtonLabelImpl(
-        text = stringResource(Res.string.home_remove_from_favourites),
+        text = stringResource(Res.string.home_add_to_favourites),
         modifier = modifier,
     )
 }
