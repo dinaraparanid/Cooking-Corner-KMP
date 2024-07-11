@@ -28,8 +28,8 @@
     <string name="home_filter_placeholder">Filter your recipes</string>
     <string name="home_category">Category</string>
     <string name="home_author">Author</string>
-    <string name="home_add_to_favourites">Add to favourites</string>
-    <string name="home_remove_from_favourites">Remove from favourites</string>
+    <string name="home_add_to_favourites">Add to</string>
+    <string name="home_remove_from_favourites">Remove from</string>
 
     <!-- Profile -->
     <string name="profile_username">Username</string>
