@@ -56,6 +56,7 @@ kotlin {
 
             implementation(projects.domain.globalEvent)
             implementation(projects.domain.recipe)
+            implementation(projects.domain.category)
 
             implementation(projects.feature.main.recipe)
 

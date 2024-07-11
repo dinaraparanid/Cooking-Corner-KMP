@@ -5,6 +5,7 @@ import com.paranid5.cooking_corner.component.root.RootComponent
 import com.paranid5.cooking_corner.di.initKodein
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor
+import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
@@ -27,6 +28,7 @@ class DITest : DIAware {
         assertNotNull(instanceOrNull<AuthRepository>())
         assertNotNull(instanceOrNull<TokenInteractor>())
         assertNotNull(instanceOrNull<RecipeRepository>())
+        assertNotNull(instanceOrNull<CategoryRepository>())
     }
 
     @Test

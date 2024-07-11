@@ -16,8 +16,11 @@ infix fun <T> ImmutableList<T>.with(element: T): ImmutableList<T> =
 infix fun <T> ImmutableList<T>.without(element: T): ImmutableList<T> =
     (this - element).toImmutableList()
 
-fun <T, R> ImmutableList<T>.mapToImmutable(transform: (T) -> R): ImmutableList<R> =
+inline fun <T, R> Iterable<T>.mapToImmutableList(transform: (T) -> R): ImmutableList<R> =
     map(transform).toImmutableList()
+
+inline fun <T> Iterable<T>.filterToImmutableList(predicate: (T) -> Boolean): ImmutableList<T> =
+    filter(predicate).toImmutableList()
 
 fun <T> ImmutableList<T>?.orNil(): ImmutableList<T> = this ?: persistentListOf()
 

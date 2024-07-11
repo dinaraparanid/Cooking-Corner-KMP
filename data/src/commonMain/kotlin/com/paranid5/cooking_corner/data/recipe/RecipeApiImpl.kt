@@ -1,27 +1,21 @@
 package com.paranid5.cooking_corner.data.recipe
 
 import arrow.core.Either
-import arrow.core.raise.either
-import arrow.core.raise.ensure
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
+import com.paranid5.cooking_corner.data.auth.withAuth
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
-import com.paranid5.cooking_corner.domain.auth.requireAccessToken
 import com.paranid5.cooking_corner.domain.recipe.RecipeApi
 import com.paranid5.cooking_corner.domain.recipe.dto.MyRecipesRequest
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
-import com.paranid5.cooking_corner.utils.toAppStatusCode
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.http.isSuccess
 import kotlinx.coroutines.withContext
 
 internal class RecipeApiImpl(
@@ -31,7 +25,7 @@ internal class RecipeApiImpl(
 ) : RecipeApi {
     override suspend fun getRecentRecipes(): ApiResultWithCode<List<RecipeResponse>> =
         Either.catch {
-            handeRequest { accessToken ->
+            authRepository.withAuth { accessToken ->
                 withContext(AppDispatchers.Data) {
                     ktorClient.get(urlBuilder.buildGetRecentRecipesUrl()) {
                         bearerAuth(accessToken)
@@ -42,7 +36,7 @@ internal class RecipeApiImpl(
 
     override suspend fun getBestRatedRecipes(): ApiResultWithCode<List<RecipeResponse>> =
         Either.catch {
-            handeRequest { accessToken ->
+            authRepository.withAuth { accessToken ->
                 withContext(AppDispatchers.Data) {
                     ktorClient.get(urlBuilder.buildGetBestRatedRecipesUrl()) {
                         bearerAuth(accessToken)
@@ -56,7 +50,7 @@ internal class RecipeApiImpl(
         isFavourite: Boolean,
         ascendingOrder: Boolean,
     ): ApiResultWithCode<List<RecipeResponse>> = Either.catch {
-        handeRequest { accessToken ->
+        authRepository.withAuth { accessToken ->
             withContext(AppDispatchers.Data) {
                 ktorClient.post(urlBuilder.buildMyRecipesUrl()) {
                     bearerAuth(accessToken)
@@ -75,7 +69,7 @@ internal class RecipeApiImpl(
     }
 
     override suspend fun addToFavourites(recipeId: Long): ApiResultWithCode<Unit> = Either.catch {
-        handeRequest { accessToken ->
+        authRepository.withAuth { accessToken ->
             withContext(AppDispatchers.Data) {
                 ktorClient.post(urlBuilder.buildAddToFavouritesUrl(recipeId = recipeId)) {
                     bearerAuth(accessToken)
@@ -86,7 +80,7 @@ internal class RecipeApiImpl(
 
     override suspend fun removeFromFavourites(recipeId: Long): ApiResultWithCode<Unit> =
         Either.catch {
-            handeRequest { accessToken ->
+            authRepository.withAuth { accessToken ->
                 withContext(AppDispatchers.Data) {
                     ktorClient.delete(
                         urlBuilder.buildRemoveFromFavouritesUrl(recipeId = recipeId)
@@ -98,7 +92,7 @@ internal class RecipeApiImpl(
         }
 
     override suspend fun addToMyRecipes(recipeId: Long): ApiResultWithCode<Unit> = Either.catch {
-        handeRequest { accessToken ->
+        authRepository.withAuth { accessToken ->
             withContext(AppDispatchers.Data) {
                 ktorClient.post(urlBuilder.buildAddToMyRecipesUrl(recipeId = recipeId)) {
                     bearerAuth(accessToken)
@@ -109,7 +103,7 @@ internal class RecipeApiImpl(
 
     override suspend fun removeFromMyRecipes(recipeId: Long): ApiResultWithCode<Unit> =
         Either.catch {
-            handeRequest { accessToken ->
+            authRepository.withAuth { accessToken ->
                 withContext(AppDispatchers.Data) {
                     ktorClient.delete(urlBuilder.buildRemoveFromMyRecipesUrl(recipeId = recipeId)) {
                         bearerAuth(accessToken)
@@ -117,13 +111,4 @@ internal class RecipeApiImpl(
                 }
             }
         }
-
-    private suspend inline fun <reified T> handeRequest(
-        sendRequest: (accessToken: String) -> HttpResponse,
-    ) = either {
-        val accessToken = authRepository.requireAccessToken()
-        val response = sendRequest(accessToken)
-        ensure(response.status.isSuccess()) { response.toAppStatusCode() }
-        response.body<T>()
-    }
 }

@@ -9,7 +9,7 @@ internal object HomeReducer : Reducer<State, Msg> {
         is Msg.UpdateSearchText -> copy(searchText = msg.text)
         is Msg.UpdateOrder -> copy(isAscendingOrder = isAscendingOrder.not())
         is Msg.SelectCategory -> copy(selectedCategoryIndex = msg.index)
-        is Msg.UpdateRecipes -> copy(recipes = msg.recipes)
-        is Msg.UpdateUiState -> copy(uiState = msg.uiState)
+        is Msg.UpdateRecipesUiState -> copy(recipesUiState = msg.recipesUiState)
+        is Msg.UpdateCategoriesUiState -> copy(categoriesUiState = msg.categoriesUiState)
     }
 }

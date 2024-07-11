@@ -6,6 +6,7 @@ import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
+import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
@@ -17,17 +18,20 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStoreProvider.Msg
+import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
 import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.doNothing
+import com.paranid5.cooking_corner.utils.mapToImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 internal class HomeExecutor(
     private val recipeRepository: RecipeRepository,
+    private val categoryRepository: CategoryRepository,
     private val globalEventRepository: GlobalEventRepository,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     override fun executeIntent(intent: UiIntent) {
@@ -60,10 +64,12 @@ internal class HomeExecutor(
         }
     }
 
+    override fun executeAction(action: Unit) = loadCategories()
+
     // -------------------- UI Intent handling --------------------
 
     private fun loadMyRecipes() {
-        dispatch(Msg.UpdateUiState(UiState.Loading))
+        dispatch(Msg.UpdateRecipesUiState(UiState.Loading))
 
         scope.launch {
             handleRecipesApiResult(
@@ -73,6 +79,16 @@ internal class HomeExecutor(
                         ascendingOrder = state().isAscendingOrder,
                     )
                 }
+            )
+        }
+    }
+
+    private fun loadCategories() {
+        dispatch(Msg.UpdateCategoriesUiState(UiState.Loading))
+
+        scope.launch {
+            handleCategoriesApiResult(
+                result = withContext(AppDispatchers.Data) { categoryRepository.getAll() }
             )
         }
     }
@@ -110,7 +126,7 @@ internal class HomeExecutor(
     ) = when (result) {
         is Either.Left -> {
             result.value.printStackTrace()
-            dispatch(Msg.UpdateUiState(result.value.toUiState()))
+            dispatch(Msg.UpdateRecipesUiState(result.value.toUiState()))
         }
 
         is Either.Right -> handleRecipesStatus(result.value)
@@ -123,22 +139,45 @@ internal class HomeExecutor(
             status.value.isForbidden ->
                 globalEventRepository.sendEvent(GlobalEvent.LogOut(Reason.ERROR))
 
-            else -> dispatch(Msg.UpdateUiState(UiState.Error()))
+            else -> dispatch(Msg.UpdateRecipesUiState(UiState.Error()))
         }
 
-        is Either.Right -> {
-            dispatch(
-                Msg.UpdateRecipes(
-                    withContext(AppDispatchers.Eval) {
-                        status.value
-                            .map(RecipeUiState.Companion::fromResponse)
-                            .toImmutableList()
-                    }
-                )
+        is Either.Right -> dispatch(
+            Msg.UpdateRecipesUiState(
+                withContext(AppDispatchers.Eval) {
+                    status.value
+                        .mapToImmutableList(RecipeUiState.Companion::fromResponse)
+                        .toUiState()
+                }
             )
+        )
+    }
 
-            dispatch(Msg.UpdateUiState(UiState.Success))
+    private suspend inline fun handleCategoriesApiResult(
+        result: ApiResultWithCode<List<String>>,
+    ) = when (result) {
+        is Either.Left -> {
+            result.value.printStackTrace()
+            dispatch(Msg.UpdateCategoriesUiState(result.value.toUiState()))
         }
+
+        is Either.Right -> handleCategoriesStatus(result.value)
+    }
+
+    private suspend inline fun handleCategoriesStatus(
+        status: Either<HttpStatusCode, List<String>>,
+    ) = when (status) {
+        is Either.Left -> dispatch(Msg.UpdateRecipesUiState(UiState.Error()))
+
+        is Either.Right -> dispatch(
+            Msg.UpdateCategoriesUiState(
+                withContext(AppDispatchers.Eval) {
+                    status.value
+                        .mapToImmutableList(::CategoryUiState)
+                        .toUiState()
+                }
+            )
+        )
     }
 
     private suspend inline fun handleModifyRecipeApiResult(

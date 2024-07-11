@@ -5,8 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Immutable
-data class CategoryUiState(val title: String) {
-    companion object {
-        val NotSelected = CategoryUiState(title = "")
-    }
-}
+data class CategoryUiState(val title: String)

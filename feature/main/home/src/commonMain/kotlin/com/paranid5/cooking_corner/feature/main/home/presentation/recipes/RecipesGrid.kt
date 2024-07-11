@@ -23,6 +23,7 @@ import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
+import com.paranid5.cooking_corner.utils.doNothing
 
 private const val MIN_RECIPES_IN_ROW = 2
 private val RECIPE_MAX_WIDTH = 185.dp
@@ -35,7 +36,7 @@ internal fun RecipesGrid(
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier
 ) = Box(modifier) {
-    when (state.uiState) {
+    when (state.recipesUiState) {
         is UiState.Data, is UiState.Refreshing, is UiState.Success ->
             RecipesGridContent(
                 state = state,
@@ -66,7 +67,7 @@ private fun RecipesGridContent(
         items(items = state.filteredRecipes) { recipe ->
             RecipeItem(
                 recipe = recipe,
-                onErrorButtonClick = { }, // TODO: Error handling
+                onErrorButtonClick = doNothing, // TODO: Error handling
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(RECIPE_HEIGHT)

@@ -8,9 +8,10 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiInten
 import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.utils.filterToImmutableList
+import com.paranid5.cooking_corner.utils.orNil
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -48,14 +49,25 @@ interface HomeStore : Store<UiIntent, State, Label> {
     data class State(
         val searchText: String,
         val selectedCategoryIndex: Int,
-        val recipes: ImmutableList<RecipeUiState>,
-        val categories: ImmutableList<CategoryUiState>,
+        val recipesUiState: UiState<ImmutableList<RecipeUiState>>,
+        val categoriesUiState: UiState<ImmutableList<CategoryUiState>>,
         val isAscendingOrder: Boolean,
-        val uiState: UiState<Unit>,
     ) {
+        companion object {
+            private const val NOT_SELECTED = 0
+        }
+
         @Transient
         val selectedCategoryTitle: String =
-            categories.getOrNull(selectedCategoryIndex)?.title.orEmpty()
+            selectedCategoryIndex
+                .takeIf { it != NOT_SELECTED }
+                ?.let { index ->
+                    categoriesUiState
+                        .getOrNull()
+                        ?.getOrNull(index)
+                        ?.title
+                }
+                .orEmpty()
 
         @Transient
         private val searchTextLowercase: String =
@@ -63,15 +75,20 @@ interface HomeStore : Store<UiIntent, State, Label> {
 
         @Transient
         val filteredRecipes: ImmutableList<RecipeUiState> =
-            recipes.filter { searchTextLowercase in it.title }.toImmutableList()
+            recipesUiState
+                .getOrNull()
+                ?.filterToImmutableList { searchTextLowercase in it.title }
+                .orNil()
+
+        @Transient
+        val categories = categoriesUiState.getOrNull().orNil()
 
         constructor() : this(
             searchText = "",
-            selectedCategoryIndex = 0,
-            recipes = persistentListOf(),
-            categories = persistentListOf(CategoryUiState.NotSelected),
+            selectedCategoryIndex = NOT_SELECTED,
+            recipesUiState = UiState.Undefined,
+            categoriesUiState = UiState.Undefined,
             isAscendingOrder = false,
-            uiState = UiState.Undefined,
         )
     }
 
