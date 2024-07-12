@@ -57,8 +57,10 @@ kotlin {
             implementation(projects.core.utils)
             api(projects.core.component)
 
-            api(projects.domain.recipe)
-            api(projects.domain.globalEvent)
+            implementation(projects.domain.recipe)
+            implementation(projects.domain.category)
+            implementation(projects.domain.tag)
+            implementation(projects.domain.globalEvent)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

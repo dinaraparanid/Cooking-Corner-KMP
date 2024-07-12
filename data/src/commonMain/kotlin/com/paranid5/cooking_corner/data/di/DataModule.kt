@@ -7,11 +7,13 @@ import com.paranid5.cooking_corner.data.di.network.networkModule
 import com.paranid5.cooking_corner.data.di.storage.storageModule
 import com.paranid5.cooking_corner.data.global_event.GlobalEventRepositoryImpl
 import com.paranid5.cooking_corner.data.recipe.RecipeRepositoryImpl
+import com.paranid5.cooking_corner.data.tag.TagRepositoryImpl
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor
 import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
+import com.paranid5.cooking_corner.domain.tag.TagRepository
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
@@ -38,5 +40,9 @@ val dataModule = DI.Module("dataModule") {
 
     bind<CategoryRepository>() with multiton {
         CategoryRepositoryImpl(categoryApi = instance(tag = CATEGORY_API))
+    }
+
+    bind<TagRepository>() with multiton {
+        TagRepositoryImpl(tagApi = instance(tag = TAG_API))
     }
 }

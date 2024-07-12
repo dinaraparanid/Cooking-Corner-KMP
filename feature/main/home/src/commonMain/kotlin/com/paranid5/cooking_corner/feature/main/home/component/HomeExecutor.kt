@@ -18,7 +18,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStoreProvider.Msg
-import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
@@ -168,7 +168,7 @@ internal class HomeExecutor(
     private suspend inline fun handleCategoriesStatus(
         status: Either<HttpStatusCode, List<String>>,
     ) = when (status) {
-        is Either.Left -> dispatch(Msg.UpdateRecipesUiState(UiState.Error()))
+        is Either.Left -> dispatch(Msg.UpdateCategoriesUiState(UiState.Error()))
 
         is Either.Right -> dispatch(
             Msg.UpdateCategoriesUiState(

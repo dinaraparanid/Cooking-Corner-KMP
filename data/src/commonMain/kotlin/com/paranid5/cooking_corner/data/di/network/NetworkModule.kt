@@ -7,6 +7,7 @@ internal val networkModule = DI.Module("networkModule") {
         authApiModule,
         recipeApiModule,
         categoryApiModule,
+        tagApiModule,
         ktorClientModule,
     )
 }

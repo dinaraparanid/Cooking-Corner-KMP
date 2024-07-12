@@ -1,16 +1,31 @@
 package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 
+import arrow.core.Either
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.paranid5.cooking_corner.core.common.ApiResultWithCode
+import com.paranid5.cooking_corner.core.common.AppDispatchers
+import com.paranid5.cooking_corner.core.common.HttpStatusCode
+import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
+import com.paranid5.cooking_corner.domain.tag.TagRepository
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStoreProvider.Msg
+import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.TagUiState
+import com.paranid5.cooking_corner.ui.toUiState
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
+import com.paranid5.cooking_corner.utils.mapToImmutableList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class RecipeExecutor(
     private val recipeRepository: RecipeRepository,
+    private val categoryRepository: CategoryRepository,
+    private val tagRepository: TagRepository,
     private val globalEventRepository: GlobalEventRepository,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
     @Suppress("LongLine")
@@ -47,17 +62,78 @@ internal class RecipeExecutor(
     }
 
     private fun loadCategories() {
-        // dispatch(Msg.UpdateCategoriesUiState(UiState.Loading))
-        // TODO: load categories
+        dispatch(Msg.UpdateCategoriesUiState(UiState.Loading))
+
+        scope.launch {
+            handleSpinnerItemsApiResult(
+                result = withContext(AppDispatchers.Data) { categoryRepository.getAll() },
+                errorMsg = Msg::UpdateCategoriesUiState,
+                handleStatus = { handleCategoriesStatus(status = it) }
+            )
+        }
     }
 
     private fun loadTags() {
-        // dispatch(Msg.UpdateTagsUiState(UiState.Loading))
-        // TODO: load tags
+        dispatch(Msg.UpdateTagsUiState(UiState.Loading))
+
+        scope.launch {
+            handleSpinnerItemsApiResult(
+                result = withContext(AppDispatchers.Data) { tagRepository.getAll() },
+                errorMsg = Msg::UpdateTagsUiState,
+                handleStatus = { handleTagsStatus(status = it) }
+            )
+        }
     }
 
     private suspend fun onSave() {
         // TODO: send request to save recipe
         publish(Label.Back)
+    }
+
+    private suspend inline fun handleSpinnerItemsApiResult(
+        result: ApiResultWithCode<List<String>>,
+        errorMsg: (error: UiState<Nothing>) -> Msg,
+        handleStatus: (Either<HttpStatusCode, List<String>>) -> Unit,
+    ) = when (result) {
+        is Either.Left -> {
+            result.value.printStackTrace()
+            dispatch(errorMsg(result.value.toUiState()))
+        }
+
+        is Either.Right -> handleStatus(result.value)
+    }
+
+    private suspend inline fun handleCategoriesStatus(
+        status: Either<HttpStatusCode, List<String>>,
+    ) = when (status) {
+        is Either.Left -> dispatch(Msg.UpdateCategoriesUiState(UiState.Error()))
+
+        is Either.Right -> dispatch(
+            Msg.UpdateCategoriesUiState(
+                withContext(AppDispatchers.Eval) {
+                    status.value
+                        .mapToImmutableList(::CategoryUiState)
+                        .let(::SerializableImmutableList)
+                        .toUiState()
+                }
+            )
+        )
+    }
+
+    private suspend inline fun handleTagsStatus(
+        status: Either<HttpStatusCode, List<String>>,
+    ) = when (status) {
+        is Either.Left -> dispatch(Msg.UpdateTagsUiState(UiState.Error()))
+
+        is Either.Right -> dispatch(
+            Msg.UpdateTagsUiState(
+                withContext(AppDispatchers.Eval) {
+                    status.value
+                        .mapToImmutableList(::TagUiState)
+                        .let(::SerializableImmutableList)
+                        .toUiState()
+                }
+            )
+        )
     }
 }

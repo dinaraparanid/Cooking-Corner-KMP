@@ -8,3 +8,5 @@ internal const val AUTH_DATA_SOURCE = "auth_data_source"
 internal const val RECIPE_API = "recipe_api"
 
 internal const val CATEGORY_API = "category_api"
+
+internal const val TAG_API = "tag_api"

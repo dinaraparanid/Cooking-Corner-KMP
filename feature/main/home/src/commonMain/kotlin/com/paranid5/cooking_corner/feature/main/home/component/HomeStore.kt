@@ -5,8 +5,8 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.home.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
@@ -60,7 +60,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
 
         @Transient
         val selectedCategoryTitle = selectedCategoryIndex
-            .takeIf { it != NOT_SELECTED }
+            .takeIf { it > NOT_SELECTED }
             ?.let { index ->
                 categoriesUiState
                     .getOrNull()

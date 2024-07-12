@@ -6,12 +6,17 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
+import com.paranid5.cooking_corner.utils.orNil
 import com.paranid5.cooking_corner.utils.serializer.ImmutableListSerializer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -46,8 +51,8 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
     data class State(
         val name: String = "",
         val description: String = "",
-        val selectedCategoryIndex: Int = 0,
-        val selectedTagIndex: Int = 0,
+        val selectedCategoryIndex: Int = NOT_SELECTED,
+        val selectedTagIndex: Int = NOT_SELECTED,
         val preparationTimeInput: String = "",
         val cookingTimeInput: String = "",
         val restTimeInput: String = "",
@@ -64,18 +69,50 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val ingredients: ImmutableList<IngredientUiState> = persistentListOf(),
         @Serializable(with = ImmutableListSerializer::class)
         val steps: ImmutableList<StepUiState> = persistentListOf(),
-        val categoriesUiState: UiState<@Serializable(with = ImmutableListSerializer::class) ImmutableList<String>> = UiState.Undefined,
-        val tagsUiState: UiState<@Serializable(with = ImmutableListSerializer::class) ImmutableList<String>> = UiState.Undefined,
+        val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>> = UiState.Undefined,
+        val tagsUiState: UiState<SerializableImmutableList<TagUiState>> = UiState.Undefined,
     ) {
-        @Transient
-        val selectedCategoryTitle = categoriesUiState
-            .getOrNull()
-            ?.getOrNull(selectedCategoryIndex)
+        companion object {
+            internal const val NOT_SELECTED = 0
+        }
 
         @Transient
-        val selectedTagTitle = tagsUiState
+        val selectedCategoryTitle = selectedCategoryIndex
+            .takeIf { it > NOT_SELECTED }
+            ?.let { index ->
+                categoriesUiState
+                    .getOrNull()
+                    ?.value
+                    ?.getOrNull(index)
+                    ?.title
+            }
+            .orEmpty()
+
+        @Transient
+        val selectedTagTitle = selectedTagIndex
+            .takeIf { it > NOT_SELECTED }
+            ?.let { index ->
+                tagsUiState
+                    .getOrNull()
+                    ?.value
+                    ?.getOrNull(index)
+                    ?.title
+            }
+            .orEmpty()
+
+        @Transient
+        val categories = categoriesUiState
             .getOrNull()
-            ?.getOrNull(selectedCategoryIndex)
+            ?.value
+            ?.toImmutableList()
+            .orNil()
+
+        @Transient
+        val tags = tagsUiState
+            .getOrNull()
+            ?.value
+            ?.toImmutableList()
+            .orNil()
 
         @Transient
         val preparationTimeMinutes = preparationTimeInput.toIntOrNull() ?: 0

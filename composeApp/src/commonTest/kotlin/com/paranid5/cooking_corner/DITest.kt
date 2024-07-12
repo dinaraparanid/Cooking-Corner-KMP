@@ -8,6 +8,7 @@ import com.paranid5.cooking_corner.domain.auth.TokenInteractor
 import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
+import com.paranid5.cooking_corner.domain.tag.TagRepository
 import com.paranid5.cooking_corner.featrue.auth.component.AuthComponent
 import com.paranid5.cooking_corner.feature.main.root.component.MainRootComponent
 import com.paranid5.cooking_corner.feature.splash.component.SplashScreenComponent
@@ -29,6 +30,7 @@ class DITest : DIAware {
         assertNotNull(instanceOrNull<TokenInteractor>())
         assertNotNull(instanceOrNull<RecipeRepository>())
         assertNotNull(instanceOrNull<CategoryRepository>())
+        assertNotNull(instanceOrNull<TagRepository>())
     }
 
     @Test

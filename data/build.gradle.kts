@@ -60,6 +60,7 @@ kotlin {
             api(projects.domain.auth)
             api(projects.domain.recipe)
             api(projects.domain.category)
+            api(projects.domain.tag)
             api(projects.domain.globalEvent)
 
             implementation(libs.androidx.datastore.core.okio)

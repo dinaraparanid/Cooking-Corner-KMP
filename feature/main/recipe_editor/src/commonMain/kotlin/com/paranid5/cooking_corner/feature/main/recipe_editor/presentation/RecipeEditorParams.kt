@@ -13,13 +13,13 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_editor_category
 import com.paranid5.cooking_corner.core.resources.recipe_editor_description
 import com.paranid5.cooking_corner.core.resources.recipe_editor_name
+import com.paranid5.cooking_corner.core.resources.recipe_editor_tag
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
+import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.foundation.AppSpinnerWithArrow
-import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.utils.identity
-import com.paranid5.cooking_corner.utils.orNil
 import org.jetbrains.compose.resources.stringResource
 
 internal inline val ParamShape
@@ -51,8 +51,8 @@ internal fun RecipeEditorParams(
 
     AppSpinnerWithArrow(
         selectedItemIndex = state.selectedCategoryIndex,
-        items = state.categoriesUiState.getOrNull().orNil(),
-        title = ::identity,
+        items = state.categories,
+        title = CategoryUiState::title,
         initial = stringResource(Res.string.recipe_editor_category),
         modifier = Modifier
             .fillMaxWidth()
@@ -64,4 +64,20 @@ internal fun RecipeEditorParams(
                 shape = ParamShape,
             ),
     ) { onUiIntent(UiIntent.UpdateSelectedCategory(index = it)) }
+
+    AppSpinnerWithArrow(
+        selectedItemIndex = state.selectedTagIndex,
+        items = state.tags,
+        title = TagUiState::title,
+        initial = stringResource(Res.string.recipe_editor_tag),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = AppTheme.dimensions.padding.small)
+            .clip(ParamShape)
+            .border(
+                width = AppTheme.dimensions.borders.minimum,
+                color = AppTheme.colors.button.primary,
+                shape = ParamShape,
+            ),
+    ) { onUiIntent(UiIntent.UpdateSelectedTag(index = it)) }
 }

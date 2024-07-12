@@ -54,6 +54,7 @@ kotlin {
             api(projects.core.utils)
             api(projects.core.component)
 
+            implementation(projects.domain.tag)
             implementation(projects.domain.globalEvent)
 
             implementation(projects.feature.main.recipe)
