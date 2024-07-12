@@ -97,6 +97,7 @@
     <string name="recipe_editor_ingredient_portion_placeholder">Ingredient portion</string>
     <string name="recipe_editor_step_title_placeholder">Step title</string>
     <string name="recipe_editor_step_description_placeholder">Step description</string>
+    <string name="recipe_editor_recipe_uploaded">Recipe uploaded</string>
 
     <!-- Units -->
     <string name="unit_minute">min</string>

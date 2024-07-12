@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IngredientResponse(
+data class IngredientDTO(
     @SerialName("title") val title: String? = null,
     @SerialName("portion") val portion: String? = null,
 )

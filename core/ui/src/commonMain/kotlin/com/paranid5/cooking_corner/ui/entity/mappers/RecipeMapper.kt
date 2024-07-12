@@ -1,13 +1,14 @@
-package com.paranid5.cooking_corner.feature.main.recipe.utils
+package com.paranid5.cooking_corner.ui.entity.mappers
 
-import com.paranid5.cooking_corner.domain.recipe.dto.IngredientResponse
+import com.paranid5.cooking_corner.domain.recipe.dto.IngredientDTO
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
-import com.paranid5.cooking_corner.domain.recipe.dto.StepResponse
+import com.paranid5.cooking_corner.domain.recipe.dto.StepDTO
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.mapToImmutableList
@@ -54,15 +55,21 @@ fun RecipeDetailedUiState.Companion.fromResponse(response: RecipeResponse) =
         ),
     )
 
-fun IngredientUiState.Companion.fromResponse(response: IngredientResponse) =
+fun IngredientUiState.Companion.fromResponse(response: IngredientDTO) =
     IngredientUiState(
         title = response.title.orEmpty(),
         portion = response.portion.orEmpty(),
     )
 
-fun StepUiState.Companion.fromResponse(response: StepResponse) =
+fun IngredientUiState.toRequest() =
+    IngredientDTO(title = title, portion = portion)
+
+fun StepUiState.Companion.fromResponse(response: StepDTO) =
     StepUiState(
         title = response.title.orEmpty(),
         description = response.description.orEmpty(),
         coverUrlState = response.imagePath?.toUiState() ?: UiState.Success,
     )
+
+fun StepUiState.toRequest() =
+    StepDTO(title = title, description = description, imagePath = coverUrlState.getOrNull())

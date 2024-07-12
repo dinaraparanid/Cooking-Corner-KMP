@@ -6,14 +6,19 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
+import com.paranid5.cooking_corner.component.componentScope
 import com.paranid5.cooking_corner.component.toStateFlow
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
+import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.feature.main.generate.component.GenerateComponent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
+import com.paranid5.cooking_corner.utils.doNothing
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 internal class MainContentComponentImpl(
     componentContext: ComponentContext,
@@ -23,6 +28,7 @@ internal class MainContentComponentImpl(
     private val recipeComponentFactory: RecipeComponent.Factory,
     private val generateComponentFactory: GenerateComponent.Factory,
     private val recipeEditorComponentFactory: RecipeEditorComponent.Factory,
+    private val globalEventRepository: GlobalEventRepository,
     private val onBack: () -> Unit,
 ) : MainContentComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<MainContentConfig>()
@@ -61,7 +67,9 @@ internal class MainContentComponentImpl(
                 component = buildRecipeDetailsComponent(config, componentContext)
             )
 
-            is MainContentConfig.AddRecipe -> MainContentChild.AddRecipe
+            is MainContentConfig.AddRecipe -> MainContentChild.AddRecipe(
+                component = buildRecipeEditorComponent(componentContext)
+            )
 
             is MainContentConfig.GenerateRecipe -> MainContentChild.GenerateRecipe(
                 component = buildGenerateRecipeComponent(componentContext)
@@ -146,7 +154,16 @@ internal class MainContentComponentImpl(
         recipeEditorComponentFactory.create(
             componentContext = componentContext,
             onBack = { result ->
-                // TODO: show snackbar on success
+                when (result) {
+                    is RecipeEditorComponent.BackResult.Dismiss -> doNothing
+
+                    is RecipeEditorComponent.BackResult.Uploaded -> componentScope.launch {
+                        globalEventRepository.sendEvent(
+                            GlobalEvent.ShowSnackbar(result.snackbarMessage)
+                        )
+                    }
+                }
+
                 navigation.pop()
             }
         )
@@ -158,6 +175,7 @@ internal class MainContentComponentImpl(
         private val recipeComponentFactory: RecipeComponent.Factory,
         private val generateComponentFactory: GenerateComponent.Factory,
         private val recipeEditorComponentFactory: RecipeEditorComponent.Factory,
+        private val globalEventRepository: GlobalEventRepository,
     ) : MainContentComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
@@ -170,6 +188,7 @@ internal class MainContentComponentImpl(
             recipeComponentFactory = recipeComponentFactory,
             generateComponentFactory = generateComponentFactory,
             recipeEditorComponentFactory = recipeEditorComponentFactory,
+            globalEventRepository = globalEventRepository,
             onBack = onBack,
         )
     }

@@ -19,7 +19,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStoreProvider.Msg
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
-import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
+import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState

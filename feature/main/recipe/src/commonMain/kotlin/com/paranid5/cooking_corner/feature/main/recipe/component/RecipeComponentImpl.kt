@@ -9,22 +9,21 @@ import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
+import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
-import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
-import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent.BackResult
-import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
+import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.updateState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -32,6 +31,7 @@ internal class RecipeComponentImpl(
     componentContext: ComponentContext,
     recipeId: Long,
     private val recipeRepository: RecipeRepository,
+    private val authRepository: AuthRepository,
     private val globalEventRepository: GlobalEventRepository,
     private val onBack: (BackResult) -> Unit,
 ) : RecipeComponent, ComponentContext by componentContext {
@@ -40,7 +40,10 @@ internal class RecipeComponentImpl(
     override val stateFlow = _stateFlow.asStateFlow()
 
     init {
-        doOnResume { loadRecipe(recipeId) }
+        doOnResume {
+            loadUsername()
+            loadRecipe(recipeId)
+        }
     }
 
     override fun onUiIntent(intent: RecipeUiIntent) {
@@ -81,6 +84,16 @@ internal class RecipeComponentImpl(
         }
     }
 
+    private fun loadUsername() = componentScope.launch {
+        val user = withContext(AppDispatchers.Data) {
+            authRepository
+                .loginFlow
+                .firstOrNull()
+        }
+
+        _stateFlow.updateState { copy(username = user) }
+    }
+
     private suspend inline fun handleLoadRecipeApiResult(
         result: ApiResultWithCode<RecipeResponse>,
         onSuccess: (RecipeResponse) -> Unit,
@@ -112,6 +125,7 @@ internal class RecipeComponentImpl(
 
     class Factory(
         private val recipeRepository: RecipeRepository,
+        private val authRepository: AuthRepository,
         private val globalEventRepository: GlobalEventRepository,
     ) : RecipeComponent.Factory {
         override fun create(
@@ -122,6 +136,7 @@ internal class RecipeComponentImpl(
             componentContext = componentContext,
             recipeId = recipeId,
             recipeRepository = recipeRepository,
+            authRepository = authRepository,
             globalEventRepository = globalEventRepository,
             onBack = onBack,
         )

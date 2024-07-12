@@ -12,7 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.recipe_editor_recipe_uploaded
 import com.paranid5.cooking_corner.core.resources.recipe_editor_save
+import com.paranid5.cooking_corner.core.resources.something_went_wrong
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedBackButton
@@ -25,6 +29,7 @@ private val BUTTON_SIZE = 36.dp
 
 @Composable
 internal fun RecipeEditorTopBar(
+    isSaveButtonEnabled: Boolean,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -32,15 +37,28 @@ internal fun RecipeEditorTopBar(
         .simpleShadow()
         .background(AppTheme.colors.background.primary)
 
+    val unhandledErrorSnackbar = UnhandledErrorSnackbar()
+    val successSnackbar = SuccessSnackbar()
+
     Row(modifier = modifier) {
         AppOutlinedBackButton(generalModifier.size(BUTTON_SIZE)) { onUiIntent(UiIntent.Back) }
+
         Spacer(Modifier.weight(1F))
-        SaveButton(generalModifier) { onUiIntent(UiIntent.Save) }
+
+        SaveButton(enabled = isSaveButtonEnabled, modifier = generalModifier) {
+            onUiIntent(
+                UiIntent.Save(
+                    unhandledErrorSnackbar = unhandledErrorSnackbar,
+                    successSnackbar = successSnackbar,
+                )
+            )
+        }
     }
 }
 
 @Composable
 private fun SaveButton(
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) = Box(
@@ -50,7 +68,7 @@ private fun SaveButton(
             color = AppTheme.colors.button.primary,
             shape = RoundedCornerShape(AppTheme.dimensions.corners.medium)
         )
-        .clickableWithRipple(bounded = true, onClick = onClick)
+        .clickableWithRipple(bounded = true, enabled = enabled, onClick = onClick)
 ) {
     AppMainText(
         text = stringResource(Res.string.recipe_editor_save),
@@ -61,3 +79,17 @@ private fun SaveButton(
         )
     )
 }
+
+@Composable
+private fun UnhandledErrorSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.something_went_wrong),
+    snackbarType = SnackbarType.NEGATIVE,
+    withDismissAction = true,
+)
+
+@Composable
+private fun SuccessSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.recipe_editor_recipe_uploaded),
+    snackbarType = SnackbarType.POSITIVE,
+    withDismissAction = true,
+)

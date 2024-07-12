@@ -54,6 +54,7 @@ kotlin {
             implementation(projects.core.utils)
             api(projects.core.component)
 
+            api(projects.domain.auth)
             api(projects.domain.recipe)
             api(projects.domain.globalEvent)
 

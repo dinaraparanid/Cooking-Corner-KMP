@@ -31,7 +31,9 @@ sealed interface MainContentChild {
     ) : MainContentChild
 
     @Immutable
-    data object AddRecipe : MainContentChild
+    data class AddRecipe internal constructor(
+        internal val component: RecipeEditorComponent
+    ) : MainContentChild
 
     @Immutable
     class GenerateRecipe internal constructor(

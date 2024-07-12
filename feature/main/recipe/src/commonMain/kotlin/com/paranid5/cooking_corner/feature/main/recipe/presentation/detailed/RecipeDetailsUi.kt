@@ -66,6 +66,7 @@ private fun RecipeDetailsContent(
 ) = Box(modifier) {
     @Composable
     fun Content(recipeUiState: RecipeDetailedUiState) = RecipeDetailsContentData(
+        isOwned = state.isOwned,
         recipeUiState = recipeUiState,
         isKebabMenuVisible = state.isKebabMenuVisible,
         onUiIntent = onUiIntent,
@@ -97,6 +98,7 @@ private fun RecipeDetailsContent(
 
 @Composable
 fun RecipeDetailsContentData(
+    isOwned: Boolean,
     recipeUiState: RecipeDetailedUiState,
     isKebabMenuVisible: Boolean,
     onUiIntent: (RecipeUiIntent) -> Unit,
@@ -110,6 +112,7 @@ fun RecipeDetailsContentData(
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
         RecipeTopBar(
+            isOwned = isOwned,
             recipeUiState = recipeUiState,
             isKebabMenuVisible = isKebabMenuVisible,
             onUiIntent = onUiIntent,

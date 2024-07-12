@@ -52,6 +52,7 @@ private fun RecipeEditorUiContent(
             .verticalScroll(rememberScrollState())
     ) {
         RecipeEditorTopBar(
+            isSaveButtonEnabled = state.isSaveButtonActive,
             onUiIntent = onUiIntent,
             modifier = Modifier
                 .fillMaxWidth()

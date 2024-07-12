@@ -35,7 +35,7 @@ internal fun RecipeKebabMenu(
     modifier: Modifier = Modifier,
 ) {
     val menuItems = buildKebabMenuItems(
-        recipeUiState = recipeUiState,
+        isPublished = recipeUiState.isPublished,
         onUiIntent = onUiIntent,
     )
 
@@ -87,18 +87,18 @@ private fun RecipeKebabMenuItem(
 
 @Composable
 private fun buildKebabMenuItems(
-    recipeUiState: RecipeDetailedUiState,
+    isPublished: Boolean,
     onUiIntent: (RecipeUiIntent) -> Unit,
 ) = persistentListOfNotNull(
     buildKebabMenuItem(stringResource(Res.string.recipe_kebab_publish)) {
         onUiIntent(RecipeUiIntent.Publish)
-    }.takeIf { recipeUiState.byUser && recipeUiState.isPublished.not() },
+    }.takeIf { isPublished.not() },
     buildKebabMenuItem(stringResource(Res.string.recipe_kebab_edit)) {
         onUiIntent(RecipeUiIntent.Edit)
-    }.takeIf { recipeUiState.byUser },
+    },
     buildKebabMenuItem(stringResource(Res.string.recipe_kebab_delete)) {
         onUiIntent(RecipeUiIntent.Publish)
-    }.takeIf { recipeUiState.byUser },
+    },
 )
 
 private fun buildKebabMenuItem(title: String, onClick: () -> Unit) =

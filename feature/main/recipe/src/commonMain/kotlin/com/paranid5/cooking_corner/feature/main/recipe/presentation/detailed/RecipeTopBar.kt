@@ -28,6 +28,7 @@ private val ICON_SIZE = 20.dp
 
 @Composable
 internal fun RecipeTopBar(
+    isOwned: Boolean,
     recipeUiState: RecipeDetailedUiState,
     isKebabMenuVisible: Boolean,
     onUiIntent: (RecipeUiIntent) -> Unit,
@@ -44,7 +45,7 @@ internal fun RecipeTopBar(
         modifier = buttonModifier.align(Alignment.CenterStart),
     )
 
-    Column(Modifier.align(Alignment.CenterEnd)) {
+    if (isOwned) Column(Modifier.align(Alignment.CenterEnd)) {
         KebabButton(
             onClick = { onUiIntent(RecipeUiIntent.ChangeKebabMenuVisibility(isVisible = true)) },
             modifier = buttonModifier,

@@ -2,7 +2,6 @@ package com.paranid5.cooking_corner.feature.main.content.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -57,8 +56,8 @@ internal fun ContentUi(
                 modifier = screenModifier,
             )
 
-            is MainContentChild.AddRecipe -> Text(
-                text = "TODO: Add Recipe Ui",
+            is MainContentChild.AddRecipe -> RecipeEditorUi(
+                component = child.component,
                 modifier = screenModifier,
             )
 

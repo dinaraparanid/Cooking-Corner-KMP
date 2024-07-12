@@ -13,7 +13,7 @@ import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
-import com.paranid5.cooking_corner.feature.main.recipe.utils.fromResponse
+import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent

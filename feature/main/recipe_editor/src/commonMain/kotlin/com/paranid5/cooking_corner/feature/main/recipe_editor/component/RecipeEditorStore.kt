@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 
 import androidx.compose.runtime.Immutable
 import com.arkivanov.mvikotlin.core.store.Store
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
@@ -19,23 +20,44 @@ import kotlinx.serialization.Transient
 interface RecipeEditorStore : Store<UiIntent, State, Label> {
     sealed interface UiIntent {
         data object Back : UiIntent
-        data object Save : UiIntent
+
+        data class Save(
+            val unhandledErrorSnackbar: SnackbarMessage,
+            val successSnackbar: SnackbarMessage,
+        ) : UiIntent
+
         data class UpdateName(val name: String) : UiIntent
+
         data class UpdateDescription(val description: String) : UiIntent
+
         data class UpdateSelectedCategory(val index: Int) : UiIntent
+
         data class UpdateSelectedTag(val index: Int) : UiIntent
+
         data class UpdatePreparationTime(val preparationTimeInput: String) : UiIntent
+
         data class UpdateCookingTime(val cookingTimeInput: String) : UiIntent
+
         data class UpdateRestTime(val restTimeInput: String) : UiIntent
+
         data class UpdatePortions(val portionsInput: String) : UiIntent
+
         data class UpdateComments(val commentsInput: String) : UiIntent
+
         data class UpdateNutritions(val nutritionsInput: String) : UiIntent
+
         data class UpdateProteins(val proteinsInput: String) : UiIntent
+
         data class UpdateFats(val fatsInput: String) : UiIntent
+
         data class UpdateCarbohydrates(val carbohydratesInput: String) : UiIntent
+
         data class UpdateDishes(val dishesInput: String) : UiIntent
+
         data class UpdateVideoLink(val videoLink: String) : UiIntent
+
         data class UpdateSource(val source: String) : UiIntent
+
         data class UpdateThumbnail(val thumbnail: ByteArray?) : UiIntent
 
         sealed interface Ingredient : UiIntent {
@@ -128,7 +150,10 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         }
 
         @Transient
-        val selectedCategoryTitle = selectedCategoryIndex
+        val isNameEmpty = name.isEmpty()
+
+        @Transient
+        val selectedCategoryTitleOrNull = selectedCategoryIndex
             .takeIf { it > NOT_SELECTED }
             ?.let { index ->
                 categoriesUiState
@@ -136,10 +161,15 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
                     ?.getOrNull(index)
                     ?.title
             }
-            .orEmpty()
 
         @Transient
-        val selectedTagTitle = selectedTagIndex
+        val isCategorySelected = selectedCategoryTitleOrNull != null
+
+        @Transient
+        val selectedCategoryTitle = selectedCategoryTitleOrNull.orEmpty()
+
+        @Transient
+        val selectedTagTitleOrNull = selectedTagIndex
             .takeIf { it > NOT_SELECTED }
             ?.let { index ->
                 tagsUiState
@@ -147,7 +177,12 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
                     ?.getOrNull(index)
                     ?.title
             }
-            .orEmpty()
+
+        @Transient
+        val selectedTagTitle = selectedTagTitleOrNull.orEmpty()
+
+        @Transient
+        val isSaveButtonActive = isNameEmpty.not() && isCategorySelected
 
         @Transient
         val categories = categoriesUiState.getOrNull().orNil()

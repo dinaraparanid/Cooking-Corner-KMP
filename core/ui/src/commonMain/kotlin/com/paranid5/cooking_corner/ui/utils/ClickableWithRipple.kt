@@ -12,9 +12,11 @@ import com.paranid5.cooking_corner.ui.theme.AppTheme
 @Composable
 fun Modifier.clickableWithRipple(
     bounded: Boolean = false,
+    enabled: Boolean = true,
     color: Color = AppTheme.colors.orange,
     onClick: () -> Unit,
 ) = this.clickable(
+    enabled = enabled,
     interactionSource = remember { MutableInteractionSource() },
     indication = rememberRipple(bounded = bounded, color = color),
     onClick = onClick,
