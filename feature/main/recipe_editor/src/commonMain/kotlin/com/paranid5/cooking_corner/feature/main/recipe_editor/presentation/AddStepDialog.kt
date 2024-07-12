@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.add
-import com.paranid5.cooking_corner.core.resources.recipe_editor_ingredient_portion_placeholder
-import com.paranid5.cooking_corner.core.resources.recipe_editor_ingredient_title_placeholder
-import com.paranid5.cooking_corner.core.resources.recipe_editor_new_ingredient
-import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.IngredientDialogState
+import com.paranid5.cooking_corner.core.resources.recipe_editor_new_step
+import com.paranid5.cooking_corner.core.resources.recipe_editor_step_description_placeholder
+import com.paranid5.cooking_corner.core.resources.recipe_editor_step_title_placeholder
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.StepDialogState
 import com.paranid5.cooking_corner.ui.foundation.AppAnimatedOutlinedEditText
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.alert_dialog.AppAlertDialog
@@ -23,12 +23,13 @@ import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun AddIngredientDialog(
-    ingredientDialogState: IngredientDialogState,
+internal fun AddStepDialog(
+    stepDialogState: StepDialogState,
     onConfirmButtonClick: () -> Unit,
     onCancelButtonClick: () -> Unit,
     onTitleChange: (String) -> Unit,
-    onPortionChange: (String) -> Unit,
+    onDescriptionChange: (String) -> Unit,
+    onPickImage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AppAlertDialog(
@@ -41,7 +42,7 @@ internal fun AddIngredientDialog(
         properties = AppAlertDialogProperties.create(shape = DialogShape),
         title = {
             AppMainText(
-                text = stringResource(Res.string.recipe_editor_new_ingredient),
+                text = stringResource(Res.string.recipe_editor_new_step),
                 fontWeight = FontWeight.Bold,
                 style = AppTheme.typography.h.h3,
                 modifier = Modifier
@@ -52,10 +53,17 @@ internal fun AddIngredientDialog(
     ) {
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
+        RecipeCoverPickerButton(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = onPickImage,
+        )
+
+        Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
+
         AppAnimatedOutlinedEditText(
-            value = ingredientDialogState.title,
+            value = stepDialogState.title,
             onValueChange = onTitleChange,
-            placeholder = stringResource(Res.string.recipe_editor_ingredient_title_placeholder),
+            placeholder = stringResource(Res.string.recipe_editor_step_title_placeholder),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = AppTheme.dimensions.padding.medium),
@@ -64,10 +72,11 @@ internal fun AddIngredientDialog(
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
         AppAnimatedOutlinedEditText(
-            value = ingredientDialogState.portion,
-            onValueChange = onPortionChange,
+            value = stepDialogState.description,
+            onValueChange = onDescriptionChange,
+            singleLine = false,
             placeholder = stringResource(
-                Res.string.recipe_editor_ingredient_portion_placeholder
+                Res.string.recipe_editor_step_description_placeholder
             ),
             modifier = Modifier
                 .fillMaxWidth()

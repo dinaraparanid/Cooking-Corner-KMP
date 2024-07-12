@@ -3,6 +3,7 @@ package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStoreProvider.Msg
+import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.with
 import com.paranid5.cooking_corner.utils.without
 
@@ -10,6 +11,7 @@ internal object RecipeReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg): State = when (msg) {
         is Msg.UpdateCarbohydrates -> copy(carbohydratesInput = msg.carbohydratesInput)
         is Msg.UpdateCategoriesUiState -> copy(categoriesUiState = msg.categoriesUiState)
+        is Msg.UpdateComments -> copy(commentsInput = msg.commentsInput)
         is Msg.UpdateCookingTime -> copy(cookingTimeInput = msg.cookingTimeInput)
         is Msg.UpdateCover -> copy(cover = msg.cover)
         is Msg.UpdateDescription -> copy(description = msg.description)
@@ -31,9 +33,11 @@ internal object RecipeReducer : Reducer<State, Msg> {
     }
 
     private fun State.reduceIngredientMsg(msg: Msg.Ingredient): State = when (msg) {
-        is Msg.Ingredient.Add -> copy(ingredients = ingredients with msg.ingredient)
+        is Msg.Ingredient.Add ->
+            copy(ingredients = SerializableImmutableList(ingredients with msg.ingredient))
 
-        is Msg.Ingredient.Remove -> copy(ingredients = ingredients without msg.ingredient)
+        is Msg.Ingredient.Remove ->
+            copy(ingredients = SerializableImmutableList(ingredients without msg.ingredient))
 
         is Msg.Ingredient.UpdatePortion ->
             copy(ingredientDialogState = ingredientDialogState.copy(portion = msg.portion))
@@ -46,9 +50,11 @@ internal object RecipeReducer : Reducer<State, Msg> {
     }
 
     private fun State.reduceStepMsg(msg: Msg.Step): State = when (msg) {
-        is Msg.Step.Add -> copy(steps = steps with msg.step)
+        is Msg.Step.Add ->
+            copy(steps = SerializableImmutableList(steps with msg.step))
 
-        is Msg.Step.Remove -> copy(steps = steps without msg.step)
+        is Msg.Step.Remove ->
+            copy(steps = SerializableImmutableList(steps without msg.step))
 
         is Msg.Step.UpdateDescription ->
             copy(stepDialogState = stepDialogState.copy(description = msg.description))

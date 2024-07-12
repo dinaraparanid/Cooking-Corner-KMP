@@ -41,6 +41,8 @@ internal class RecipeEditorStoreProvider(
 
         data class UpdatePortions(val portionsInput: String) : Msg
 
+        data class UpdateComments(val commentsInput: String) : Msg
+
         data class UpdateNutritions(val nutritionsInput: String) : Msg
 
         data class UpdateProteins(val proteinsInput: String) : Msg

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,8 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_step
-import com.paranid5.cooking_corner.ui.entity.StepUiState
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
+import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
@@ -55,6 +55,9 @@ private fun RecipeCookingStep(
 ) {
     val shape = RoundedCornerShape(AppTheme.dimensions.corners.extraMedium)
 
+    val stepTitle = stepUiState.title.takeIf(String::isNotBlank)
+        ?: stringResource(Res.string.recipe_step, stepNumber)
+
     Column(
         modifier = modifier
             .clip(shape)
@@ -67,7 +70,7 @@ private fun RecipeCookingStep(
         Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
         RecipeStepLabel(
-            stepNumber = stepNumber,
+            stepTitle = stepTitle,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
 
@@ -96,14 +99,12 @@ private fun RecipeCookingStep(
 
 @Composable
 private fun RecipeStepLabel(
-    stepNumber: Int,
+    stepTitle: String,
     modifier: Modifier = Modifier,
-) = Text(
-    text = stringResource(Res.string.recipe_step, stepNumber),
+) = AppMainText(
+    text = stepTitle,
     fontWeight = FontWeight.Bold,
-    color = AppTheme.colors.text.primary,
     style = AppTheme.typography.body,
-    fontFamily = AppTheme.typography.RalewayFontFamily,
     modifier = modifier,
 )
 
@@ -111,11 +112,9 @@ private fun RecipeStepLabel(
 private fun RecipeStepDescription(
     description: String,
     modifier: Modifier = Modifier,
-) = Text(
+) = AppMainText(
     text = description,
     textAlign = TextAlign.Center,
-    color = AppTheme.colors.text.primary,
     style = AppTheme.typography.body,
-    fontFamily = AppTheme.typography.RalewayFontFamily,
     modifier = modifier,
 )

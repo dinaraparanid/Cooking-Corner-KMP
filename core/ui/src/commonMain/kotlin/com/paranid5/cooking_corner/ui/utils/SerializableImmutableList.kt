@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 data class SerializableImmutableList<T>(
     @Serializable(with = ImmutableListSerializer::class)
-    val value: ImmutableList<T>
-) {
+    private val value: ImmutableList<T>
+) : ImmutableList<T> by value {
     constructor() : this(value = persistentListOf())
 }

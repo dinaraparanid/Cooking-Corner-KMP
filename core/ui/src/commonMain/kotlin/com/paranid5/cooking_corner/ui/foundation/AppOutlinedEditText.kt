@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.ui.foundation
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -24,7 +25,7 @@ fun AppOutlinedEditText(
     onValueChange = onValueChange,
     shape = shape,
     textStyle = AppTheme.typography.body.copy(
-        fontFamily = AppTheme.typography.InterFontFamily,
+        fontFamily = AppTheme.typography.RalewayFontFamily,
     ),
     singleLine = singleLine,
     colors = TextFieldDefaults.colors(
@@ -47,6 +48,40 @@ fun AppOutlinedEditText(
         color = AppTheme.colors.button.primary,
         shape = shape,
     ),
+)
+
+@Composable
+fun AppAnimatedOutlinedEditText(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String? = null,
+    singleLine: Boolean = true,
+    shape: Shape = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall),
+) = OutlinedTextField(
+    value = value,
+    onValueChange = onValueChange,
+    shape = shape,
+    textStyle = AppTheme.typography.body.copy(
+        fontFamily = AppTheme.typography.RalewayFontFamily,
+    ),
+    singleLine = singleLine,
+    colors = TextFieldDefaults.colors(
+        focusedTextColor = AppTheme.colors.text.tertiriary,
+        unfocusedTextColor = AppTheme.colors.text.tertiriary,
+        disabledTextColor = AppTheme.colors.text.tertiriary,
+        errorTextColor = AppTheme.colors.error,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+        cursorColor = AppTheme.colors.text.tertiriary,
+        focusedIndicatorColor = AppTheme.colors.button.primary,
+        disabledIndicatorColor = AppTheme.colors.button.primary,
+        unfocusedIndicatorColor = AppTheme.colors.button.primary,
+    ),
+    label = placeholder?.let { { Placeholder(text = it) } },
+    modifier = modifier,
 )
 
 @Composable

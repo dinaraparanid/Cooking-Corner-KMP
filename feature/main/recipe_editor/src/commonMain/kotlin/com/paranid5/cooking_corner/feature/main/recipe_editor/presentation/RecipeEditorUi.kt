@@ -20,8 +20,10 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.utils.doNothing
 
 internal val DialogShape = RoundedCornerShape(24.dp)
+internal val FLOW_ROW_MIN_HEIGHT = 32.dp
 
 @Composable
 fun RecipeEditorUi(
@@ -59,7 +61,9 @@ private fun RecipeEditorUiContent(
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.extraMedium))
 
-        RecipeCoverPickerButton(modifier = Modifier.align(Alignment.CenterHorizontally))
+        RecipeCoverPickerButton(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            // TODO: launch picker
+        }
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
@@ -70,15 +74,30 @@ private fun RecipeEditorUiContent(
                 .fillMaxWidth()
                 .padding(horizontal = AppTheme.dimensions.padding.big)
         )
+
+        Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
     }
 
-    AddIngredientDialog(
-        ingredientDialogState = state.ingredientDialogState,
-        onConfirmButtonClick = { onUiIntent(UiIntent.Ingredient.Add) },
-        onCancelButtonClick = {
-            onUiIntent(UiIntent.Ingredient.UpdateDialogVisibility(isVisible = false))
-        },
-        onTitleChange = { onUiIntent(UiIntent.Ingredient.UpdateTitle(title = it)) },
-        onPortionChange = { onUiIntent(UiIntent.Ingredient.UpdatePortion(portion = it)) },
-    )
+    if (state.ingredientDialogState.isVisible)
+        AddIngredientDialog(
+            ingredientDialogState = state.ingredientDialogState,
+            onConfirmButtonClick = { onUiIntent(UiIntent.Ingredient.Add) },
+            onCancelButtonClick = {
+                onUiIntent(UiIntent.Ingredient.UpdateDialogVisibility(isVisible = false))
+            },
+            onTitleChange = { onUiIntent(UiIntent.Ingredient.UpdateTitle(title = it)) },
+            onPortionChange = { onUiIntent(UiIntent.Ingredient.UpdatePortion(portion = it)) },
+        )
+
+    if (state.stepDialogState.isVisible)
+        AddStepDialog(
+            stepDialogState = state.stepDialogState,
+            onConfirmButtonClick = { onUiIntent(UiIntent.Step.Add) },
+            onCancelButtonClick = {
+                onUiIntent(UiIntent.Step.UpdateDialogVisibility(isVisible = false))
+            },
+            onTitleChange = { onUiIntent(UiIntent.Step.UpdateTitle(title = it)) },
+            onDescriptionChange = { onUiIntent(UiIntent.Step.UpdateDescription(description = it)) },
+            onPickImage = doNothing // TODO: launch picker
+        )
 }

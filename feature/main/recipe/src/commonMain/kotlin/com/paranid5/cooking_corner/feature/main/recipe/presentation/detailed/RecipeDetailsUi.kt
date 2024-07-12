@@ -154,8 +154,8 @@ fun RecipeDetailsContentData(
         Spacer(Modifier.height(AppTheme.dimensions.padding.extraSmall))
 
         RecipePager(
-            steps = recipeUiState.steps.value,
-            ingredients = recipeUiState.ingredients.value,
+            steps = recipeUiState.steps,
+            ingredients = recipeUiState.ingredients,
             modifier = Modifier.fillMaxWidth(),
         )
     }

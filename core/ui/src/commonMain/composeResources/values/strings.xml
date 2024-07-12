@@ -79,6 +79,7 @@
     <string name="recipe_editor_cooking_time">Cooking time</string>
     <string name="recipe_editor_rest_time">Rest time</string>
     <string name="recipe_editor_portions">Portions</string>
+    <string name="recipe_editor_comments">Comments</string>
     <string name="recipe_editor_nutritions">Nutritional value</string>
     <string name="recipe_editor_proteins">Proteins value</string>
     <string name="recipe_editor_fats">Fats value</string>

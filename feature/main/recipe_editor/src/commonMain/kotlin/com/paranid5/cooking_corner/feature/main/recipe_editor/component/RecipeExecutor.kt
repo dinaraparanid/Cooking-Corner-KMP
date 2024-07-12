@@ -58,6 +58,9 @@ internal class RecipeExecutor(
             is UiIntent.UpdatePortions ->
                 dispatch(Msg.UpdatePortions(intent.portionsInput))
 
+            is UiIntent.UpdateComments ->
+                dispatch(Msg.UpdateComments(intent.commentsInput))
+
             is UiIntent.UpdatePreparationTime ->
                 dispatch(Msg.UpdatePreparationTime(intent.preparationTimeInput))
 
@@ -93,6 +96,7 @@ internal class RecipeExecutor(
             // TODO: validate
             val ingredient = state().ingredientDialogState.inputIngredientUiState
             dispatch(Msg.Ingredient.Add(ingredient))
+            dispatch(Msg.Ingredient.UpdateDialogVisibility(isVisible = false))
         }
 
         is UiIntent.Ingredient.Remove ->
@@ -113,6 +117,7 @@ internal class RecipeExecutor(
             // TODO: validate
             val step = state().stepDialogState.inputStepUiState
             dispatch(Msg.Step.Add(step))
+            dispatch(Msg.Step.UpdateDialogVisibility(isVisible = false))
         }
 
         is UiIntent.Step.Remove ->

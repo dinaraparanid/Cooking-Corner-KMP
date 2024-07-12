@@ -2,7 +2,7 @@ package com.paranid5.cooking_corner.feature.main.recipe_editor.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.paranid5.cooking_corner.ui.foundation.AppOutlinedEditText
+import com.paranid5.cooking_corner.ui.foundation.AppAnimatedOutlinedEditText
 
 @Composable
 internal fun RecipeEditorTextField(
@@ -10,7 +10,7 @@ internal fun RecipeEditorTextField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-) = AppOutlinedEditText(
+) = AppAnimatedOutlinedEditText(
     value = value,
     onValueChange = onValueChange,
     placeholder = placeholder,

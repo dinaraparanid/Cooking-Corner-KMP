@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -18,8 +20,8 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.cancel
 import com.paranid5.cooking_corner.core.resources.ok
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
-import com.paranid5.cooking_corner.ui.foundation.AppRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -141,14 +143,20 @@ private fun AppAlertDialogButton(
     title: String,
     modifier: Modifier = Modifier,
     textColor: Color = AppTheme.colors.text.primary,
-) = AppRippleButton(
-    modifier = modifier,
-    onClick = onClick,
-    content = {
-        AppMainText(
-            text = title,
-            style = AppTheme.typography.regular,
-            color = textColor,
-        )
-    }
-)
+) = Box(
+    modifier
+        .clip(RoundedCornerShape(AppTheme.dimensions.corners.medium))
+        .clickableWithRipple(bounded = true, onClick = onClick),
+) {
+    AppMainText(
+        text = title,
+        style = AppTheme.typography.body,
+        color = textColor,
+        modifier = Modifier
+            .align(Alignment.Center)
+            .padding(
+                vertical = AppTheme.dimensions.padding.small,
+                horizontal = AppTheme.dimensions.padding.medium,
+            ),
+    )
+}

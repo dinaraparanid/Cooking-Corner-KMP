@@ -3,32 +3,35 @@ package com.paranid5.cooking_corner.feature.main.recipe_editor.presentation
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.recipe_editor_add_ingredient_placeholder
+import com.paranid5.cooking_corner.core.resources.recipe_editor_carbohydrates
 import com.paranid5.cooking_corner.core.resources.recipe_editor_category
+import com.paranid5.cooking_corner.core.resources.recipe_editor_comments
 import com.paranid5.cooking_corner.core.resources.recipe_editor_cooking_time
 import com.paranid5.cooking_corner.core.resources.recipe_editor_description
+import com.paranid5.cooking_corner.core.resources.recipe_editor_dishes
+import com.paranid5.cooking_corner.core.resources.recipe_editor_fats
 import com.paranid5.cooking_corner.core.resources.recipe_editor_name
+import com.paranid5.cooking_corner.core.resources.recipe_editor_nutritions
 import com.paranid5.cooking_corner.core.resources.recipe_editor_portions
 import com.paranid5.cooking_corner.core.resources.recipe_editor_preparation_time
+import com.paranid5.cooking_corner.core.resources.recipe_editor_proteins
 import com.paranid5.cooking_corner.core.resources.recipe_editor_rest_time
+import com.paranid5.cooking_corner.core.resources.recipe_editor_source
 import com.paranid5.cooking_corner.core.resources.recipe_editor_tag
+import com.paranid5.cooking_corner.core.resources.recipe_editor_video_link
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.foundation.AppSpinnerWithArrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.utils.mapToImmutableList
 import org.jetbrains.compose.resources.stringResource
 
 internal inline val ParamShape
@@ -39,10 +42,9 @@ internal inline val ClippedOutlinedModifier
     @Composable
     get() = Modifier
         .fillMaxWidth()
-        .padding(vertical = AppTheme.dimensions.padding.small)
         .clip(ParamShape)
         .border(
-            width = AppTheme.dimensions.borders.minimum,
+            width = 1.dp,
             color = AppTheme.colors.button.primary,
             shape = ParamShape,
         )
@@ -114,17 +116,71 @@ internal fun RecipeEditorParams(
         modifier = Modifier.fillMaxWidth(),
     )
 
-    Spacer(Modifier.height(AppTheme.dimensions.padding.small))
-
     IngredientFlowRow(
         ingredients = state.ingredients,
-        placeholder = stringResource(Res.string.recipe_editor_add_ingredient_placeholder),
+        onUiIntent = onUiIntent,
         modifier = Modifier.fillMaxWidth(),
-        onAddButtonClick = {
-            onUiIntent(UiIntent.Ingredient.UpdateDialogVisibility(isVisible = true))
-        },
+    )
+
+    StepFlowRow(
+        steps = state.steps,
+        onUiIntent = onUiIntent,
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.commentsInput,
+        placeholder = stringResource(Res.string.recipe_editor_comments),
+        onValueChange = { onUiIntent(UiIntent.UpdateComments(commentsInput = it)) },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.nutritionsInput,
+        placeholder = stringResource(Res.string.recipe_editor_nutritions),
+        onValueChange = { onUiIntent(UiIntent.UpdateNutritions(nutritionsInput = it)) },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.proteinsInput,
+        placeholder = stringResource(Res.string.recipe_editor_proteins),
+        onValueChange = { onUiIntent(UiIntent.UpdateProteins(proteinsInput = it)) },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.fatsInput,
+        placeholder = stringResource(Res.string.recipe_editor_fats),
+        onValueChange = { onUiIntent(UiIntent.UpdateFats(fatsInput = it)) },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.carbohydratesInput,
+        placeholder = stringResource(Res.string.recipe_editor_carbohydrates),
+        onValueChange = { onUiIntent(UiIntent.UpdateCarbohydrates(carbohydratesInput = it)) },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.dishesInput,
+        placeholder = stringResource(Res.string.recipe_editor_dishes),
+        onValueChange = { onUiIntent(UiIntent.UpdateDishes(dishesInput = it)) },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.videoLink,
+        placeholder = stringResource(Res.string.recipe_editor_video_link),
+        onValueChange = { onUiIntent(UiIntent.UpdateVideoLink(videoLink = it)) },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    RecipeEditorTextField(
+        value = state.source,
+        placeholder = stringResource(Res.string.recipe_editor_source),
+        onValueChange = { onUiIntent(UiIntent.UpdateSource(source = it)) },
+        modifier = Modifier.fillMaxWidth(),
     )
 }
-
-private fun stub() =
-    (1..1).mapToImmutableList { IngredientUiState(title = "Aboba", portion = "$it kg") }

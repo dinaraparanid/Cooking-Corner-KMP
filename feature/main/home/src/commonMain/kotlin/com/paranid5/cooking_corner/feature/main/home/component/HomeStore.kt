@@ -12,7 +12,6 @@ import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.filterToImmutableList
 import com.paranid5.cooking_corner.utils.orNil
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -64,7 +63,6 @@ interface HomeStore : Store<UiIntent, State, Label> {
             ?.let { index ->
                 categoriesUiState
                     .getOrNull()
-                    ?.value
                     ?.getOrNull(index)
                     ?.title
             }
@@ -76,16 +74,11 @@ interface HomeStore : Store<UiIntent, State, Label> {
         @Transient
         val filteredRecipes = recipesUiState
             .getOrNull()
-            ?.value
             ?.filterToImmutableList { searchTextLowercase in it.title }
             .orNil()
 
         @Transient
-        val categories = categoriesUiState
-            .getOrNull()
-            ?.value
-            ?.toImmutableList()
-            .orNil()
+        val categories = categoriesUiState.getOrNull().orNil()
 
         constructor() : this(
             searchText = "",

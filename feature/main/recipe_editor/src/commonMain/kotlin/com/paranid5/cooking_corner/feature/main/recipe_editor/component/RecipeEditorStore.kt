@@ -11,13 +11,8 @@ import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
 import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.getOrNull
-import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.orNil
-import com.paranid5.cooking_corner.utils.serializer.ImmutableListSerializer
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -33,6 +28,7 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         data class UpdateCookingTime(val cookingTimeInput: String) : UiIntent
         data class UpdateRestTime(val restTimeInput: String) : UiIntent
         data class UpdatePortions(val portionsInput: String) : UiIntent
+        data class UpdateComments(val commentsInput: String) : UiIntent
         data class UpdateNutritions(val nutritionsInput: String) : UiIntent
         data class UpdateProteins(val proteinsInput: String) : UiIntent
         data class UpdateFats(val fatsInput: String) : UiIntent
@@ -71,6 +67,7 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val cookingTimeInput: String = "",
         val restTimeInput: String = "",
         val portionsInput: String = "",
+        val commentsInput: String = "",
         val nutritionsInput: String = "",
         val proteinsInput: String = "",
         val fatsInput: String = "",
@@ -79,10 +76,8 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val videoLink: String = "",
         val source: String = "",
         val cover: ByteArray? = null,
-        @Serializable(with = ImmutableListSerializer::class)
-        val ingredients: ImmutableList<IngredientUiState> = persistentListOf(),
-        @Serializable(with = ImmutableListSerializer::class)
-        val steps: ImmutableList<StepUiState> = persistentListOf(),
+        val ingredients: SerializableImmutableList<IngredientUiState> = SerializableImmutableList(),
+        val steps: SerializableImmutableList<StepUiState> = SerializableImmutableList(),
         val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>> = UiState.Undefined,
         val tagsUiState: UiState<SerializableImmutableList<TagUiState>> = UiState.Undefined,
         val ingredientDialogState: IngredientDialogState = IngredientDialogState(),
@@ -94,6 +89,7 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         }
 
         @Serializable
+        @Immutable
         data class IngredientDialogState(
             val isVisible: Boolean,
             val title: String,
@@ -109,6 +105,7 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         }
 
         @Serializable
+        @Immutable
         data class StepDialogState(
             val isVisible: Boolean,
             val title: String,
@@ -136,7 +133,6 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
             ?.let { index ->
                 categoriesUiState
                     .getOrNull()
-                    ?.value
                     ?.getOrNull(index)
                     ?.title
             }
@@ -148,25 +144,16 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
             ?.let { index ->
                 tagsUiState
                     .getOrNull()
-                    ?.value
                     ?.getOrNull(index)
                     ?.title
             }
             .orEmpty()
 
         @Transient
-        val categories = categoriesUiState
-            .getOrNull()
-            ?.value
-            ?.toImmutableList()
-            .orNil()
+        val categories = categoriesUiState.getOrNull().orNil()
 
         @Transient
-        val tags = tagsUiState
-            .getOrNull()
-            ?.value
-            ?.toImmutableList()
-            .orNil()
+        val tags = tagsUiState.getOrNull().orNil()
 
         @Transient
         val preparationTimeMinutes = preparationTimeInput.toIntOrNull() ?: 0
