@@ -28,32 +28,107 @@ internal class RecipeExecutor(
     private val tagRepository: TagRepository,
     private val globalEventRepository: GlobalEventRepository,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
-    @Suppress("LongLine")
     override fun executeIntent(intent: UiIntent) {
         when (intent) {
-            is UiIntent.AddIngredient -> dispatch(Msg.AddIngredient(intent.ingredient))
-            is UiIntent.AddStep -> dispatch(Msg.AddStep(intent.step))
             is UiIntent.Back -> publish(Label.Back)
-            is UiIntent.RemoveIngredient -> dispatch(Msg.RemoveIngredient(intent.ingredient))
-            is UiIntent.RemoveStep -> dispatch(Msg.RemoveStep(intent.step))
+
             is UiIntent.Save -> scope.launch { onSave() }
-            is UiIntent.UpdateCarbohydrates -> dispatch(Msg.UpdateCarbohydrates(intent.carbohydratesInput))
-            is UiIntent.UpdateCookingTime -> dispatch(Msg.UpdateCookingTime(intent.cookingTimeInput))
-            is UiIntent.UpdateDescription -> dispatch(Msg.UpdateDescription(intent.description))
-            is UiIntent.UpdateDishes -> dispatch(Msg.UpdateDishes(intent.dishesInput))
-            is UiIntent.UpdateFats -> dispatch(Msg.UpdateFats(intent.fatsInput))
-            is UiIntent.UpdateName -> dispatch(Msg.UpdateName(intent.name))
-            is UiIntent.UpdateNutritions -> dispatch(Msg.UpdateNutritions(intent.nutritionsInput))
-            is UiIntent.UpdatePortions -> dispatch(Msg.UpdatePortions(intent.portionsInput))
-            is UiIntent.UpdatePreparationTime -> dispatch(Msg.UpdatePreparationTime(intent.preparationTimeInput))
-            is UiIntent.UpdateProteins -> dispatch(Msg.UpdateProteins(intent.proteinsInput))
-            is UiIntent.UpdateRestTime -> dispatch(Msg.UpdateRestTime(intent.restTimeInput))
-            is UiIntent.UpdateSelectedCategory -> dispatch(Msg.UpdateSelectedCategory(intent.index))
-            is UiIntent.UpdateSelectedTag -> dispatch(Msg.UpdateSelectedTag(intent.index))
-            is UiIntent.UpdateSource -> dispatch(Msg.UpdateSource(intent.source))
-            is UiIntent.UpdateThumbnail -> dispatch(Msg.UpdateCover(intent.thumbnail))
-            is UiIntent.UpdateVideoLink -> dispatch(Msg.UpdateVideoLink(intent.videoLink))
+
+            is UiIntent.UpdateCarbohydrates ->
+                dispatch(Msg.UpdateCarbohydrates(intent.carbohydratesInput))
+
+            is UiIntent.UpdateCookingTime ->
+                dispatch(Msg.UpdateCookingTime(intent.cookingTimeInput))
+
+            is UiIntent.UpdateDescription ->
+                dispatch(Msg.UpdateDescription(intent.description))
+
+            is UiIntent.UpdateDishes ->
+                dispatch(Msg.UpdateDishes(intent.dishesInput))
+
+            is UiIntent.UpdateFats ->
+                dispatch(Msg.UpdateFats(intent.fatsInput))
+
+            is UiIntent.UpdateName ->
+                dispatch(Msg.UpdateName(intent.name))
+
+            is UiIntent.UpdateNutritions ->
+                dispatch(Msg.UpdateNutritions(intent.nutritionsInput))
+
+            is UiIntent.UpdatePortions ->
+                dispatch(Msg.UpdatePortions(intent.portionsInput))
+
+            is UiIntent.UpdatePreparationTime ->
+                dispatch(Msg.UpdatePreparationTime(intent.preparationTimeInput))
+
+            is UiIntent.UpdateProteins ->
+                dispatch(Msg.UpdateProteins(intent.proteinsInput))
+
+            is UiIntent.UpdateRestTime ->
+                dispatch(Msg.UpdateRestTime(intent.restTimeInput))
+
+            is UiIntent.UpdateSelectedCategory ->
+                dispatch(Msg.UpdateSelectedCategory(intent.index))
+
+            is UiIntent.UpdateSelectedTag ->
+                dispatch(Msg.UpdateSelectedTag(intent.index))
+
+            is UiIntent.UpdateSource ->
+                dispatch(Msg.UpdateSource(intent.source))
+
+            is UiIntent.UpdateThumbnail ->
+                dispatch(Msg.UpdateCover(intent.thumbnail))
+
+            is UiIntent.UpdateVideoLink ->
+                dispatch(Msg.UpdateVideoLink(intent.videoLink))
+
+            is UiIntent.Ingredient -> executeIngredientIntent(intent)
+
+            is UiIntent.Step -> executeStepIntent(intent)
         }
+    }
+
+    private fun executeIngredientIntent(intent: UiIntent.Ingredient) = when (intent) {
+        is UiIntent.Ingredient.Add -> {
+            // TODO: validate
+            val ingredient = state().ingredientDialogState.inputIngredientUiState
+            dispatch(Msg.Ingredient.Add(ingredient))
+        }
+
+        is UiIntent.Ingredient.Remove ->
+            dispatch(Msg.Ingredient.Remove(intent.ingredient))
+
+        is UiIntent.Ingredient.UpdatePortion ->
+            dispatch(Msg.Ingredient.UpdatePortion(intent.portion))
+
+        is UiIntent.Ingredient.UpdateTitle ->
+            dispatch(Msg.Ingredient.UpdateTitle(intent.title))
+
+        is UiIntent.Ingredient.UpdateDialogVisibility ->
+            dispatch(Msg.Ingredient.UpdateDialogVisibility(isVisible = intent.isVisible))
+    }
+
+    private fun executeStepIntent(intent: UiIntent.Step) = when (intent) {
+        is UiIntent.Step.Add -> {
+            // TODO: validate
+            val step = state().stepDialogState.inputStepUiState
+            dispatch(Msg.Step.Add(step))
+        }
+
+        is UiIntent.Step.Remove ->
+            dispatch(Msg.Step.Remove(intent.step))
+
+        is UiIntent.Step.UpdateDescription ->
+            dispatch(Msg.Step.UpdateDescription(intent.description))
+
+        is UiIntent.Step.UpdateCover ->
+            dispatch(Msg.Step.UpdateCover(intent.cover))
+
+        is UiIntent.Step.UpdateTitle ->
+            dispatch(Msg.Step.UpdateTitle(intent.title))
+
+        is UiIntent.Step.UpdateDialogVisibility ->
+            dispatch(Msg.Step.UpdateDialogVisibility(isVisible = intent.isVisible))
     }
 
     override fun executeAction(action: Unit) {

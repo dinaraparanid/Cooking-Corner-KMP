@@ -84,7 +84,7 @@ private fun RecipeCookingStep(
         Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
         RecipeStepDescription(
-            description = stepUiState.text,
+            description = stepUiState.description,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = AppTheme.dimensions.padding.extraMedium),

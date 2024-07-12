@@ -62,6 +62,7 @@ fun IngredientUiState.Companion.fromResponse(response: IngredientResponse) =
 
 fun StepUiState.Companion.fromResponse(response: StepResponse) =
     StepUiState(
-        text = response.description.orEmpty(),
+        title = response.title.orEmpty(),
+        description = response.description.orEmpty(),
         coverUrlState = response.imagePath?.toUiState() ?: UiState.Success,
     )

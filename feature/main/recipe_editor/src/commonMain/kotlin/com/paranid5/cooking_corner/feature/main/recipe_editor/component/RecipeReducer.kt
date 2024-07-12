@@ -8,10 +8,6 @@ import com.paranid5.cooking_corner.utils.without
 
 internal object RecipeReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg): State = when (msg) {
-        is Msg.AddIngredient -> copy(ingredients = ingredients with msg.ingredient)
-        is Msg.AddStep -> copy(steps = steps with msg.step)
-        is Msg.RemoveIngredient -> copy(ingredients = ingredients without msg.ingredient)
-        is Msg.RemoveStep -> copy(steps = steps without msg.step)
         is Msg.UpdateCarbohydrates -> copy(carbohydratesInput = msg.carbohydratesInput)
         is Msg.UpdateCategoriesUiState -> copy(categoriesUiState = msg.categoriesUiState)
         is Msg.UpdateCookingTime -> copy(cookingTimeInput = msg.cookingTimeInput)
@@ -30,5 +26,40 @@ internal object RecipeReducer : Reducer<State, Msg> {
         is Msg.UpdateSource -> copy(source = msg.source)
         is Msg.UpdateTagsUiState -> copy(tagsUiState = msg.tagsUiState)
         is Msg.UpdateVideoLink -> copy(videoLink = msg.videoLink)
+        is Msg.Ingredient -> reduceIngredientMsg(msg)
+        is Msg.Step -> reduceStepMsg(msg)
+    }
+
+    private fun State.reduceIngredientMsg(msg: Msg.Ingredient): State = when (msg) {
+        is Msg.Ingredient.Add -> copy(ingredients = ingredients with msg.ingredient)
+
+        is Msg.Ingredient.Remove -> copy(ingredients = ingredients without msg.ingredient)
+
+        is Msg.Ingredient.UpdatePortion ->
+            copy(ingredientDialogState = ingredientDialogState.copy(portion = msg.portion))
+
+        is Msg.Ingredient.UpdateTitle ->
+            copy(ingredientDialogState = ingredientDialogState.copy(title = msg.title))
+
+        is Msg.Ingredient.UpdateDialogVisibility ->
+            copy(ingredientDialogState = ingredientDialogState.copy(isVisible = msg.isVisible))
+    }
+
+    private fun State.reduceStepMsg(msg: Msg.Step): State = when (msg) {
+        is Msg.Step.Add -> copy(steps = steps with msg.step)
+
+        is Msg.Step.Remove -> copy(steps = steps without msg.step)
+
+        is Msg.Step.UpdateDescription ->
+            copy(stepDialogState = stepDialogState.copy(description = msg.description))
+
+        is Msg.Step.UpdateCover ->
+            copy(stepDialogState = stepDialogState.copy(cover = msg.cover))
+
+        is Msg.Step.UpdateTitle ->
+            copy(stepDialogState = stepDialogState.copy(title = msg.title))
+
+        is Msg.Step.UpdateDialogVisibility ->
+            copy(stepDialogState = stepDialogState.copy(isVisible = msg.isVisible))
     }
 }

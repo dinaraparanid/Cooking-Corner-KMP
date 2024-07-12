@@ -57,14 +57,6 @@ internal class RecipeEditorStoreProvider(
 
         data class UpdateCover(val cover: ByteArray?) : Msg
 
-        data class AddIngredient(val ingredient: IngredientUiState) : Msg
-
-        data class RemoveIngredient(val ingredient: IngredientUiState) : Msg
-
-        data class AddStep(val step: StepUiState) : Msg
-
-        data class RemoveStep(val step: StepUiState) : Msg
-
         data class UpdateCategoriesUiState(
             val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>>
         ) : Msg
@@ -72,6 +64,23 @@ internal class RecipeEditorStoreProvider(
         data class UpdateTagsUiState(
             val tagsUiState: UiState<SerializableImmutableList<TagUiState>>
         ) : Msg
+
+        sealed interface Ingredient : Msg {
+            data class Add(val ingredient: IngredientUiState) : Ingredient
+            data class Remove(val ingredient: IngredientUiState) : Ingredient
+            data class UpdateTitle(val title: String) : Ingredient
+            data class UpdatePortion(val portion: String) : Ingredient
+            data class UpdateDialogVisibility(val isVisible: Boolean) : Ingredient
+        }
+
+        sealed interface Step : Msg {
+            data class Add(val step: StepUiState) : Step
+            data class Remove(val step: StepUiState) : Step
+            data class UpdateTitle(val title: String) : Step
+            data class UpdateDescription(val description: String) : Step
+            data class UpdateCover(val cover: ByteArray?) : Step
+            data class UpdateDialogVisibility(val isVisible: Boolean) : Step
+        }
     }
 
     fun provide(initialState: State): RecipeEditorStore = object :

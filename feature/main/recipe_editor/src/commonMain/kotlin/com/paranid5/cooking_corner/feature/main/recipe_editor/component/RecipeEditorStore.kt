@@ -11,6 +11,7 @@ import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
 import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.orNil
 import com.paranid5.cooking_corner.utils.serializer.ImmutableListSerializer
@@ -40,10 +41,23 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         data class UpdateVideoLink(val videoLink: String) : UiIntent
         data class UpdateSource(val source: String) : UiIntent
         data class UpdateThumbnail(val thumbnail: ByteArray?) : UiIntent
-        data class AddIngredient(val ingredient: IngredientUiState) : UiIntent
-        data class RemoveIngredient(val ingredient: IngredientUiState) : UiIntent
-        data class AddStep(val step: StepUiState) : UiIntent
-        data class RemoveStep(val step: StepUiState) : UiIntent
+
+        sealed interface Ingredient : UiIntent {
+            data object Add : Ingredient
+            data class Remove(val ingredient: IngredientUiState) : Ingredient
+            data class UpdateTitle(val title: String) : Ingredient
+            data class UpdatePortion(val portion: String) : Ingredient
+            data class UpdateDialogVisibility(val isVisible: Boolean) : Ingredient
+        }
+
+        sealed interface Step : UiIntent {
+            data object Add : Step
+            data class Remove(val step: StepUiState) : Step
+            data class UpdateTitle(val title: String) : Step
+            data class UpdateDescription(val description: String) : Step
+            data class UpdateCover(val cover: ByteArray?) : Step
+            data class UpdateDialogVisibility(val isVisible: Boolean) : Step
+        }
     }
 
     @Serializable
@@ -71,9 +85,49 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val steps: ImmutableList<StepUiState> = persistentListOf(),
         val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>> = UiState.Undefined,
         val tagsUiState: UiState<SerializableImmutableList<TagUiState>> = UiState.Undefined,
+        val ingredientDialogState: IngredientDialogState = IngredientDialogState(),
+        val stepDialogState: StepDialogState = StepDialogState(),
+        val isAddStepDialogVisible: Boolean = false,
     ) {
         companion object {
             internal const val NOT_SELECTED = 0
+        }
+
+        @Serializable
+        data class IngredientDialogState(
+            val isVisible: Boolean,
+            val title: String,
+            val portion: String,
+        ) {
+            @Transient
+            val inputIngredientUiState = IngredientUiState(
+                title = title,
+                portion = portion,
+            )
+
+            constructor() : this(isVisible = false, title = "", portion = "")
+        }
+
+        @Serializable
+        data class StepDialogState(
+            val isVisible: Boolean,
+            val title: String,
+            val description: String,
+            val cover: ByteArray?,
+        ) {
+            @Transient
+            val inputStepUiState = StepUiState(
+                title = title,
+                description = description,
+                coverUrlState = UiState.Success, // TODO: handle cover
+            )
+
+            constructor() : this(
+                isVisible = false,
+                title = "",
+                description = "",
+                cover = null,
+            )
         }
 
         @Transient

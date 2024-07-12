@@ -27,6 +27,7 @@ fun <T> AppSpinnerWithArrow(
     title: T.() -> String,
     initial: String,
     modifier: Modifier = Modifier,
+    contentModifier: Modifier = Modifier,
     onItemSelected: (index: Int) -> Unit,
 ) = Box(modifier.background(AppTheme.colors.background.primary)) {
     AppSpinnerContent(
@@ -35,7 +36,7 @@ fun <T> AppSpinnerWithArrow(
         title = title,
         initial = initial,
         onItemSelected = onItemSelected,
-        modifier = Modifier
+        modifier = contentModifier
             .fillMaxWidth()
             .align(Alignment.CenterStart)
             .padding(

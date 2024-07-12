@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.ui.foundation.alert_dialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -74,9 +75,9 @@ fun AppAlertDialog(
     confirmButtonModifier: Modifier = Modifier,
     cancelButtonModifier: Modifier = Modifier,
     cancelButtonTitle: String? = stringResource(Res.string.cancel),
-    title: @Composable (() -> Unit)? = null,
+    title: @Composable (ColumnScope.() -> Unit)? = null,
     properties: AppAlertDialogProperties = AppAlertDialogProperties.create(),
-    content: @Composable (() -> Unit)? = null,
+    content: @Composable (ColumnScope.() -> Unit)? = null,
 ) = Dialog(onDismissRequest = callbacks.onDismissRequest) {
     Surface(
         modifier = modifier,
@@ -85,10 +86,11 @@ fun AppAlertDialog(
         contentColor = properties.colors.contentColor,
     ) {
         Column(Modifier.fillMaxWidth()) {
-            title?.invoke()
-            content?.invoke()
+            if (title != null) title()
+            if (content != null) content()
+
             Box(Modifier.align(Alignment.End)) {
-                Row(Modifier.padding(AppTheme.dimensions.padding.extraLarge)) {
+                Row(Modifier.padding(AppTheme.dimensions.padding.extraBig)) {
                     cancelButtonTitle?.let {
                         AppAlertDialogButton(
                             modifier = cancelButtonModifier,

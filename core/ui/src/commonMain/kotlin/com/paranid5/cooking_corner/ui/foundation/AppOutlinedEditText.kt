@@ -17,6 +17,7 @@ fun AppOutlinedEditText(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String? = null,
+    singleLine: Boolean = true,
     shape: Shape = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall),
 ) = TextField(
     value = value,
@@ -25,7 +26,7 @@ fun AppOutlinedEditText(
     textStyle = AppTheme.typography.body.copy(
         fontFamily = AppTheme.typography.InterFontFamily,
     ),
-    singleLine = true,
+    singleLine = singleLine,
     colors = TextFieldDefaults.colors(
         focusedTextColor = AppTheme.colors.text.tertiriary,
         unfocusedTextColor = AppTheme.colors.text.tertiriary,

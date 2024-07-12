@@ -88,6 +88,14 @@
     <string name="recipe_editor_source">Source</string>
     <string name="recipe_editor_ingredients">Ingredients</string>
     <string name="recipe_editor_steps">Cooking steps</string>
+    <string name="recipe_editor_new_ingredient">New ingredient</string>
+    <string name="recipe_editor_new_step">New cooking step</string>
+    <string name="recipe_editor_add_ingredient_placeholder">Add the first ingredient</string>
+    <string name="recipe_editor_add_step_placeholder">Add the first cooking step</string>
+    <string name="recipe_editor_ingredient_title_placeholder">Ingredient title</string>
+    <string name="recipe_editor_ingredient_portion_placeholder">Ingredient portion</string>
+    <string name="recipe_editor_step_title_placeholder">Step title</string>
+    <string name="recipe_editor_step_description_placeholder">Step description</string>
 
     <!-- Units -->
     <string name="unit_minute">min</string>
@@ -97,5 +105,6 @@
     <string name="something_went_wrong">Something went wrong. Try again</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="add">Add</string>
     <string name="token_expired">Authorization token is expired, please try to authorize again.</string>
 </resources>

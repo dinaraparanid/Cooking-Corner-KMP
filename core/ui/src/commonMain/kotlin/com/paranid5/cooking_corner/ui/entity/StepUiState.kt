@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Immutable
 data class StepUiState(
-    val text: String,
+    val title: String,
+    val description: String,
     val coverUrlState: UiState<String> = UiState.Undefined,
 )

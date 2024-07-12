@@ -158,8 +158,12 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.paranid5.cooking_corner"
+            packageName = "Cooking Corner"
             packageVersion = "1.0.0"
+            macOS {
+                bundleID = "com.paranid5.cooking_corner"
+                dockName = "Cooking Corner"
+            }
         }
     }
 }
