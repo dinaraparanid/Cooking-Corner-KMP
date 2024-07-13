@@ -12,6 +12,7 @@ import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
 import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
+import com.paranid5.cooking_corner.domain.recipe.dto.RecipeModifyParams
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.tag.TagRepository
@@ -212,7 +213,10 @@ internal class RecipeExecutor(
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
     ) = when (launchMode) {
-        is LaunchMode.Edit -> doNothing() // TODO: update request
+        is LaunchMode.Edit -> edit(
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
+            successSnackbar = successSnackbar,
+        )
 
         is LaunchMode.New, is LaunchMode.Generate -> create(
             unhandledErrorSnackbar = unhandledErrorSnackbar,
@@ -235,31 +239,82 @@ internal class RecipeExecutor(
         val resultJob = scope.async(AppDispatchers.Data) {
             state().run {
                 recipeRepository.create(
-                    name = recipeParamsUiState.name,
-                    description = recipeParamsUiState.description,
-                    iconPath = null,
-                    category = selectedCategoryTitleOrNull,
-                    tag = selectedTagTitleOrNull,
-                    preparingTime = preparationTimeMinutes,
-                    cookingTime = cookingTimeMinutes,
-                    waitingTime = restTimeMinutes,
-                    totalTime = totalTimeMinutes,
-                    portions = recipeParamsUiState.portionsInput.toIntOrZero(),
-                    comments = recipeParamsUiState.commentsInput,
-                    nutritions = recipeParamsUiState.nutritionsInput.toIntOrZero(),
-                    proteins = recipeParamsUiState.proteinsInput.toIntOrZero(),
-                    fats = recipeParamsUiState.fatsInput.toIntOrZero(),
-                    carbohydrates = recipeParamsUiState.carbohydratesInput.toIntOrZero(),
-                    dishes = recipeParamsUiState.dishesInput.toIntOrZero(),
-                    videoLink = recipeParamsUiState.videoLink,
-                    source = recipeParamsUiState.source,
-                    ingredients = ingredientsJob.await(),
-                    steps = stepsJob.await(),
+                    RecipeModifyParams(
+                        name = recipeParamsUiState.name,
+                        description = recipeParamsUiState.description,
+                        iconPath = null,
+                        category = selectedCategoryTitleOrNull,
+                        tag = selectedTagTitleOrNull,
+                        preparingTime = preparationTimeMinutes,
+                        cookingTime = cookingTimeMinutes,
+                        waitingTime = restTimeMinutes,
+                        totalTime = totalTimeMinutes,
+                        portions = recipeParamsUiState.portionsInput.toIntOrZero(),
+                        comments = recipeParamsUiState.commentsInput,
+                        nutritions = recipeParamsUiState.nutritionsInput.toIntOrZero(),
+                        proteins = recipeParamsUiState.proteinsInput.toIntOrZero(),
+                        fats = recipeParamsUiState.fatsInput.toIntOrZero(),
+                        carbohydrates = recipeParamsUiState.carbohydratesInput.toIntOrZero(),
+                        dishes = recipeParamsUiState.dishesInput,
+                        videoLink = recipeParamsUiState.videoLink,
+                        source = recipeParamsUiState.source,
+                        ingredients = ingredientsJob.await(),
+                        steps = stepsJob.await(),
+                    )
                 )
             }
         }
 
-        handleCreateApiResult(
+        handleModifyApiResult(
+            result = resultJob.await(),
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
+            successSnackbar = successSnackbar,
+        )
+    }
+
+    private suspend fun edit(
+        unhandledErrorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) {
+        val ingredientsJob = scope.async(AppDispatchers.Eval) {
+            state().recipeParamsUiState.ingredients.map(IngredientUiState::toRequest)
+        }
+
+        val stepsJob = scope.async(AppDispatchers.Eval) {
+            state().recipeParamsUiState.steps.map(StepUiState::toRequest)
+        }
+
+        val resultJob = scope.async(AppDispatchers.Data) {
+            state().run {
+                recipeRepository.update(
+                    id = requireNotNull(state().recipeParamsUiState.id),
+                    RecipeModifyParams(
+                        name = recipeParamsUiState.name,
+                        description = recipeParamsUiState.description,
+                        iconPath = null,
+                        category = selectedCategoryTitleOrNull,
+                        tag = selectedTagTitleOrNull,
+                        preparingTime = preparationTimeMinutes,
+                        cookingTime = cookingTimeMinutes,
+                        waitingTime = restTimeMinutes,
+                        totalTime = totalTimeMinutes,
+                        portions = recipeParamsUiState.portionsInput.toIntOrZero(),
+                        comments = recipeParamsUiState.commentsInput,
+                        nutritions = recipeParamsUiState.nutritionsInput.toIntOrZero(),
+                        proteins = recipeParamsUiState.proteinsInput.toIntOrZero(),
+                        fats = recipeParamsUiState.fatsInput.toIntOrZero(),
+                        carbohydrates = recipeParamsUiState.carbohydratesInput.toIntOrZero(),
+                        dishes = recipeParamsUiState.dishesInput,
+                        videoLink = recipeParamsUiState.videoLink,
+                        source = recipeParamsUiState.source,
+                        ingredients = ingredientsJob.await(),
+                        steps = stepsJob.await(),
+                    )
+                )
+            }
+        }
+
+        handleModifyApiResult(
             result = resultJob.await(),
             unhandledErrorSnackbar = unhandledErrorSnackbar,
             successSnackbar = successSnackbar,
@@ -342,7 +397,7 @@ internal class RecipeExecutor(
         )
     }
 
-    private suspend inline fun handleCreateApiResult(
+    private suspend inline fun handleModifyApiResult(
         result: ApiResultWithCode<Unit>,
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
@@ -352,14 +407,14 @@ internal class RecipeExecutor(
             showSnackbar(snackbarMessage = unhandledErrorSnackbar)
         }
 
-        is Either.Right -> handleCreateStatus(
+        is Either.Right -> handleModifyStatus(
             status = result.value,
             unhandledErrorSnackbar = unhandledErrorSnackbar,
             successSnackbar = successSnackbar,
         )
     }
 
-    private suspend inline fun handleCreateStatus(
+    private suspend inline fun handleModifyStatus(
         status: Either<HttpStatusCode, Unit>,
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,

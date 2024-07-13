@@ -23,4 +23,6 @@ internal class RecipeApiUrlBuilder(private val baseUrl: String) {
         "$baseUrl/recipes/get_by_id/$recipeId"
 
     fun buildCreateUrl() = "$baseUrl/recipes/create"
+
+    fun buildUpdateUrl() = "$baseUrl/recipes/update"
 }
