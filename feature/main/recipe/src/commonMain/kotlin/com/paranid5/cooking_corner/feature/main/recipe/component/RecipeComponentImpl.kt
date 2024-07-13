@@ -14,8 +14,10 @@ import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
+import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent.BackResult
 import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
@@ -58,31 +60,71 @@ internal class RecipeComponentImpl(
                 onBack(BackResult.Edit(recipeId = it))
             }
 
-            is RecipeUiIntent.Publish -> publishRecipe()
+            is RecipeUiIntent.Publish -> publishRecipe(
+                successSnackbar = intent.successSnackbar,
+                errorSnackbar = intent.errorSnackbar,
+            )
 
-            is RecipeUiIntent.Delete -> deleteRecipe()
+            is RecipeUiIntent.Delete -> deleteRecipe(
+                successSnackbar = intent.successSnackbar,
+                errorSnackbar = intent.errorSnackbar,
+            )
         }
     }
 
     private fun changeKebabMenuVisibility(isVisible: Boolean) =
         _stateFlow.updateState { copy(isKebabMenuVisible = isVisible) }
 
-    private fun publishRecipe() {
-        // TODO: publish request
-    }
-
-    private fun deleteRecipe() {
-        // TODO: delete recipe
-    }
-
-    private fun loadRecipe(recipeId: Long) = componentScope.launch {
-        handleLoadRecipeApiResult(
-            result = withContext(AppDispatchers.Data) {
-                recipeRepository.getRecipeById(recipeId = recipeId)
+    private fun publishRecipe(
+        errorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) {
+        stateFlow.value.recipeId?.let {
+            componentScope.launch {
+                handleModifyRecipeApiResult(
+                    result = recipeRepository.publish(recipeId = it),
+                    errorSnackbar = errorSnackbar,
+                ) {
+                    globalEventRepository.sendSnackbar(successSnackbar)
+                    loadRecipe(recipeId = it)
+                }
             }
-        ) { recipeResponse ->
-            _stateFlow.updateState {
-                copy(recipeUiState = RecipeDetailedUiState.fromResponse(recipeResponse).toUiState())
+        }
+    }
+
+    private fun deleteRecipe(
+        errorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) {
+        stateFlow.value.recipeId?.let {
+            componentScope.launch {
+                handleModifyRecipeApiResult(
+                    result = recipeRepository.removeFromMyRecipes(recipeId = it),
+                    errorSnackbar = errorSnackbar,
+                ) {
+                    globalEventRepository.sendSnackbar(successSnackbar)
+                    onBack(BackResult.Dismiss)
+                }
+            }
+        }
+    }
+
+    private fun loadRecipe(recipeId: Long) {
+        _stateFlow.updateState { copy(recipeUiState = UiState.Loading) }
+
+        componentScope.launch {
+            handleLoadRecipeApiResult(
+                result = withContext(AppDispatchers.Data) {
+                    recipeRepository.getRecipeById(recipeId = recipeId)
+                }
+            ) { recipeResponse ->
+                _stateFlow.updateState {
+                    copy(
+                        recipeUiState = RecipeDetailedUiState
+                            .fromResponse(recipeResponse)
+                            .toUiState()
+                    )
+                }
             }
         }
     }
@@ -122,6 +164,36 @@ internal class RecipeComponentImpl(
         }
 
         is Either.Right -> onSuccess(status.value)
+    }
+
+    private suspend inline fun handleModifyRecipeApiResult(
+        result: ApiResultWithCode<Unit>,
+        errorSnackbar: SnackbarMessage,
+        onSuccess: () -> Unit,
+    ) = when (result) {
+        is Either.Left -> {
+            result.value.printStackTrace()
+            globalEventRepository.sendSnackbar(errorSnackbar)
+        }
+
+        is Either.Right -> handleModifyRecipeStatus(
+            status = result.value,
+            errorSnackbar = errorSnackbar,
+            onSuccess = onSuccess,
+        )
+    }
+
+    private suspend inline fun handleModifyRecipeStatus(
+        status: Either<HttpStatusCode, Unit>,
+        errorSnackbar: SnackbarMessage,
+        onSuccess: () -> Unit,
+    ) = when (status) {
+        is Either.Left -> when {
+            status.value.isForbidden -> globalEventRepository.sendLogOut(Reason.ERROR)
+            else -> globalEventRepository.sendSnackbar(errorSnackbar)
+        }
+
+        is Either.Right -> onSuccess()
     }
 
     class Factory(

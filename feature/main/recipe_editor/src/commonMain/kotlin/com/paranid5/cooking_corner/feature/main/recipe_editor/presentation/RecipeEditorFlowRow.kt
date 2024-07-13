@@ -77,7 +77,9 @@ internal fun <T> RecipeEditorFlowRow(
         items.forEach { ingredient -> itemContent(ingredient, onItemRemove, itemModifier) }
 
         FlowRowAddButton(
-            modifier = Modifier.align(Alignment.CenterVertically),
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(AppTheme.dimensions.padding.small),
             onClick = onAddButtonClick,
         )
     }

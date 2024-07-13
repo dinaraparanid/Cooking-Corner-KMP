@@ -6,7 +6,7 @@ import androidx.compose.material3.SnackbarVisuals
 data class SnackbarMessage(
     override val message: String,
     val snackbarType: SnackbarType,
-    override val withDismissAction: Boolean = false,
+    override val withDismissAction: Boolean = true,
     val isCheckedVisible: Boolean = false,
     val isRetryVisible: Boolean = false,
     val gravity: SnackbarGravity = SnackbarGravity.Bottom(),

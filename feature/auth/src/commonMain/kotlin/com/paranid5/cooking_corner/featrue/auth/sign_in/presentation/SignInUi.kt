@@ -152,7 +152,6 @@ private fun SignUpButton(
 private fun UnhandledErrorSnackbar() = SnackbarMessage(
     message = stringResource(Res.string.something_went_wrong),
     snackbarType = SnackbarType.NEGATIVE,
-    withDismissAction = true,
 )
 
 private fun confirmButtonTextRes(areCredentialsInvalid: Boolean) = when {

@@ -15,11 +15,17 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_delete
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_edit
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_publish
+import com.paranid5.cooking_corner.core.resources.recipe_published
+import com.paranid5.cooking_corner.core.resources.recipe_removed
+import com.paranid5.cooking_corner.core.resources.something_went_wrong
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.utils.persistentListOfNotNull
+import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.stringResource
 
 private data class RecipeKebabMenuItemData(
@@ -89,16 +95,50 @@ private fun RecipeKebabMenuItem(
 private fun buildKebabMenuItems(
     isPublished: Boolean,
     onUiIntent: (RecipeUiIntent) -> Unit,
-) = persistentListOfNotNull(
-    buildKebabMenuItem(stringResource(Res.string.recipe_kebab_publish)) {
-        onUiIntent(RecipeUiIntent.Publish)
-    }.takeIf { isPublished.not() },
-    buildKebabMenuItem(stringResource(Res.string.recipe_kebab_edit)) {
-        onUiIntent(RecipeUiIntent.Edit)
-    },
-    buildKebabMenuItem(stringResource(Res.string.recipe_kebab_delete)) {
-        onUiIntent(RecipeUiIntent.Publish)
-    },
+): PersistentList<RecipeKebabMenuItemData> {
+    val publishedSnackbar = PublishedSnackbar()
+    val removedSnackbar = RemovedSnackbar()
+    val errorSnackbar = ErrorSnackbar()
+
+    return persistentListOfNotNull(
+        buildKebabMenuItem(stringResource(Res.string.recipe_kebab_publish)) {
+            onUiIntent(
+                RecipeUiIntent.Publish(
+                    errorSnackbar = errorSnackbar,
+                    successSnackbar = publishedSnackbar,
+                )
+            )
+        }.takeIf { isPublished.not() },
+        buildKebabMenuItem(stringResource(Res.string.recipe_kebab_edit)) {
+            onUiIntent(RecipeUiIntent.Edit)
+        },
+        buildKebabMenuItem(stringResource(Res.string.recipe_kebab_delete)) {
+            onUiIntent(
+                RecipeUiIntent.Delete(
+                    errorSnackbar = errorSnackbar,
+                    successSnackbar = removedSnackbar,
+                )
+            )
+        }.takeIf { isPublished.not() },
+    )
+}
+
+@Composable
+private fun PublishedSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.recipe_published),
+    snackbarType = SnackbarType.POSITIVE,
+)
+
+@Composable
+private fun RemovedSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.recipe_removed),
+    snackbarType = SnackbarType.POSITIVE,
+)
+
+@Composable
+private fun ErrorSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.something_went_wrong),
+    snackbarType = SnackbarType.POSITIVE,
 )
 
 private fun buildKebabMenuItem(title: String, onClick: () -> Unit) =

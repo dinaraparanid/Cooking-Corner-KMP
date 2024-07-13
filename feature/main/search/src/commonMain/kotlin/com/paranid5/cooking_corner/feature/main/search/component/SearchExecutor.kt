@@ -164,7 +164,6 @@ internal class SearchExecutor(
                 SnackbarMessage(
                     message = unhandledErrorMessage,
                     snackbarType = SnackbarType.NEGATIVE,
-                    withDismissAction = true,
                 )
             )
         }
@@ -188,7 +187,6 @@ internal class SearchExecutor(
                 SnackbarMessage(
                     message = unhandledErrorMessage,
                     snackbarType = SnackbarType.NEGATIVE,
-                    withDismissAction = true,
                 )
             )
         }

@@ -73,6 +73,8 @@
     <string name="recipe_no_steps_description">No steps were provided during creation of the recipe. You can always edit your recipe to change that.</string>
     <string name="recipe_no_ingredients_title">No ingredients provided</string>
     <string name="recipe_no_ingredients_description">No ingredients were provided during creation of the recipe. You can always edit your recipe to change that.</string>
+    <string name="recipe_published">Your recipe was successfully published</string>
+    <string name="recipe_removed">Your recipe was successfully deleted</string>
 
     <!-- Generate -->
     <string name="generate_provide_link">Provide a link to a site that has a cooking recipe and we will create a recipe from it and add it to your list.</string>

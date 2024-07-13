@@ -195,7 +195,6 @@ internal class HomeExecutor(
                 SnackbarMessage(
                     message = unhandledErrorMessage,
                     snackbarType = SnackbarType.NEGATIVE,
-                    withDismissAction = true,
                 )
             )
         }
@@ -220,7 +219,6 @@ internal class HomeExecutor(
                 SnackbarMessage(
                     message = unhandledErrorMessage,
                     snackbarType = SnackbarType.NEGATIVE,
-                    withDismissAction = true,
                 )
             )
         }

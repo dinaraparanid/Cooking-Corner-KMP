@@ -28,7 +28,9 @@ interface RecipeApi {
     suspend fun create(recipeModifyParams: RecipeModifyParams): ApiResultWithCode<Unit>
 
     suspend fun update(
-        id: Long,
+        recipeId: Long,
         recipeModifyParams: RecipeModifyParams,
     ): ApiResultWithCode<Unit>
+
+    suspend fun publish(recipeId: Long): ApiResultWithCode<Unit>
 }

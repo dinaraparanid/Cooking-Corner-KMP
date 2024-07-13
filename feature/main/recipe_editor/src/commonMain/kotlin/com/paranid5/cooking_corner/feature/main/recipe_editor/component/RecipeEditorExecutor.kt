@@ -284,7 +284,7 @@ internal class RecipeEditorExecutor(
         val resultJob = scope.async(AppDispatchers.Data) {
             state().run {
                 recipeRepository.update(
-                    id = requireNotNull(state().recipeParamsUiState.id),
+                    recipeId = requireNotNull(state().recipeParamsUiState.id),
                     RecipeModifyParams(
                         name = recipeParamsUiState.name,
                         description = recipeParamsUiState.description,

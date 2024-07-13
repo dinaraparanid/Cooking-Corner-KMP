@@ -86,12 +86,10 @@ private fun SaveButton(
 private fun UnhandledErrorSnackbar() = SnackbarMessage(
     message = stringResource(Res.string.something_went_wrong),
     snackbarType = SnackbarType.NEGATIVE,
-    withDismissAction = true,
 )
 
 @Composable
 private fun SuccessSnackbar() = SnackbarMessage(
     message = stringResource(Res.string.recipe_editor_recipe_uploaded),
     snackbarType = SnackbarType.POSITIVE,
-    withDismissAction = true,
 )

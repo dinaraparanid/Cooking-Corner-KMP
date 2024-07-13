@@ -160,5 +160,4 @@ private fun SignUpContent(
 private fun ErrorSnackbar(message: String) = SnackbarMessage(
     message = message,
     snackbarType = SnackbarType.NEGATIVE,
-    withDismissAction = true,
 )

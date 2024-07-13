@@ -48,5 +48,4 @@ internal fun GlobalEventsEffect(
 private fun logOutSnackbarMessage() = SnackbarMessage(
     message = stringResource(Res.string.token_expired),
     snackbarType = SnackbarType.NEGATIVE,
-    withDismissAction = true,
 )

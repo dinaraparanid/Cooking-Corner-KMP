@@ -167,7 +167,7 @@ internal class RecipeApiImpl(
         }
 
     override suspend fun update(
-        id: Long,
+        recipeId: Long,
         recipeModifyParams: RecipeModifyParams,
     ): ApiResultWithCode<Unit> = Either.catch {
         authRepository.withAuth { accessToken ->
@@ -179,7 +179,7 @@ internal class RecipeApiImpl(
                     setBody(
                         recipeModifyParams.run {
                             UpdateRecipeRequest(
-                                id = id,
+                                id = recipeId,
                                 name = recipeModifyParams.name,
                                 description = description,
                                 iconPath = iconPath,
@@ -203,6 +203,16 @@ internal class RecipeApiImpl(
                             )
                         }
                     )
+                }
+            }
+        }
+    }
+
+    override suspend fun publish(recipeId: Long): ApiResultWithCode<Unit> = Either.catch {
+        authRepository.withAuth { accessToken ->
+            withContext(AppDispatchers.Data) {
+                ktorClient.put(urlBuilder.buildPublishUrl(recipeId)) {
+                    bearerAuth(accessToken)
                 }
             }
         }
