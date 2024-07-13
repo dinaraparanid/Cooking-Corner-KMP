@@ -16,9 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.recipe_no_ingredients_description
+import com.paranid5.cooking_corner.core.resources.recipe_no_ingredients_title
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun RecipeIngredients(
@@ -28,11 +32,19 @@ internal fun RecipeIngredients(
     modifier = modifier,
     verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium),
 ) {
-    ingredients.forEach { ingredient ->
-        RecipeIngredient(
-            ingredientUiState = ingredient,
+    when {
+        ingredients.isEmpty() -> NoPagerItemsPlaceholder(
+            title = stringResource(Res.string.recipe_no_ingredients_title),
+            description = stringResource(Res.string.recipe_no_ingredients_description),
             modifier = Modifier.fillMaxWidth(),
         )
+
+        else -> ingredients.forEach { ingredient ->
+            RecipeIngredient(
+                ingredientUiState = ingredient,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))

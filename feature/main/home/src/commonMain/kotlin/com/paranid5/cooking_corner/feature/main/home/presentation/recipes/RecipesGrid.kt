@@ -57,6 +57,20 @@ private fun RecipesGridContent(
     state: State,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
+) = when {
+    state.filteredRecipes.isEmpty() -> NoItemsPlaceholder(modifier)
+    else -> RecipesGridContentImpl(
+        state = state,
+        onUiIntent = onUiIntent,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun RecipesGridContentImpl(
+    state: State,
+    onUiIntent: (UiIntent) -> Unit,
+    modifier: Modifier = Modifier,
 ) = BoxWithConstraints(modifier) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),

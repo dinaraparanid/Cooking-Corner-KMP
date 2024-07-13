@@ -3,24 +3,29 @@ package com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_kebab
+import com.paranid5.cooking_corner.core.resources.recipe_private_label
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedBackButton
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
 private val BUTTON_SIZE = 36.dp
@@ -33,7 +38,10 @@ internal fun RecipeTopBar(
     isKebabMenuVisible: Boolean,
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
-) = Box(modifier) {
+) = ConstraintLayout(modifier) {
+    val appPadding = AppTheme.dimensions.padding
+    val (backButton, privateStatus, kebabMenu) = createRefs()
+
     val buttonModifier = Modifier
         .size(BUTTON_SIZE)
         .simpleShadow()
@@ -42,10 +50,54 @@ internal fun RecipeTopBar(
     AppOutlinedBackButton(
         onClick = { onUiIntent(RecipeUiIntent.Back) },
         iconModifier = Modifier.size(ICON_SIZE),
-        modifier = buttonModifier.align(Alignment.CenterStart),
+        modifier = buttonModifier.constrainAs(backButton) {
+            centerVerticallyTo(parent)
+            start.linkTo(parent.start)
+        },
     )
 
-    if (isOwned) Column(Modifier.align(Alignment.CenterEnd)) {
+    if (recipeUiState.isPublished.not())
+        PrivateStatusLabel(
+            modifier = Modifier.constrainAs(privateStatus) {
+                centerVerticallyTo(parent)
+                start.linkTo(parent.start, margin = appPadding.extraMedium)
+                end.linkTo(parent.end, margin = appPadding.extraMedium)
+                width = Dimension.fillToConstraints
+            }
+        )
+
+    KebabMenu(
+        isOwned = isOwned,
+        isKebabMenuVisible = isKebabMenuVisible,
+        recipeUiState = recipeUiState,
+        onUiIntent = onUiIntent,
+        buttonModifier = buttonModifier,
+        modifier = Modifier.constrainAs(kebabMenu) {
+            centerVerticallyTo(parent)
+            end.linkTo(parent.end)
+        },
+    )
+}
+
+@Composable
+private fun PrivateStatusLabel(modifier: Modifier = Modifier) = AppMainText(
+    text = stringResource(Res.string.recipe_private_label),
+    textAlign = TextAlign.Center,
+    style = AppTheme.typography.regular,
+    overflow = TextOverflow.Ellipsis,
+    modifier = modifier,
+)
+
+@Composable
+private fun KebabMenu(
+    isOwned: Boolean,
+    isKebabMenuVisible: Boolean,
+    recipeUiState: RecipeDetailedUiState,
+    onUiIntent: (RecipeUiIntent) -> Unit,
+    modifier: Modifier = Modifier,
+    buttonModifier: Modifier = Modifier
+) = Column(modifier) {
+    if (isOwned) {
         KebabButton(
             onClick = { onUiIntent(RecipeUiIntent.ChangeKebabMenuVisibility(isVisible = true)) },
             modifier = buttonModifier,

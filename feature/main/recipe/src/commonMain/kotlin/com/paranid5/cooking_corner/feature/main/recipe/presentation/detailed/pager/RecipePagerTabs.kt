@@ -38,6 +38,10 @@ private val PagerTabShape
     @Composable
     get() = RoundedCornerShape(AppTheme.dimensions.corners.medium)
 
+internal inline val PagerItemShape
+    @Composable
+    get() = RoundedCornerShape(AppTheme.dimensions.corners.extraMedium)
+
 @Composable
 internal fun RecipePagerTabs(
     activePage: Int,

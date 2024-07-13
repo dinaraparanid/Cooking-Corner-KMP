@@ -30,6 +30,12 @@
     <string name="home_author">Author</string>
     <string name="home_add_to_favourites">Add to</string>
     <string name="home_remove_from_favourites">Remove from</string>
+    <string name="home_no_item_placeholder_row_1">Apparently you don't have any recipes saved yet.</string>
+    <string name="home_no_item_placeholder_row_2_1">You can use the</string>
+    <string name="home_no_item_placeholder_row_2_2">search page to find new</string>
+    <string name="home_no_item_placeholder_row_3">recipes you're interested in, you can use the</string>
+    <string name="home_no_item_placeholder_row_4">import existing recipes from a website, or</string>
+    <string name="home_no_item_placeholder_row_5">add and write your recipe manually.</string>
 
     <!-- Profile -->
     <string name="profile_username">Username</string>
@@ -62,6 +68,11 @@
     <string name="recipe_kebab_publish">Publish your recipe</string>
     <string name="recipe_kebab_edit">Edit your recipe</string>
     <string name="recipe_kebab_delete">Delete your recipe</string>
+    <string name="recipe_private_label">Your recipe is currently private</string>
+    <string name="recipe_no_steps_title">No steps provided</string>
+    <string name="recipe_no_steps_description">No steps were provided during creation of the recipe. You can always edit your recipe to change that.</string>
+    <string name="recipe_no_ingredients_title">No ingredients provided</string>
+    <string name="recipe_no_ingredients_description">No ingredients were provided during creation of the recipe. You can always edit your recipe to change that.</string>
 
     <!-- Generate -->
     <string name="generate_provide_link">Provide a link to a site that has a cooking recipe and we will create a recipe from it and add it to your list.</string>

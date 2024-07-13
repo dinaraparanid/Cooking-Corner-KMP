@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.recipe_no_steps_description
+import com.paranid5.cooking_corner.core.resources.recipe_no_steps_title
 import com.paranid5.cooking_corner.core.resources.recipe_step
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
 import com.paranid5.cooking_corner.ui.entity.StepUiState
@@ -36,12 +37,20 @@ internal fun RecipeCookingSteps(
     modifier = modifier,
     verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium),
 ) {
-    steps.forEachIndexed { index, step ->
-        RecipeCookingStep(
-            stepNumber = index + 1,
-            stepUiState = step,
+    when {
+        steps.isEmpty() -> NoPagerItemsPlaceholder(
+            title = stringResource(Res.string.recipe_no_steps_title),
+            description = stringResource(Res.string.recipe_no_steps_description),
             modifier = Modifier.fillMaxWidth(),
         )
+
+        else -> steps.forEachIndexed { index, step ->
+            RecipeCookingStep(
+                stepNumber = index + 1,
+                stepUiState = step,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
@@ -53,7 +62,7 @@ private fun RecipeCookingStep(
     stepUiState: StepUiState,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(AppTheme.dimensions.corners.extraMedium)
+    val shape = PagerItemShape
 
     val stepTitle = stepUiState.title.takeIf(String::isNotBlank)
         ?: stringResource(Res.string.recipe_step, stepNumber)
