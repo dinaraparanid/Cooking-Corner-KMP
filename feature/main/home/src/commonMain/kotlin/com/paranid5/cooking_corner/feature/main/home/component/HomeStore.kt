@@ -93,6 +93,6 @@ interface HomeStore : Store<UiIntent, State, Label> {
         data class ShowRecipe(val recipeId: Long) : Label
         data object ShowAddRecipe : Label
         data object ShowGenerateRecipe : Label
-        data object ShowRecipeEditor : Label
+        data class ShowRecipeEditor(val recipeId: Long) : Label
     }
 }

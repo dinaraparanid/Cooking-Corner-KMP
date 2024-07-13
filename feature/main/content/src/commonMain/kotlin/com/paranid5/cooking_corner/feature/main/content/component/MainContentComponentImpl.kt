@@ -15,6 +15,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent.Factory.LaunchMode
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 import com.paranid5.cooking_corner.utils.doNothing
 import kotlinx.coroutines.flow.StateFlow
@@ -68,7 +69,10 @@ internal class MainContentComponentImpl(
             )
 
             is MainContentConfig.AddRecipe -> MainContentChild.AddRecipe(
-                component = buildRecipeEditorComponent(componentContext)
+                component = buildRecipeEditorComponent(
+                    componentContext = componentContext,
+                    launchMode = LaunchMode.New,
+                )
             )
 
             is MainContentConfig.GenerateRecipe -> MainContentChild.GenerateRecipe(
@@ -76,7 +80,10 @@ internal class MainContentComponentImpl(
             )
 
             is MainContentConfig.RecipeEditor -> MainContentChild.RecipeEditor(
-                component = buildRecipeEditorComponent(componentContext)
+                component = buildRecipeEditorComponent(
+                    componentContext = componentContext,
+                    launchMode = LaunchMode.Edit(recipeId = config.recipeId),
+                )
             )
         }
 
@@ -98,8 +105,9 @@ internal class MainContentComponentImpl(
                     is HomeComponent.BackResult.ShowImportRecipe ->
                         navigation.bringToFront(MainContentConfig.GenerateRecipe)
 
-                    is HomeComponent.BackResult.ShowRecipeEditor ->
-                        navigation.bringToFront(MainContentConfig.RecipeEditor)
+                    is HomeComponent.BackResult.ShowRecipeEditor -> navigation.bringToFront(
+                        MainContentConfig.RecipeEditor(recipeId = result.recipeId)
+                    )
                 }
             },
         )
@@ -132,11 +140,11 @@ internal class MainContentComponentImpl(
         recipeId = config.recipeId,
         onBack = { result ->
             when (result) {
-                is RecipeComponent.BackResult.Dismiss ->
-                    navigation.pop()
+                is RecipeComponent.BackResult.Dismiss -> navigation.pop()
 
-                is RecipeComponent.BackResult.Edit ->
-                    navigation.bringToFront(MainContentConfig.RecipeEditor)
+                is RecipeComponent.BackResult.Edit -> navigation.bringToFront(
+                    MainContentConfig.RecipeEditor(recipeId = result.recipeId)
+                )
             }
         },
     )
@@ -150,9 +158,13 @@ internal class MainContentComponentImpl(
             }
         )
 
-    private fun buildRecipeEditorComponent(componentContext: ComponentContext) =
+    private fun buildRecipeEditorComponent(
+        componentContext: ComponentContext,
+        launchMode: LaunchMode,
+    ) =
         recipeEditorComponentFactory.create(
             componentContext = componentContext,
+            launchMode = launchMode,
             onBack = { result ->
                 when (result) {
                     is RecipeEditorComponent.BackResult.Dismiss -> doNothing

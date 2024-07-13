@@ -17,6 +17,9 @@ data class RecipeState(
     @Transient
     val isOwned = recipeUiState.getOrNull()?.author == username
 
+    @Transient
+    val recipeId = recipeUiState.getOrNull()?.id
+
     constructor() : this(
         recipeUiState = UiState.Undefined,
         isKebabMenuVisible = false,

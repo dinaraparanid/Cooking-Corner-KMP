@@ -18,7 +18,7 @@ fun RecipeUiState.Companion.fromResponse(response: RecipeResponse) =
     RecipeUiState(
         id = response.id,
         title = response.name,
-        rating = response.rating,
+        rating = response.rating ?: 0F,
         preparingTime = response.preparingTime ?: 0,
         cookingTime = response.cookingTime ?: 0,
         author = response.username,
@@ -31,7 +31,8 @@ fun RecipeDetailedUiState.Companion.fromResponse(response: RecipeResponse) =
     RecipeDetailedUiState(
         id = response.id,
         title = response.name,
-        rating = response.rating,
+        description = response.description.orEmpty(),
+        rating = response.rating ?: 0F,
         preparingTime = response.preparingTime ?: 0,
         cookingTime = response.cookingTime ?: 0,
         author = response.username,

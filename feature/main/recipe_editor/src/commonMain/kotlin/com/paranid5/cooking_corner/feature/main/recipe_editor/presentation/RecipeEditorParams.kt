@@ -28,6 +28,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_editor_tag
 import com.paranid5.cooking_corner.core.resources.recipe_editor_video_link
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
+import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.foundation.AppSpinnerWithArrow
@@ -52,6 +53,7 @@ internal inline val ClippedOutlinedModifier
 @Composable
 internal fun RecipeEditorParams(
     state: State,
+    recipeParamsUiState: RecipeParamsUiState,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier
 ) = Column(
@@ -59,14 +61,14 @@ internal fun RecipeEditorParams(
     verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium)
 ) {
     RecipeEditorTextField(
-        value = state.name,
+        value = recipeParamsUiState.name,
         placeholder = stringResource(Res.string.recipe_editor_name),
         onValueChange = { onUiIntent(UiIntent.UpdateName(name = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.description,
+        value = recipeParamsUiState.description,
         placeholder = stringResource(Res.string.recipe_editor_description),
         onValueChange = { onUiIntent(UiIntent.UpdateDescription(description = it)) },
         modifier = Modifier.fillMaxWidth(),
@@ -89,96 +91,96 @@ internal fun RecipeEditorParams(
     ) { onUiIntent(UiIntent.UpdateSelectedTag(index = it)) }
 
     RecipeEditorTextField(
-        value = state.preparationTimeInput,
+        value = recipeParamsUiState.preparationTimeInput,
         placeholder = stringResource(Res.string.recipe_editor_preparation_time),
         onValueChange = { onUiIntent(UiIntent.UpdatePreparationTime(preparationTimeInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.cookingTimeInput,
+        value = recipeParamsUiState.cookingTimeInput,
         placeholder = stringResource(Res.string.recipe_editor_cooking_time),
         onValueChange = { onUiIntent(UiIntent.UpdateCookingTime(cookingTimeInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.restTimeInput,
+        value = recipeParamsUiState.restTimeInput,
         placeholder = stringResource(Res.string.recipe_editor_rest_time),
         onValueChange = { onUiIntent(UiIntent.UpdateRestTime(restTimeInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.portionsInput,
+        value = recipeParamsUiState.portionsInput,
         placeholder = stringResource(Res.string.recipe_editor_portions),
         onValueChange = { onUiIntent(UiIntent.UpdatePortions(portionsInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     IngredientFlowRow(
-        ingredients = state.ingredients,
+        ingredients = recipeParamsUiState.ingredients,
         onUiIntent = onUiIntent,
         modifier = Modifier.fillMaxWidth(),
     )
 
     StepFlowRow(
-        steps = state.steps,
+        steps = recipeParamsUiState.steps,
         onUiIntent = onUiIntent,
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.commentsInput,
+        value = recipeParamsUiState.commentsInput,
         placeholder = stringResource(Res.string.recipe_editor_comments),
         onValueChange = { onUiIntent(UiIntent.UpdateComments(commentsInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.nutritionsInput,
+        value = recipeParamsUiState.nutritionsInput,
         placeholder = stringResource(Res.string.recipe_editor_nutritions),
         onValueChange = { onUiIntent(UiIntent.UpdateNutritions(nutritionsInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.proteinsInput,
+        value = recipeParamsUiState.proteinsInput,
         placeholder = stringResource(Res.string.recipe_editor_proteins),
         onValueChange = { onUiIntent(UiIntent.UpdateProteins(proteinsInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.fatsInput,
+        value = recipeParamsUiState.fatsInput,
         placeholder = stringResource(Res.string.recipe_editor_fats),
         onValueChange = { onUiIntent(UiIntent.UpdateFats(fatsInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.carbohydratesInput,
+        value = recipeParamsUiState.carbohydratesInput,
         placeholder = stringResource(Res.string.recipe_editor_carbohydrates),
         onValueChange = { onUiIntent(UiIntent.UpdateCarbohydrates(carbohydratesInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.dishesInput,
+        value = recipeParamsUiState.dishesInput,
         placeholder = stringResource(Res.string.recipe_editor_dishes),
         onValueChange = { onUiIntent(UiIntent.UpdateDishes(dishesInput = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.videoLink,
+        value = recipeParamsUiState.videoLink,
         placeholder = stringResource(Res.string.recipe_editor_video_link),
         onValueChange = { onUiIntent(UiIntent.UpdateVideoLink(videoLink = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     RecipeEditorTextField(
-        value = state.source,
+        value = recipeParamsUiState.source,
         placeholder = stringResource(Res.string.recipe_editor_source),
         onValueChange = { onUiIntent(UiIntent.UpdateSource(source = it)) },
         modifier = Modifier.fillMaxWidth(),

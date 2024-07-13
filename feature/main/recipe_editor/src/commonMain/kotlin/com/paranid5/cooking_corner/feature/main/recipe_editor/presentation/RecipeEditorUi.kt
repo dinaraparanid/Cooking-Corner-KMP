@@ -19,6 +19,10 @@ import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
+import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
+import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.utils.doNothing
 
@@ -35,6 +39,7 @@ fun RecipeEditorUi(
 
     RecipeEditorUiContent(
         state = state,
+        uiState = state.uiState,
         onUiIntent = onUiIntent,
         modifier = modifier,
     )
@@ -43,6 +48,40 @@ fun RecipeEditorUi(
 @Composable
 private fun RecipeEditorUiContent(
     state: State,
+    uiState: UiState<Unit>,
+    onUiIntent: (UiIntent) -> Unit,
+    modifier: Modifier = Modifier,
+): Unit = Box(modifier) {
+    when (uiState) {
+        is UiState.Data, is UiState.Success -> RecipeEditorUiContentImpl(
+            state = state,
+            recipeParamsUiState = state.recipeParamsUiState,
+            onUiIntent = onUiIntent,
+            modifier = Modifier.fillMaxSize(),
+        )
+
+        is UiState.Error -> AppMainText(
+            text = "TODO: Error stub",
+            style = AppTheme.typography.h.h1,
+            modifier = Modifier.align(Alignment.Center),
+        )
+
+        is UiState.Loading, is UiState.Undefined ->
+            AppProgressIndicator(Modifier.align(Alignment.Center))
+
+        is UiState.Refreshing -> RecipeEditorUiContent(
+            state = state,
+            uiState = uiState.value,
+            onUiIntent = onUiIntent,
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+private fun RecipeEditorUiContentImpl(
+    state: State,
+    recipeParamsUiState: RecipeParamsUiState,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) = Box(modifier) {
@@ -52,7 +91,7 @@ private fun RecipeEditorUiContent(
             .verticalScroll(rememberScrollState())
     ) {
         RecipeEditorTopBar(
-            isSaveButtonEnabled = state.isSaveButtonActive,
+            state = state,
             onUiIntent = onUiIntent,
             modifier = Modifier
                 .fillMaxWidth()
@@ -70,6 +109,7 @@ private fun RecipeEditorUiContent(
 
         RecipeEditorParams(
             state = state,
+            recipeParamsUiState = recipeParamsUiState,
             onUiIntent = onUiIntent,
             modifier = Modifier
                 .fillMaxWidth()

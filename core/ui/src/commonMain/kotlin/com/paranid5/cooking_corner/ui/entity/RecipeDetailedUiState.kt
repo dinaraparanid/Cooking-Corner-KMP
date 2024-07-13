@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
 data class RecipeDetailedUiState(
     val id: Long,
     val title: String,
+    val description: String,
     val rating: Float,
     val preparingTime: Int,
     val cookingTime: Int,

@@ -5,16 +5,22 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
+import com.paranid5.cooking_corner.core.common.isForbidden
 import com.paranid5.cooking_corner.domain.category.CategoryRepository
+import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendLogOut
 import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
+import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.tag.TagRepository
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent.Factory.LaunchMode
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStoreProvider.Msg
+import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
@@ -23,7 +29,9 @@ import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.entity.mappers.toRequest
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
+import com.paranid5.cooking_corner.utils.doNothing
 import com.paranid5.cooking_corner.utils.mapToImmutableList
+import com.paranid5.cooking_corner.utils.toIntOrZero
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,12 +46,18 @@ internal class RecipeExecutor(
         when (intent) {
             is UiIntent.Back -> publish(Label.Back)
 
+            is UiIntent.Load -> loadRecipe(recipeId = intent.recipeId)
+
             is UiIntent.Save -> scope.launch {
                 onSave(
+                    launchMode = intent.launchMode,
                     unhandledErrorSnackbar = intent.unhandledErrorSnackbar,
                     successSnackbar = intent.successSnackbar,
                 )
             }
+
+            is UiIntent.UpdateUiState ->
+                dispatch(Msg.UpdateUiState(intent.uiState))
 
             is UiIntent.UpdateCarbohydrates ->
                 dispatch(Msg.UpdateCarbohydrates(intent.carbohydratesInput))
@@ -154,6 +168,21 @@ internal class RecipeExecutor(
 
     // -------------------- UI Intent handling --------------------
 
+    private fun loadRecipe(recipeId: Long) {
+        dispatch(Msg.UpdateUiState(UiState.Loading))
+
+        scope.launch {
+            handleLoadRecipeApiResult(
+                result = withContext(AppDispatchers.Data) {
+                    recipeRepository.getRecipeById(recipeId = recipeId)
+                }
+            ) {
+                val recipeUiState = RecipeParamsUiState.fromResponse(response = it)
+                dispatch(Msg.UpdateUiState(UiState.Success, recipeUiState))
+            }
+        }
+    }
+
     private fun loadCategories() {
         dispatch(Msg.UpdateCategoriesUiState(UiState.Loading))
 
@@ -179,22 +208,35 @@ internal class RecipeExecutor(
     }
 
     private suspend fun onSave(
+        launchMode: LaunchMode,
+        unhandledErrorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) = when (launchMode) {
+        is LaunchMode.Edit -> doNothing() // TODO: update request
+
+        is LaunchMode.New, is LaunchMode.Generate -> create(
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
+            successSnackbar = successSnackbar,
+        )
+    }
+
+    private suspend fun create(
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
     ) {
         val ingredientsJob = scope.async(AppDispatchers.Eval) {
-            state().ingredients.map(IngredientUiState::toRequest)
+            state().recipeParamsUiState.ingredients.map(IngredientUiState::toRequest)
         }
 
         val stepsJob = scope.async(AppDispatchers.Eval) {
-            state().steps.map(StepUiState::toRequest)
+            state().recipeParamsUiState.steps.map(StepUiState::toRequest)
         }
 
         val resultJob = scope.async(AppDispatchers.Data) {
             state().run {
                 recipeRepository.create(
-                    name = name,
-                    description = description,
+                    name = recipeParamsUiState.name,
+                    description = recipeParamsUiState.description,
                     iconPath = null,
                     category = selectedCategoryTitleOrNull,
                     tag = selectedTagTitleOrNull,
@@ -202,17 +244,17 @@ internal class RecipeExecutor(
                     cookingTime = cookingTimeMinutes,
                     waitingTime = restTimeMinutes,
                     totalTime = totalTimeMinutes,
-                    portions = portionsInput.toIntOrNull(),
-                    comments = commentsInput,
-                    nutritions = nutritionsInput.toIntOrNull(),
-                    proteins = proteinsInput.toIntOrNull(),
-                    fats = fatsInput.toIntOrNull(),
-                    carbohydrates = carbohydratesInput.toIntOrNull(),
-                    dishes = dishesInput.toIntOrNull(),
-                    videoLink = videoLink,
-                    source = source,
+                    portions = recipeParamsUiState.portionsInput.toIntOrZero(),
+                    comments = recipeParamsUiState.commentsInput,
+                    nutritions = recipeParamsUiState.nutritionsInput.toIntOrZero(),
+                    proteins = recipeParamsUiState.proteinsInput.toIntOrZero(),
+                    fats = recipeParamsUiState.fatsInput.toIntOrZero(),
+                    carbohydrates = recipeParamsUiState.carbohydratesInput.toIntOrZero(),
+                    dishes = recipeParamsUiState.dishesInput.toIntOrZero(),
+                    videoLink = recipeParamsUiState.videoLink,
+                    source = recipeParamsUiState.source,
                     ingredients = ingredientsJob.await(),
-                    steps = stepsJob.await()
+                    steps = stepsJob.await(),
                 )
             }
         }
@@ -225,6 +267,33 @@ internal class RecipeExecutor(
     }
 
     // -------------------- API results handling --------------------
+
+    private suspend inline fun handleLoadRecipeApiResult(
+        result: ApiResultWithCode<RecipeResponse>,
+        onSuccess: (RecipeResponse) -> Unit,
+    ) = when (result) {
+        is Either.Left -> {
+            result.value.printStackTrace()
+            dispatch(Msg.UpdateUiState(UiState.Error()))
+        }
+
+        is Either.Right -> handleLoadRecipeStatus(
+            status = result.value,
+            onSuccess = onSuccess,
+        )
+    }
+
+    private suspend inline fun handleLoadRecipeStatus(
+        status: Either<HttpStatusCode, RecipeResponse>,
+        onSuccess: (RecipeResponse) -> Unit,
+    ) = when (status) {
+        is Either.Left -> when {
+            status.value.isForbidden -> globalEventRepository.sendLogOut(Reason.ERROR)
+            else -> dispatch(Msg.UpdateUiState(UiState.Error()))
+        }
+
+        is Either.Right -> onSuccess(status.value)
+    }
 
     private inline fun handleSpinnerItemsApiResult(
         result: ApiResultWithCode<List<String>>,

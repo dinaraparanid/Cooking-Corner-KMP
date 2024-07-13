@@ -7,7 +7,7 @@ import com.paranid5.cooking_corner.component.UiIntentHandler
 interface RecipeComponent : StateSource<RecipeState>, UiIntentHandler<RecipeUiIntent> {
     sealed interface BackResult {
         data object Dismiss : BackResult
-        data object Edit : BackResult
+        data class Edit(val recipeId: Long) : BackResult
     }
 
     interface Factory {

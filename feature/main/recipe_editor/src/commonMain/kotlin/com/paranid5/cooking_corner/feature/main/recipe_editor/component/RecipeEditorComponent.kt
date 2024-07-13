@@ -6,6 +6,7 @@ import com.paranid5.cooking_corner.component.UiIntentHandler
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
+import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
 
 interface RecipeEditorComponent : StateSource<State>, UiIntentHandler<UiIntent> {
     sealed interface BackResult {
@@ -14,8 +15,15 @@ interface RecipeEditorComponent : StateSource<State>, UiIntentHandler<UiIntent> 
     }
 
     interface Factory {
+        sealed interface LaunchMode {
+            data object New : LaunchMode
+            data class Edit(val recipeId: Long) : LaunchMode
+            data class Generate(val recipeParamsUiState: RecipeParamsUiState) : LaunchMode
+        }
+
         fun create(
             componentContext: ComponentContext,
+            launchMode: LaunchMode,
             onBack: (BackResult) -> Unit,
         ): RecipeEditorComponent
     }

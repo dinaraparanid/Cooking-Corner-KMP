@@ -3,9 +3,11 @@ package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 import androidx.compose.runtime.Immutable
 import com.arkivanov.mvikotlin.core.store.Store
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent.Factory.LaunchMode
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
+import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
@@ -14,6 +16,7 @@ import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.orNil
+import com.paranid5.cooking_corner.utils.toIntOrZero
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -21,10 +24,15 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
     sealed interface UiIntent {
         data object Back : UiIntent
 
+        data class Load(val recipeId: Long) : UiIntent
+
         data class Save(
+            val launchMode: LaunchMode,
             val unhandledErrorSnackbar: SnackbarMessage,
             val successSnackbar: SnackbarMessage,
         ) : UiIntent
+
+        data class UpdateUiState(val uiState: UiState<Unit>) : UiIntent
 
         data class UpdateName(val name: String) : UiIntent
 
@@ -81,33 +89,19 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
     @Serializable
     @Immutable
     data class State(
-        val name: String = "",
-        val description: String = "",
-        val selectedCategoryIndex: Int = NOT_SELECTED,
-        val selectedTagIndex: Int = NOT_SELECTED,
-        val preparationTimeInput: String = "",
-        val cookingTimeInput: String = "",
-        val restTimeInput: String = "",
-        val portionsInput: String = "",
-        val commentsInput: String = "",
-        val nutritionsInput: String = "",
-        val proteinsInput: String = "",
-        val fatsInput: String = "",
-        val carbohydratesInput: String = "",
-        val dishesInput: String = "",
-        val videoLink: String = "",
-        val source: String = "",
-        val cover: ByteArray? = null,
-        val ingredients: SerializableImmutableList<IngredientUiState> = SerializableImmutableList(),
-        val steps: SerializableImmutableList<StepUiState> = SerializableImmutableList(),
+        val launchMode: LaunchMode,
+        val recipeParamsUiState: RecipeParamsUiState = RecipeParamsUiState(),
         val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>> = UiState.Undefined,
         val tagsUiState: UiState<SerializableImmutableList<TagUiState>> = UiState.Undefined,
         val ingredientDialogState: IngredientDialogState = IngredientDialogState(),
         val stepDialogState: StepDialogState = StepDialogState(),
         val isAddStepDialogVisible: Boolean = false,
+        val selectedCategoryIndex: Int = NOT_SELECTED,
+        val selectedTagIndex: Int = NOT_SELECTED,
+        val uiState: UiState<Unit> = UiState.Undefined,
     ) {
         companion object {
-            internal const val NOT_SELECTED = 0
+            const val NOT_SELECTED = 0
         }
 
         @Serializable
@@ -150,7 +144,7 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         }
 
         @Transient
-        val isNameEmpty = name.isEmpty()
+        val isNameEmpty = recipeParamsUiState.name.isEmpty()
 
         @Transient
         val selectedCategoryTitleOrNull = selectedCategoryIndex
@@ -182,7 +176,7 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val selectedTagTitle = selectedTagTitleOrNull.orEmpty()
 
         @Transient
-        val isSaveButtonActive = isNameEmpty.not() && isCategorySelected
+        val isSaveButtonEnabled = isNameEmpty.not() && isCategorySelected
 
         @Transient
         val categories = categoriesUiState.getOrNull().orNil()
@@ -191,13 +185,13 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val tags = tagsUiState.getOrNull().orNil()
 
         @Transient
-        val preparationTimeMinutes = preparationTimeInput.toIntOrNull() ?: 0
+        val preparationTimeMinutes = recipeParamsUiState.preparationTimeInput.toIntOrZero()
 
         @Transient
-        val cookingTimeMinutes = cookingTimeInput.toIntOrNull() ?: 0
+        val cookingTimeMinutes = recipeParamsUiState.cookingTimeInput.toIntOrZero()
 
         @Transient
-        val restTimeMinutes = restTimeInput.toIntOrNull() ?: 0
+        val restTimeMinutes = recipeParamsUiState.restTimeInput.toIntOrZero()
 
         @Transient
         val totalTimeMinutes = preparationTimeMinutes + cookingTimeMinutes + restTimeMinutes

@@ -23,5 +23,5 @@ sealed interface MainContentConfig {
     data object GenerateRecipe : MainContentConfig
 
     @Serializable
-    data object RecipeEditor : MainContentConfig
+    data class RecipeEditor(val recipeId: Long) : MainContentConfig
 }

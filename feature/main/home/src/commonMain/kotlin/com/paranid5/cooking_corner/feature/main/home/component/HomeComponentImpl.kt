@@ -69,7 +69,7 @@ internal class HomeComponentImpl(
             onBack(BackResult.ShowRecipeDetails(recipeId = label.recipeId))
 
         is Label.ShowRecipeEditor ->
-            onBack(BackResult.ShowRecipeEditor)
+            onBack(BackResult.ShowRecipeEditor(recipeId = label.recipeId))
     }
 
     private fun subscribeOnStateUpdates() = componentScope.launch {

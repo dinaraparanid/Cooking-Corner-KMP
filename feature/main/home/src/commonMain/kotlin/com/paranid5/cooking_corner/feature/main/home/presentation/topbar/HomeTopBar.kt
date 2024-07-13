@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_add
+import com.paranid5.cooking_corner.core.resources.ic_ascending_filter
 import com.paranid5.cooking_corner.core.resources.ic_descending_filter
 import com.paranid5.cooking_corner.core.resources.ic_generate
 import com.paranid5.cooking_corner.core.resources.like
@@ -84,8 +86,8 @@ private fun HomeTopBarImpl(
                 ),
         )
 
-        AppIconButton(
-            icon = vectorResource(Res.drawable.ic_descending_filter),
+        OrderButton(
+            isAscendingOrder = state.isAscendingOrder,
             modifier = Modifier.align(Alignment.CenterVertically),
             onClick = { onUiIntent(UiIntent.OrderClick) },
         )
@@ -105,3 +107,23 @@ private fun TopBarBorder(modifier: Modifier = Modifier) = Spacer(
         .height(AppTheme.dimensions.borders.minimum)
         .background(AppTheme.colors.button.primary)
 )
+
+@Composable
+private fun OrderButton(
+    isAscendingOrder: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    val iconRes = remember(isAscendingOrder) {
+        when {
+            isAscendingOrder -> Res.drawable.ic_ascending_filter
+            else -> Res.drawable.ic_descending_filter
+        }
+    }
+
+    AppIconButton(
+        icon = vectorResource(iconRes),
+        modifier = modifier,
+        onClick = onClick,
+    )
+}

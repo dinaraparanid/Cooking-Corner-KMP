@@ -54,7 +54,9 @@ internal class RecipeComponentImpl(
             is RecipeUiIntent.ChangeKebabMenuVisibility ->
                 changeKebabMenuVisibility(isVisible = intent.isVisible)
 
-            is RecipeUiIntent.Edit -> onBack(BackResult.Edit)
+            is RecipeUiIntent.Edit -> stateFlow.value.recipeId?.let {
+                onBack(BackResult.Edit(recipeId = it))
+            }
 
             is RecipeUiIntent.Publish -> publishRecipe()
 
@@ -76,7 +78,7 @@ internal class RecipeComponentImpl(
     private fun loadRecipe(recipeId: Long) = componentScope.launch {
         handleLoadRecipeApiResult(
             result = withContext(AppDispatchers.Data) {
-                recipeRepository.getRecipeById(recipeId)
+                recipeRepository.getRecipeById(recipeId = recipeId)
             }
         ) { recipeResponse ->
             _stateFlow.updateState {

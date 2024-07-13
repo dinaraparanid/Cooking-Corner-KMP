@@ -17,6 +17,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_editor_save
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedBackButton
@@ -29,7 +30,7 @@ private val BUTTON_SIZE = 36.dp
 
 @Composable
 internal fun RecipeEditorTopBar(
-    isSaveButtonEnabled: Boolean,
+    state: State,
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -45,9 +46,10 @@ internal fun RecipeEditorTopBar(
 
         Spacer(Modifier.weight(1F))
 
-        SaveButton(enabled = isSaveButtonEnabled, modifier = generalModifier) {
+        SaveButton(enabled = state.isSaveButtonEnabled, modifier = generalModifier) {
             onUiIntent(
                 UiIntent.Save(
+                    launchMode = state.launchMode,
                     unhandledErrorSnackbar = unhandledErrorSnackbar,
                     successSnackbar = successSnackbar,
                 )
