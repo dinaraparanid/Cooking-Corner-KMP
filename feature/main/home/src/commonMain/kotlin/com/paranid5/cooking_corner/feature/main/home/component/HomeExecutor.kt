@@ -10,6 +10,8 @@ import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendLogOut
+import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
@@ -137,7 +139,7 @@ internal class HomeExecutor(
     ) = when (status) {
         is Either.Left -> when {
             status.value.isForbidden ->
-                globalEventRepository.sendEvent(GlobalEvent.LogOut(Reason.ERROR))
+                globalEventRepository.sendLogOut(Reason.ERROR)
 
             else -> dispatch(Msg.UpdateRecipesUiState(UiState.Error()))
         }
@@ -189,13 +191,11 @@ internal class HomeExecutor(
     ) = when (result) {
         is Either.Left -> {
             result.value.printStackTrace()
-            globalEventRepository.sendEvent(
-                GlobalEvent.ShowSnackbar(
-                    SnackbarMessage(
-                        message = unhandledErrorMessage,
-                        snackbarType = SnackbarType.NEGATIVE,
-                        withDismissAction = true,
-                    )
+            globalEventRepository.sendSnackbar(
+                SnackbarMessage(
+                    message = unhandledErrorMessage,
+                    snackbarType = SnackbarType.NEGATIVE,
+                    withDismissAction = true,
                 )
             )
         }
@@ -214,15 +214,13 @@ internal class HomeExecutor(
     ) = when (status) {
         is Either.Left -> when {
             status.value.isForbidden ->
-                globalEventRepository.sendEvent(GlobalEvent.LogOut(Reason.ERROR))
+                globalEventRepository.sendLogOut(Reason.ERROR)
 
-            else -> globalEventRepository.sendEvent(
-                GlobalEvent.ShowSnackbar(
-                    SnackbarMessage(
-                        message = unhandledErrorMessage,
-                        snackbarType = SnackbarType.NEGATIVE,
-                        withDismissAction = true,
-                    )
+            else -> globalEventRepository.sendSnackbar(
+                SnackbarMessage(
+                    message = unhandledErrorMessage,
+                    snackbarType = SnackbarType.NEGATIVE,
+                    withDismissAction = true,
                 )
             )
         }

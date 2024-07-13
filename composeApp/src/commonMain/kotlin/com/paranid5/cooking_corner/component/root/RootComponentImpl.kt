@@ -25,6 +25,8 @@ import com.paranid5.cooking_corner.utils.updateState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -78,7 +80,7 @@ internal class RootComponentImpl(
     }
 
     private suspend fun subscribeOnGlobalEventChanges() {
-        globalEventRepository.globalEventFlow.collect { event ->
+        globalEventRepository.globalEventFlow.filterNotNull().collectLatest { event ->
             when (event) {
                 is GlobalEvent.LogOut -> {
                     authRepository.clear()

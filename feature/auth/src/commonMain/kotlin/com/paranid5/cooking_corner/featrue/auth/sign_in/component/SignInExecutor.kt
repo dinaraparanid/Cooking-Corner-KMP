@@ -4,10 +4,9 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor.TokenResult
-import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
-import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
@@ -24,7 +23,7 @@ internal class SignInExecutor(
             is UiIntent.Back -> publish(Label.Back)
 
             is UiIntent.ConfirmCredentials -> scope.launch {
-                tryAcquireTokens(unhandledErrorMessage = intent.unhandledErrorMessage)
+                tryAcquireTokens(unhandledErrorSnackbar = intent.unhandledErrorSnackbarMessage)
             }
 
             is UiIntent.ShowSignUp -> publish(Label.ShowSignUp)
@@ -37,7 +36,7 @@ internal class SignInExecutor(
         }
     }
 
-    private suspend fun tryAcquireTokens(unhandledErrorMessage: String) = when (
+    private suspend fun tryAcquireTokens(unhandledErrorSnackbar: SnackbarMessage) = when (
         tokenInteractor.tryAcquireTokens(
             login = state().login,
             password = state().password,
@@ -53,14 +52,7 @@ internal class SignInExecutor(
             publish(Label.ConfirmedCredentials)
         }
 
-        is TokenResult.UnhandledError -> globalEventRepository.sendEvent(
-            GlobalEvent.ShowSnackbar(
-                SnackbarMessage(
-                    message = unhandledErrorMessage,
-                    snackbarType = SnackbarType.NEGATIVE,
-                    withDismissAction = true,
-                )
-            )
-        )
+        is TokenResult.UnhandledError ->
+            globalEventRepository.sendSnackbar(unhandledErrorSnackbar)
     }
 }

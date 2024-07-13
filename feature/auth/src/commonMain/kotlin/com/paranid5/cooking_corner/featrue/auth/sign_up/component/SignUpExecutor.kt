@@ -6,10 +6,9 @@ import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor
 import com.paranid5.cooking_corner.domain.auth.TokenInteractor.TokenResult
-import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
-import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
@@ -26,7 +25,12 @@ internal class SignUpExecutor(
         when (intent) {
             is UiIntent.Back -> publish(Label.Back)
 
-            is UiIntent.ConfirmCredentials -> scope.launch { checkCredentials(intent = intent) }
+            is UiIntent.ConfirmCredentials -> scope.launch {
+                checkCredentials(
+                    unhandledErrorSnackbar = intent.unhandledErrorSnackbar,
+                    invalidCredentialsSnackbar = intent.invalidCredentialsSnackbar,
+                )
+            }
 
             is UiIntent.UpdateLoginText -> dispatch(Msg.UpdateLoginText(intent.login))
 
@@ -39,28 +43,29 @@ internal class SignUpExecutor(
         }
     }
 
-    private suspend fun checkCredentials(intent: UiIntent.ConfirmCredentials) {
-        when (
-            val registerRes = withContext(AppDispatchers.Data) {
-                authRepository.register(
-                    username = state().login,
-                    password = state().password,
-                )
-            }
-        ) {
-            is Either.Left -> {
-                registerRes.value.printStackTrace()
-                sendErrorSnackbar(message = intent.generalErrorMessage)
-            }
+    private suspend fun checkCredentials(
+        unhandledErrorSnackbar: SnackbarMessage,
+        invalidCredentialsSnackbar: SnackbarMessage,
+    ) = when (
+        val registerRes = withContext(AppDispatchers.Data) {
+            authRepository.register(
+                username = state().login,
+                password = state().password,
+            )
+        }
+    ) {
+        is Either.Left -> {
+            registerRes.value.printStackTrace()
+            sendSnackbar(snackbar = unhandledErrorSnackbar)
+        }
 
-            is Either.Right -> when (registerRes.value) {
-                is Either.Left -> sendErrorSnackbar(message = intent.invalidCredentialsMessage)
-                is Either.Right -> tryAcquireTokens(intent = intent)
-            }
+        is Either.Right -> when (registerRes.value) {
+            is Either.Left -> sendSnackbar(snackbar = invalidCredentialsSnackbar)
+            is Either.Right -> tryAcquireTokens(unhandledErrorSnackbar = unhandledErrorSnackbar)
         }
     }
 
-    private suspend fun tryAcquireTokens(intent: UiIntent.ConfirmCredentials) = when (
+    private suspend fun tryAcquireTokens(unhandledErrorSnackbar: SnackbarMessage) = when (
         tokenInteractor.tryAcquireTokens(
             login = state().login,
             password = state().password,
@@ -75,16 +80,9 @@ internal class SignUpExecutor(
         }
 
         is TokenResult.InvalidPassword, is TokenResult.UnhandledError ->
-            sendErrorSnackbar(message = intent.generalErrorMessage)
+            sendSnackbar(snackbar = unhandledErrorSnackbar)
     }
 
-    private suspend fun sendErrorSnackbar(message: String) = globalEventRepository.sendEvent(
-        GlobalEvent.ShowSnackbar(
-            SnackbarMessage(
-                message = message,
-                snackbarType = SnackbarType.NEGATIVE,
-                withDismissAction = true,
-            )
-        )
-    )
+    private suspend fun sendSnackbar(snackbar: SnackbarMessage) =
+        globalEventRepository.sendSnackbar(snackbar)
 }

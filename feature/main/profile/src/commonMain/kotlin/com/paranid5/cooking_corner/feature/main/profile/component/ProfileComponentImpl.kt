@@ -15,6 +15,7 @@ import com.paranid5.cooking_corner.domain.auth.getMe
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendLogOut
 import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
 import com.paranid5.cooking_corner.feature.main.profile.utils.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
@@ -93,7 +94,7 @@ internal class ProfileComponentImpl(
     }
 
     private suspend fun logOut(reason: Reason) =
-        globalEventRepository.sendEvent(GlobalEvent.LogOut(reason))
+        globalEventRepository.sendLogOut(reason)
 
     class Factory(
         private val authRepository: AuthRepository,

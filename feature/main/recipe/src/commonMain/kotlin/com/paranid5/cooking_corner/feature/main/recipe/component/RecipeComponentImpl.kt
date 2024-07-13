@@ -13,6 +13,7 @@ import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendLogOut
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent.BackResult
@@ -114,9 +115,7 @@ internal class RecipeComponentImpl(
         onSuccess: (RecipeResponse) -> Unit,
     ) = when (status) {
         is Either.Left -> when {
-            status.value.isForbidden ->
-                globalEventRepository.sendEvent(GlobalEvent.LogOut(Reason.ERROR))
-
+            status.value.isForbidden -> globalEventRepository.sendLogOut(Reason.ERROR)
             else -> _stateFlow.updateState { copy(recipeUiState = UiState.Error()) }
         }
 

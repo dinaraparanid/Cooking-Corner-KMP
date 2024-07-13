@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.featrue.auth.sign_in.component
 
 import androidx.compose.runtime.Immutable
 import com.arkivanov.mvikotlin.core.store.Store
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_in.component.SignInStore.UiIntent
@@ -15,10 +16,17 @@ internal interface SignInStore : Store<UiIntent, State, Label> {
 
     sealed interface UiIntent {
         data object Back : UiIntent
+
         data class UpdateLoginText(val login: String) : UiIntent
+
         data class UpdatePasswordText(val password: String) : UiIntent
+
         data object UpdatePasswordVisibility : UiIntent
-        data class ConfirmCredentials(val unhandledErrorMessage: String) : UiIntent
+
+        data class ConfirmCredentials(
+            val unhandledErrorSnackbarMessage: SnackbarMessage
+        ) : UiIntent
+
         data object ShowSignUp : UiIntent
     }
 

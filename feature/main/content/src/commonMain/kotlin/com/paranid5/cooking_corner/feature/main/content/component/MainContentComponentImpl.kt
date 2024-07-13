@@ -8,8 +8,8 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.paranid5.cooking_corner.component.componentScope
 import com.paranid5.cooking_corner.component.toStateFlow
-import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.feature.main.generate.component.GenerateComponent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
@@ -158,9 +158,7 @@ internal class MainContentComponentImpl(
                     is RecipeEditorComponent.BackResult.Dismiss -> doNothing
 
                     is RecipeEditorComponent.BackResult.Uploaded -> componentScope.launch {
-                        globalEventRepository.sendEvent(
-                            GlobalEvent.ShowSnackbar(result.snackbarMessage)
-                        )
+                        globalEventRepository.sendSnackbar(result.snackbarMessage)
                     }
                 }
 

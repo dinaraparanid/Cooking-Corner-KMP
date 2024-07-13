@@ -24,6 +24,8 @@ import com.paranid5.cooking_corner.core.resources.auth_sign_in
 import com.paranid5.cooking_corner.core.resources.auth_sign_up
 import com.paranid5.cooking_corner.core.resources.auth_wrong_password
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
 import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordVisibilityHandling
@@ -70,7 +72,7 @@ private fun SignInContent(
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val unhandledErrorMessage = stringResource(Res.string.something_went_wrong)
+    val unhandledErrorSnackbar = UnhandledErrorSnackbar()
 
     Column(modifier) {
         CookingIcon(
@@ -118,13 +120,10 @@ private fun SignInContent(
             text = stringResource(
                 confirmButtonTextRes(areCredentialsInvalid = state.isPasswordInvalid)
             ),
-            onClick = {
-                onUiIntent(UiIntent.ConfirmCredentials(unhandledErrorMessage = unhandledErrorMessage))
-            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
-        )
+        ) { onUiIntent(UiIntent.ConfirmCredentials(unhandledErrorSnackbar)) }
     }
 }
 
@@ -148,6 +147,13 @@ private fun SignUpButton(
         fontFamily = AppTheme.typography.InterFontFamily,
     )
 }
+
+@Composable
+private fun UnhandledErrorSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.something_went_wrong),
+    snackbarType = SnackbarType.NEGATIVE,
+    withDismissAction = true,
+)
 
 private fun confirmButtonTextRes(areCredentialsInvalid: Boolean) = when {
     areCredentialsInvalid -> Res.string.auth_wrong_password

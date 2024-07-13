@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.featrue.auth.sign_up.component
 
 import androidx.compose.runtime.Immutable
 import com.arkivanov.mvikotlin.core.store.Store
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.Label
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.State
 import com.paranid5.cooking_corner.featrue.auth.sign_up.component.SignUpStore.UiIntent
@@ -25,8 +26,8 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
         data class UpdateConfirmPasswordText(val confirmPassword: String) : UiIntent
 
         data class ConfirmCredentials(
-            val generalErrorMessage: String,
-            val invalidCredentialsMessage: String,
+            val unhandledErrorSnackbar: SnackbarMessage,
+            val invalidCredentialsSnackbar: SnackbarMessage,
         ) : UiIntent
     }
 

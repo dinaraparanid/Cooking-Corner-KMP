@@ -15,8 +15,8 @@ import com.paranid5.cooking_corner.ui.utils.simpleShadow
 internal fun AuthConfirmButton(
     text: String,
     isEnabled: Boolean,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit,
 ) = AppRippleButton(
     onClick = onClick,
     isEnabled = isEnabled,

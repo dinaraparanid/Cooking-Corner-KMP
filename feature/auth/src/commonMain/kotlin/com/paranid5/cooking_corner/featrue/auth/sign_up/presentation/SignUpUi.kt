@@ -17,6 +17,8 @@ import com.paranid5.cooking_corner.core.resources.auth_sign_up
 import com.paranid5.cooking_corner.core.resources.auth_user_already_exists
 import com.paranid5.cooking_corner.core.resources.auth_username_too_short
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthConfirmButton
 import com.paranid5.cooking_corner.featrue.auth.presentation.AuthEditText
 import com.paranid5.cooking_corner.featrue.auth.presentation.PasswordVisibilityHandling
@@ -55,8 +57,11 @@ private fun SignUpContent(
         onPasswordVisibilityChanged = { onUiIntent(UiIntent.UpdatePasswordVisibility) },
     )
 
-    val generalErrorMessage = stringResource(Res.string.something_went_wrong)
-    val invalidCredentialsMessage = stringResource(Res.string.auth_user_already_exists)
+    val unhandledErrorSnackbar =
+        ErrorSnackbar(stringResource(Res.string.something_went_wrong))
+
+    val invalidCredentialsSnackbar =
+        ErrorSnackbar(stringResource(Res.string.auth_user_already_exists))
 
     ConstraintLayout(modifier = modifier) {
         val (
@@ -137,8 +142,8 @@ private fun SignUpContent(
             onClick = {
                 onUiIntent(
                     UiIntent.ConfirmCredentials(
-                        generalErrorMessage = generalErrorMessage,
-                        invalidCredentialsMessage = invalidCredentialsMessage,
+                        unhandledErrorSnackbar = unhandledErrorSnackbar,
+                        invalidCredentialsSnackbar = invalidCredentialsSnackbar,
                     )
                 )
             },
@@ -151,3 +156,9 @@ private fun SignUpContent(
         )
     }
 }
+
+private fun ErrorSnackbar(message: String) = SnackbarMessage(
+    message = message,
+    snackbarType = SnackbarType.NEGATIVE,
+    withDismissAction = true,
+)

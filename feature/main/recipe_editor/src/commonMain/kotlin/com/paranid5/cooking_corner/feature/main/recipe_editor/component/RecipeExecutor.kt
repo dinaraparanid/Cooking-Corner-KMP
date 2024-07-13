@@ -6,8 +6,8 @@ import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.domain.category.CategoryRepository
-import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
+import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.tag.TagRepository
@@ -304,5 +304,5 @@ internal class RecipeExecutor(
     }
 
     private suspend fun showSnackbar(snackbarMessage: SnackbarMessage) =
-        globalEventRepository.sendEvent(GlobalEvent.ShowSnackbar(snackbarMessage))
+        globalEventRepository.sendSnackbar(snackbarMessage)
 }
