@@ -18,6 +18,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_editor_description
 import com.paranid5.cooking_corner.core.resources.recipe_editor_dishes
 import com.paranid5.cooking_corner.core.resources.recipe_editor_fats
 import com.paranid5.cooking_corner.core.resources.recipe_editor_name
+import com.paranid5.cooking_corner.core.resources.recipe_editor_name_empty_error
 import com.paranid5.cooking_corner.core.resources.recipe_editor_nutritions
 import com.paranid5.cooking_corner.core.resources.recipe_editor_portions
 import com.paranid5.cooking_corner.core.resources.recipe_editor_preparation_time
@@ -63,6 +64,8 @@ internal fun RecipeEditorParams(
     RecipeEditorTextField(
         value = recipeParamsUiState.name,
         placeholder = stringResource(Res.string.recipe_editor_name),
+        isError = state.isNameEmptyErrorVisible,
+        errorMessage = stringResource(Res.string.recipe_editor_name_empty_error),
         onValueChange = { onUiIntent(UiIntent.UpdateName(name = it)) },
         modifier = Modifier.fillMaxWidth(),
     )

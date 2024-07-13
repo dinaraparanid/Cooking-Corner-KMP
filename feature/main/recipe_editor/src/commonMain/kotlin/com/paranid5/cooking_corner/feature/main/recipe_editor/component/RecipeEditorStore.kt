@@ -96,12 +96,14 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val ingredientDialogState: IngredientDialogState = IngredientDialogState(),
         val stepDialogState: StepDialogState = StepDialogState(),
         val isAddStepDialogVisible: Boolean = false,
-        val selectedCategoryIndex: Int = NOT_SELECTED,
-        val selectedTagIndex: Int = NOT_SELECTED,
+        val isNameEmptyErrorVisible: Boolean = false,
+        val selectedCategoryIndexInput: Int = NOT_SELECTED,
+        val selectedTagIndexInput: Int = NOT_SELECTED,
         val uiState: UiState<Unit> = UiState.Undefined,
     ) {
         companion object {
             const val NOT_SELECTED = 0
+            private const val SPINNER_ITEM_OFFSET = 1
         }
 
         @Serializable
@@ -147,12 +149,29 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val isNameEmpty = recipeParamsUiState.name.isEmpty()
 
         @Transient
+        val categories = categoriesUiState.getOrNull().orNil()
+
+        @Transient
+        val tags = tagsUiState.getOrNull().orNil()
+
+        @Transient
+        val selectedCategoryIndex = when (selectedCategoryIndexInput) {
+            NOT_SELECTED -> categories
+                .indexOfFirst { it.title == recipeParamsUiState.initialCategory }
+                .takeIf { it > -1 }
+                ?.let { it + SPINNER_ITEM_OFFSET }
+                ?: NOT_SELECTED
+
+            else -> selectedCategoryIndexInput
+        }
+
+        @Transient
         val selectedCategoryTitleOrNull = selectedCategoryIndex
             .takeIf { it > NOT_SELECTED }
             ?.let { index ->
                 categoriesUiState
                     .getOrNull()
-                    ?.getOrNull(index)
+                    ?.getOrNull(index - SPINNER_ITEM_OFFSET)
                     ?.title
             }
 
@@ -163,12 +182,23 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val selectedCategoryTitle = selectedCategoryTitleOrNull.orEmpty()
 
         @Transient
+        val selectedTagIndex = when (selectedTagIndexInput) {
+            NOT_SELECTED -> tags
+                .indexOfFirst { it.title == recipeParamsUiState.initialTag }
+                .takeIf { it > -1 }
+                ?.let { it + SPINNER_ITEM_OFFSET }
+                ?: NOT_SELECTED
+
+            else -> selectedTagIndexInput
+        }
+
+        @Transient
         val selectedTagTitleOrNull = selectedTagIndex
             .takeIf { it > NOT_SELECTED }
             ?.let { index ->
                 tagsUiState
                     .getOrNull()
-                    ?.getOrNull(index)
+                    ?.getOrNull(index - SPINNER_ITEM_OFFSET)
                     ?.title
             }
 
@@ -177,12 +207,6 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
 
         @Transient
         val isSaveButtonEnabled = isNameEmpty.not() && isCategorySelected
-
-        @Transient
-        val categories = categoriesUiState.getOrNull().orNil()
-
-        @Transient
-        val tags = tagsUiState.getOrNull().orNil()
 
         @Transient
         val preparationTimeMinutes = recipeParamsUiState.preparationTimeInput.toIntOrZero()

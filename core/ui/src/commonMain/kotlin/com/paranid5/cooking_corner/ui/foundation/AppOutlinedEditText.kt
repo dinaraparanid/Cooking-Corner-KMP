@@ -3,7 +3,6 @@ package com.paranid5.cooking_corner.ui.foundation
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -57,8 +56,11 @@ fun AppAnimatedOutlinedEditText(
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     singleLine: Boolean = true,
+    isError: Boolean = false,
+    errorMessage: String? = null,
     shape: Shape = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall),
 ) = OutlinedTextField(
+    modifier = modifier,
     value = value,
     onValueChange = onValueChange,
     shape = shape,
@@ -66,6 +68,7 @@ fun AppAnimatedOutlinedEditText(
         fontFamily = AppTheme.typography.RalewayFontFamily,
     ),
     singleLine = singleLine,
+    isError = isError,
     colors = TextFieldDefaults.colors(
         focusedTextColor = AppTheme.colors.text.tertiriary,
         unfocusedTextColor = AppTheme.colors.text.tertiriary,
@@ -81,14 +84,21 @@ fun AppAnimatedOutlinedEditText(
         unfocusedIndicatorColor = AppTheme.colors.button.primary,
     ),
     label = placeholder?.let { { Placeholder(text = it) } },
-    modifier = modifier,
+    supportingText = errorMessage.takeIf { isError }?.let { { Error(text = it) } },
 )
 
 @Composable
-private fun Placeholder(text: String, modifier: Modifier = Modifier) = Text(
+private fun Placeholder(text: String, modifier: Modifier = Modifier) = AppMainText(
     text = text,
     modifier = modifier,
     color = AppTheme.colors.text.tertiriary,
     style = AppTheme.typography.body,
-    fontFamily = AppTheme.typography.InterFontFamily,
+)
+
+@Composable
+private fun Error(text: String, modifier: Modifier = Modifier) = AppMainText(
+    text = text,
+    modifier = modifier,
+    color = AppTheme.colors.error,
+    style = AppTheme.typography.regular,
 )

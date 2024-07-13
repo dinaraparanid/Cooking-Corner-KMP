@@ -168,7 +168,7 @@ internal class RecipeApiImpl(
 
     override suspend fun update(
         id: Long,
-        recipeModifyParams: RecipeModifyParams
+        recipeModifyParams: RecipeModifyParams,
     ): ApiResultWithCode<Unit> = Either.catch {
         authRepository.withAuth { accessToken ->
             withContext(AppDispatchers.Data) {

@@ -30,14 +30,13 @@ import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.entity.mappers.toRequest
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
-import com.paranid5.cooking_corner.utils.doNothing
 import com.paranid5.cooking_corner.utils.mapToImmutableList
 import com.paranid5.cooking_corner.utils.toIntOrZero
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-internal class RecipeExecutor(
+internal class RecipeEditorExecutor(
     private val recipeRepository: RecipeRepository,
     private val categoryRepository: CategoryRepository,
     private val tagRepository: TagRepository,
@@ -119,7 +118,6 @@ internal class RecipeExecutor(
 
     private fun executeIngredientIntent(intent: UiIntent.Ingredient) = when (intent) {
         is UiIntent.Ingredient.Add -> {
-            // TODO: validate
             val ingredient = state().ingredientDialogState.inputIngredientUiState
             dispatch(Msg.Ingredient.Add(ingredient))
             dispatch(Msg.Ingredient.UpdateDialogVisibility(isVisible = false))
@@ -140,7 +138,6 @@ internal class RecipeExecutor(
 
     private fun executeStepIntent(intent: UiIntent.Step) = when (intent) {
         is UiIntent.Step.Add -> {
-            // TODO: validate
             val step = state().stepDialogState.inputStepUiState
             dispatch(Msg.Step.Add(step))
             dispatch(Msg.Step.UpdateDialogVisibility(isVisible = false))

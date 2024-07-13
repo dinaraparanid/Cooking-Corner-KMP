@@ -9,11 +9,15 @@ internal fun RecipeEditorTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
+    isError: Boolean = false,
+    errorMessage: String? = null,
     modifier: Modifier = Modifier,
 ) = AppAnimatedOutlinedEditText(
     value = value,
     onValueChange = onValueChange,
     placeholder = placeholder,
+    isError = isError,
+    errorMessage = errorMessage,
     modifier = modifier,
     shape = ParamShape,
 )

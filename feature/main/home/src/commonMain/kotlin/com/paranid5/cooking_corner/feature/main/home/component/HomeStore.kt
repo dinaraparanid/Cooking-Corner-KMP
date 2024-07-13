@@ -85,7 +85,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
             selectedCategoryIndex = NOT_SELECTED,
             recipesUiState = UiState.Undefined,
             categoriesUiState = UiState.Undefined,
-            isAscendingOrder = false,
+            isAscendingOrder = true,
         )
     }
 

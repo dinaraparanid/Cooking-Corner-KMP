@@ -7,7 +7,7 @@ import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.with
 import com.paranid5.cooking_corner.utils.without
 
-internal object RecipeReducer : Reducer<State, Msg> {
+internal object RecipeEditorReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg): State = when (msg) {
         is Msg.UpdateCarbohydrates -> copy(
             recipeParamsUiState = recipeParamsUiState
@@ -47,8 +47,8 @@ internal object RecipeReducer : Reducer<State, Msg> {
         )
 
         is Msg.UpdateName -> copy(
-            recipeParamsUiState = recipeParamsUiState
-                .copy(name = msg.name)
+            isNameEmptyErrorVisible = msg.name.isBlank(),
+            recipeParamsUiState = recipeParamsUiState.copy(name = msg.name)
         )
 
         is Msg.UpdateNutritions -> copy(
@@ -76,9 +76,9 @@ internal object RecipeReducer : Reducer<State, Msg> {
                 .copy(restTimeInput = msg.restTimeInput)
         )
 
-        is Msg.UpdateSelectedCategory -> copy(selectedCategoryIndex = msg.index)
+        is Msg.UpdateSelectedCategory -> copy(selectedCategoryIndexInput = msg.index)
 
-        is Msg.UpdateSelectedTag -> copy(selectedTagIndex = msg.index)
+        is Msg.UpdateSelectedTag -> copy(selectedTagIndexInput = msg.index)
 
         is Msg.UpdateSource -> copy(
             recipeParamsUiState = recipeParamsUiState

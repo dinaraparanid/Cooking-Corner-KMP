@@ -97,14 +97,14 @@ internal class RecipeEditorStoreProvider(
             name = "RecipeEditorStore",
             initialState = initialState,
             executorFactory = {
-                RecipeExecutor(
+                RecipeEditorExecutor(
                     recipeRepository = recipeRepository,
                     categoryRepository = categoryRepository,
                     tagRepository = tagRepository,
                     globalEventRepository = globalEventRepository,
                 )
             },
-            reducer = RecipeReducer,
+            reducer = RecipeEditorReducer,
             bootstrapper = SimpleBootstrapper(Unit),
         ) {}
 
