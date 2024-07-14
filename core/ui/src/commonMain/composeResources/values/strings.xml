@@ -87,6 +87,8 @@
     <string name="generate_provide_link">Provide a link to a site that has a cooking recipe and we will create a recipe from it and add it to your list.</string>
     <string name="generate_link_placeholder">Link</string>
     <string name="generate_apply_button">Generate</string>
+    <string name="generate_generation_error">Can’t generate a recipe, please try again.</string>
+    <string name="generate_generating_recipe">Generating your recipe</string>
 
     <!-- Recipe Editor -->
     <string name="recipe_editor_save">Save</string>

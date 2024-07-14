@@ -37,4 +37,6 @@ interface RecipeApi {
     suspend fun publish(recipeId: Long): ApiResultWithCode<Unit>
 
     suspend fun rate(recipeId: Long, rating: Int): ApiResultWithCode<Unit>
+
+    suspend fun generate(url: String): ApiResultWithCode<RecipeResponse>
 }

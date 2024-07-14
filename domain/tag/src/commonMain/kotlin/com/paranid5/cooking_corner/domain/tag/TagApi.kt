@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.domain.tag
 
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 
+@Deprecated("Cut from release")
 interface TagApi {
     suspend fun getAll(): ApiResultWithCode<List<String>>
 

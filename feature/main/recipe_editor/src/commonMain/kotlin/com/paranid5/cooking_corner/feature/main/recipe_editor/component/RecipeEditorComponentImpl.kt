@@ -1,9 +1,6 @@
 package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.arkivanov.essenty.lifecycle.doOnResume
-import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
@@ -15,10 +12,8 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.toUiState
-import com.paranid5.cooking_corner.utils.doNothing
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 internal class RecipeEditorComponentImpl(

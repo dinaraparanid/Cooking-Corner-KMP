@@ -6,7 +6,7 @@ import com.paranid5.cooking_corner.component.UiIntentHandler
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 
 interface RecipeEditorComponent : StateSource<State>, UiIntentHandler<UiIntent> {
     sealed interface BackResult {

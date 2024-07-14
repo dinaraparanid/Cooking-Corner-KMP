@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.paranid5.cooking_corner.component.componentScope
 import com.paranid5.cooking_corner.component.toStateFlow
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
@@ -68,13 +69,6 @@ internal class MainContentComponentImpl(
                 component = buildRecipeDetailsComponent(config, componentContext)
             )
 
-            is MainContentConfig.AddRecipe -> MainContentChild.AddRecipe(
-                component = buildRecipeEditorComponent(
-                    componentContext = componentContext,
-                    launchMode = LaunchMode.New,
-                )
-            )
-
             is MainContentConfig.GenerateRecipe -> MainContentChild.GenerateRecipe(
                 component = buildGenerateRecipeComponent(componentContext)
             )
@@ -82,7 +76,7 @@ internal class MainContentComponentImpl(
             is MainContentConfig.RecipeEditor -> MainContentChild.RecipeEditor(
                 component = buildRecipeEditorComponent(
                     componentContext = componentContext,
-                    launchMode = LaunchMode.Edit(recipeId = config.recipeId),
+                    launchMode = config.launchMode,
                 )
             )
         }
@@ -100,13 +94,13 @@ internal class MainContentComponentImpl(
                     )
 
                     is HomeComponent.BackResult.ShowAddRecipe ->
-                        navigation.bringToFront(MainContentConfig.AddRecipe)
+                        navigation.bringToFront(MainContentConfig.RecipeEditor(LaunchMode.New))
 
                     is HomeComponent.BackResult.ShowImportRecipe ->
                         navigation.bringToFront(MainContentConfig.GenerateRecipe)
 
                     is HomeComponent.BackResult.ShowRecipeEditor -> navigation.bringToFront(
-                        MainContentConfig.RecipeEditor(recipeId = result.recipeId)
+                        MainContentConfig.RecipeEditor(LaunchMode.Edit(recipeId = result.recipeId))
                     )
                 }
             },
@@ -143,7 +137,7 @@ internal class MainContentComponentImpl(
                 is RecipeComponent.BackResult.Dismiss -> navigation.pop()
 
                 is RecipeComponent.BackResult.Edit -> navigation.bringToFront(
-                    MainContentConfig.RecipeEditor(recipeId = result.recipeId)
+                    MainContentConfig.RecipeEditor(LaunchMode.Edit(recipeId = result.recipeId))
                 )
             }
         },
@@ -153,8 +147,15 @@ internal class MainContentComponentImpl(
         generateComponentFactory.create(
             componentContext = componentContext,
             onBack = { result ->
-                // TODO: handle generation result
-                navigation.pop()
+                when (result) {
+                    is GenerateComponent.BackResult.Dismiss -> navigation.pop()
+
+                    is GenerateComponent.BackResult.Generated -> navigation.replaceCurrent(
+                        MainContentConfig.RecipeEditor(
+                            LaunchMode.Generate(recipeParamsUiState = result.params)
+                        )
+                    )
+                }
             }
         )
 

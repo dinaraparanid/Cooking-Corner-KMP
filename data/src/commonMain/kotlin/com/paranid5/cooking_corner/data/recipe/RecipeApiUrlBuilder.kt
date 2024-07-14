@@ -7,23 +7,23 @@ internal class RecipeApiUrlBuilder(private val baseUrl: String) {
 
     fun buildMyRecipesUrl() = "$baseUrl/recipes/get_my_recipes"
 
-    fun buildAddToMyRecipesUrl(recipeId: Long) =
-        "$baseUrl/recipes/add_to_my_recipes?recipe_id=$recipeId"
+    fun buildAddToMyRecipesUrl() =
+        "$baseUrl/recipes/add_to_my_recipes"
 
-    fun buildRemoveFromMyRecipesUrl(recipeId: Long) =
-        "$baseUrl/recipes/delete_from_my_recipes?recipe_id=$recipeId"
+    fun buildRemoveFromMyRecipesUrl() =
+        "$baseUrl/recipes/delete_from_my_recipes"
 
-    fun buildAddToFavouritesUrl(recipeId: Long) =
-        "$baseUrl/recipes/add_to_favourites?recipe_id=$recipeId"
+    fun buildAddToFavouritesUrl() =
+        "$baseUrl/recipes/add_to_favourites"
 
-    fun buildRemoveFromFavouritesUrl(recipeId: Long) =
-        "$baseUrl/recipes/remove_from_favourites?recipe_id=$recipeId"
+    fun buildRemoveFromFavouritesUrl() =
+        "$baseUrl/recipes/remove_from_favourites"
 
     fun buildGetRecipeByIdUrl(recipeId: Long) =
         "$baseUrl/recipes/get_by_id/$recipeId"
 
-    fun buildGetRecipeByNameUrl(name: String) =
-        "$baseUrl/recipes/get_by_name?name=$name"
+    fun buildGetRecipeByNameUrl() =
+        "$baseUrl/recipes/get_by_name"
 
     fun buildCreateUrl() = "$baseUrl/recipes/create"
 
@@ -31,6 +31,7 @@ internal class RecipeApiUrlBuilder(private val baseUrl: String) {
 
     fun buildPublishUrl(recipeId: Long) = "$baseUrl/recipes/publish/$recipeId"
 
-    fun buildRateUrl(recipeId: Long, rating: Int) =
-        "$baseUrl/recipes/rate_recipe?recipe_id=$recipeId&rating=$rating"
+    fun buildRateUrl() = "$baseUrl/recipes/rate_recipe"
+
+    fun buildGenerateRecipeUrl() = "$baseUrl/recipes/generate_recipe"
 }

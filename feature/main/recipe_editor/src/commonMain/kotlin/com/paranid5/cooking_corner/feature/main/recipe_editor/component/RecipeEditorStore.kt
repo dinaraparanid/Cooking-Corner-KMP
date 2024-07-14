@@ -7,7 +7,7 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.recipe_editor.domain.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState

@@ -54,6 +54,8 @@ kotlin {
             api(projects.core.utils)
             api(projects.core.ui)
 
+            implementation(projects.domain.globalEvent)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

@@ -15,6 +15,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -27,6 +28,13 @@ internal class RecipeApiImpl(
     private val urlBuilder: RecipeApiUrlBuilder,
     private val authRepository: AuthRepository,
 ) : RecipeApi {
+    private companion object {
+        const val RECIPE_ID_QUERY = "recipe_id"
+        const val NAME_QUERY = "name"
+        const val RATING_QUERY = "rating"
+        const val URL_QUERY = "url"
+    }
+
     override suspend fun getRecentRecipes(): ApiResultWithCode<List<RecipeResponse>> =
         Either.catch {
             authRepository.withAuth { accessToken ->
@@ -74,7 +82,8 @@ internal class RecipeApiImpl(
     override suspend fun addToFavourites(recipeId: Long): ApiResultWithCode<Unit> = Either.catch {
         authRepository.withAuth { accessToken ->
             withContext(AppDispatchers.Data) {
-                ktorClient.post(urlBuilder.buildAddToFavouritesUrl(recipeId = recipeId)) {
+                ktorClient.post(urlBuilder.buildAddToFavouritesUrl()) {
+                    url { parameter(RECIPE_ID_QUERY, recipeId) }
                     bearerAuth(accessToken)
                 }
             }
@@ -85,9 +94,8 @@ internal class RecipeApiImpl(
         Either.catch {
             authRepository.withAuth { accessToken ->
                 withContext(AppDispatchers.Data) {
-                    ktorClient.delete(
-                        urlBuilder.buildRemoveFromFavouritesUrl(recipeId = recipeId)
-                    ) {
+                    ktorClient.delete(urlBuilder.buildRemoveFromFavouritesUrl()) {
+                        url { parameter(RECIPE_ID_QUERY, recipeId) }
                         bearerAuth(accessToken)
                     }
                 }
@@ -97,7 +105,8 @@ internal class RecipeApiImpl(
     override suspend fun addToMyRecipes(recipeId: Long): ApiResultWithCode<Unit> = Either.catch {
         authRepository.withAuth { accessToken ->
             withContext(AppDispatchers.Data) {
-                ktorClient.post(urlBuilder.buildAddToMyRecipesUrl(recipeId = recipeId)) {
+                ktorClient.post(urlBuilder.buildAddToMyRecipesUrl()) {
+                    url { parameter(RECIPE_ID_QUERY, recipeId) }
                     bearerAuth(accessToken)
                 }
             }
@@ -108,7 +117,8 @@ internal class RecipeApiImpl(
         Either.catch {
             authRepository.withAuth { accessToken ->
                 withContext(AppDispatchers.Data) {
-                    ktorClient.delete(urlBuilder.buildRemoveFromMyRecipesUrl(recipeId = recipeId)) {
+                    ktorClient.delete(urlBuilder.buildRemoveFromMyRecipesUrl()) {
+                        url { parameter(RECIPE_ID_QUERY, recipeId) }
                         bearerAuth(accessToken)
                     }
                 }
@@ -131,7 +141,8 @@ internal class RecipeApiImpl(
             authRepository
                 .withAuth<List<RecipeResponse>?> { accessToken ->
                     withContext(AppDispatchers.Data) {
-                        ktorClient.post(urlBuilder.buildGetRecipeByNameUrl(name = name)) {
+                        ktorClient.post(urlBuilder.buildGetRecipeByNameUrl()) {
+                            url { parameter(NAME_QUERY, name) }
                             bearerAuth(accessToken)
                             contentType(ContentType.Application.Json)
                             setBody(SearchRecipesRequest())
@@ -233,7 +244,23 @@ internal class RecipeApiImpl(
     override suspend fun rate(recipeId: Long, rating: Int): ApiResultWithCode<Unit> = Either.catch {
         authRepository.withAuth { accessToken ->
             withContext(AppDispatchers.Data) {
-                ktorClient.post(urlBuilder.buildRateUrl(recipeId = recipeId, rating = rating)) {
+                ktorClient.post(urlBuilder.buildRateUrl()) {
+                    url {
+                        parameter(RECIPE_ID_QUERY, recipeId)
+                        parameter(RATING_QUERY, rating)
+                    }
+
+                    bearerAuth(accessToken)
+                }
+            }
+        }
+    }
+
+    override suspend fun generate(url: String): ApiResultWithCode<RecipeResponse> = Either.catch {
+        authRepository.withAuth { accessToken ->
+            withContext(AppDispatchers.Data) {
+                ktorClient.get(urlBuilder.buildGenerateRecipeUrl()) {
+                    url { parameter(URL_QUERY, url) }
                     bearerAuth(accessToken)
                 }
             }

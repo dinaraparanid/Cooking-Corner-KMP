@@ -1,5 +1,6 @@
 package com.paranid5.cooking_corner.feature.main.content.component
 
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent.Factory.LaunchMode
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,11 +18,8 @@ sealed interface MainContentConfig {
     data class RecipeDetails(val recipeId: Long) : MainContentConfig
 
     @Serializable
-    data object AddRecipe : MainContentConfig
-
-    @Serializable
     data object GenerateRecipe : MainContentConfig
 
     @Serializable
-    data class RecipeEditor(val recipeId: Long) : MainContentConfig
+    data class RecipeEditor(val launchMode: LaunchMode) : MainContentConfig
 }
