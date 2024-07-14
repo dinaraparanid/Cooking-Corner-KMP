@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 
 private val COVER_WIDTH = 166.dp
@@ -107,13 +107,12 @@ private fun RecipeTitle(
     title: String,
     modifier: Modifier = Modifier,
 ) = Box(modifier) {
-    Text(
+    AppMainText(
         text = title,
         fontWeight = FontWeight.Bold,
         overflow = TextOverflow.Ellipsis,
-        color = AppTheme.colors.text.primary,
         style = AppTheme.typography.h.h3,
-        fontFamily = AppTheme.typography.RalewayFontFamily,
+        maxLines = 2,
         modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.CenterStart),
