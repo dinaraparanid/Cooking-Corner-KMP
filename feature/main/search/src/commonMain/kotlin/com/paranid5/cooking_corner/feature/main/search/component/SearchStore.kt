@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.feature.main.search.component
 
 import androidx.compose.runtime.Immutable
 import com.arkivanov.mvikotlin.core.store.Store
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
@@ -18,16 +19,18 @@ interface SearchStore : Store<UiIntent, State, Label> {
 
         data class UpdateSearchText(val text: String) : UiIntent
 
+        data object CancelSearching : UiIntent
+
         data class ShowRecipe(val recipeId: Long) : UiIntent
 
         data class AddToMyRecipesClick(
             val recipeUiState: RecipeUiState,
-            val unhandledErrorMessage: String,
+            val unhandledErrorSnackbar: SnackbarMessage,
         ) : UiIntent
 
         data class RemoveFromMyRecipesClick(
             val recipeUiState: RecipeUiState,
-            val unhandledErrorMessage: String,
+            val unhandledErrorSnackbar: SnackbarMessage,
         ) : UiIntent
     }
 
@@ -35,15 +38,19 @@ interface SearchStore : Store<UiIntent, State, Label> {
     @Immutable
     data class State(
         val searchText: String,
+        val isSearching: Boolean,
         val recentRecipes: SerializableImmutableList<RecipeUiState>,
         val bestRatedRecipes: SerializableImmutableList<RecipeUiState>,
-        val uiState: UiState<Unit>,
+        val foundRecipesUiState: UiState<SerializableImmutableList<RecipeUiState>>,
+        val previewUiState: UiState<Unit>,
     ) {
         constructor() : this(
             searchText = "",
+            isSearching = false,
             recentRecipes = SerializableImmutableList(),
             bestRatedRecipes = SerializableImmutableList(),
-            uiState = UiState.Undefined,
+            foundRecipesUiState = UiState.Undefined,
+            previewUiState = UiState.Undefined,
         )
     }
 

@@ -7,9 +7,9 @@ import com.paranid5.cooking_corner.data.auth.withAuth
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeApi
 import com.paranid5.cooking_corner.domain.recipe.dto.CreateRecipeRequest
-import com.paranid5.cooking_corner.domain.recipe.dto.MyRecipesRequest
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeModifyParams
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
+import com.paranid5.cooking_corner.domain.recipe.dto.SearchRecipesRequest
 import com.paranid5.cooking_corner.domain.recipe.dto.UpdateRecipeRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.bearerAuth
@@ -59,9 +59,8 @@ internal class RecipeApiImpl(
                 ktorClient.post(urlBuilder.buildMyRecipesUrl()) {
                     bearerAuth(accessToken)
                     contentType(ContentType.Application.Json)
-
                     setBody(
-                        MyRecipesRequest(
+                        SearchRecipesRequest(
                             categoryName = categoryName,
                             isFavourite = isFavourite,
                             ascendingOrder = ascendingOrder,
@@ -127,6 +126,21 @@ internal class RecipeApiImpl(
             }
         }
 
+    override suspend fun getRecipesByName(name: String): ApiResultWithCode<List<RecipeResponse>> =
+        Either.catch {
+            authRepository
+                .withAuth<List<RecipeResponse>?> { accessToken ->
+                    withContext(AppDispatchers.Data) {
+                        ktorClient.post(urlBuilder.buildGetRecipeByNameUrl(name = name)) {
+                            bearerAuth(accessToken)
+                            contentType(ContentType.Application.Json)
+                            setBody(SearchRecipesRequest())
+                        }
+                    }
+                }
+                .map { it.orEmpty() }
+        }
+
     override suspend fun create(recipeModifyParams: RecipeModifyParams): ApiResultWithCode<Unit> =
         Either.catch {
             authRepository.withAuth { accessToken ->
@@ -134,7 +148,6 @@ internal class RecipeApiImpl(
                     ktorClient.post(urlBuilder.buildCreateUrl()) {
                         bearerAuth(accessToken)
                         contentType(ContentType.Application.Json)
-
                         setBody(
                             recipeModifyParams.run {
                                 CreateRecipeRequest(
@@ -175,7 +188,6 @@ internal class RecipeApiImpl(
                 ktorClient.put(urlBuilder.buildUpdateUrl()) {
                     bearerAuth(accessToken)
                     contentType(ContentType.Application.Json)
-
                     setBody(
                         recipeModifyParams.run {
                             UpdateRecipeRequest(

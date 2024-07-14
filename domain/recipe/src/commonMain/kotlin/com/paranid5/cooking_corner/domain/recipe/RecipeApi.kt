@@ -25,6 +25,8 @@ interface RecipeApi {
 
     suspend fun getRecipeById(recipeId: Long): ApiResultWithCode<RecipeResponse>
 
+    suspend fun getRecipesByName(name: String): ApiResultWithCode<List<RecipeResponse>>
+
     suspend fun create(recipeModifyParams: RecipeModifyParams): ApiResultWithCode<Unit>
 
     suspend fun update(

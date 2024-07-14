@@ -1,12 +1,10 @@
 package com.paranid5.cooking_corner.feature.main.search.component
 
-import arrow.core.Either
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
-import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
@@ -14,7 +12,6 @@ import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
-import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
@@ -24,173 +21,170 @@ import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
-import com.paranid5.cooking_corner.utils.doNothing
+import com.paranid5.cooking_corner.utils.handleApiResult
+import com.paranid5.cooking_corner.utils.identity
+import com.paranid5.cooking_corner.utils.mapToImmutableList
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+private val UPDATE_SEARCH_TEXT_DELAY = 1000L
 
 internal class SearchExecutor(
     private val recipeRepository: RecipeRepository,
     private val globalEventRepository: GlobalEventRepository,
 ) : CoroutineExecutor<UiIntent, Unit, State, Msg, Label>() {
+    private var currentUpdateSearchTextTask: Job? = null
+
     override fun executeIntent(intent: UiIntent) {
         when (intent) {
             is UiIntent.LoadRecipes -> loadRecipes()
 
             is UiIntent.AddToMyRecipesClick -> addToMyRecipes(
                 recipeUiState = intent.recipeUiState,
-                unhandledErrorMessage = intent.unhandledErrorMessage,
+                unhandledErrorSnackbar = intent.unhandledErrorSnackbar,
             )
 
             is UiIntent.RemoveFromMyRecipesClick -> removeFromMyRecipes(
                 recipeUiState = intent.recipeUiState,
-                unhandledErrorMessage = intent.unhandledErrorMessage,
+                unhandledErrorSnackbar = intent.unhandledErrorSnackbar,
             )
 
-            is UiIntent.SearchRecipes -> doNothing // TODO: Search recipes by name
+            is UiIntent.SearchRecipes -> launchNewSearchTextUpdateQuery(text = state().searchText)
 
             is UiIntent.ShowRecipe -> publish(Label.ShowRecipe(intent.recipeId))
 
-            is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(intent.text))
+            is UiIntent.UpdateSearchText -> dispatch(Msg.UpdateSearchText(text = intent.text))
+
+            is UiIntent.CancelSearching -> dispatch(Msg.CancelSearching)
         }
     }
 
     // -------------------- UI Intent handling --------------------
 
     private fun loadRecipes() {
-        dispatch(Msg.UpdateUiState(UiState.Loading))
+        dispatch(Msg.UpdatePreviewUiState(UiState.Loading))
 
-        scope.launch {
+        val loadBestRatedTask = scope.async {
             handleRecipesApiResult(
-                onSuccess = {
-                    dispatch(Msg.UpdateBestRatedRecipes(recipes = SerializableImmutableList(it)))
-                },
                 result = withContext(AppDispatchers.Data) {
                     recipeRepository.getBestRatedRecipes()
-                }
-            )
+                },
+                onUnhandledError = { dispatch(Msg.UpdatePreviewUiState(it.toUiState())) },
+                onErrorStatusCode = { dispatch(Msg.UpdatePreviewUiState(UiState.Error())) },
+            ) {
+                dispatch(Msg.UpdateBestRatedRecipes(recipes = SerializableImmutableList(it)))
+            }
+        }
+
+        val loadRecentTask = scope.async {
+            handleRecipesApiResult(
+                result = withContext(AppDispatchers.Data) {
+                    recipeRepository.getRecentRecipes()
+                },
+                onUnhandledError = { dispatch(Msg.UpdatePreviewUiState(it.toUiState())) },
+                onErrorStatusCode = { dispatch(Msg.UpdatePreviewUiState(UiState.Error())) },
+            ) {
+                dispatch(Msg.UpdateRecentRecipes(recipes = SerializableImmutableList(it)))
+            }
         }
 
         scope.launch {
-            handleRecipesApiResult(
-                onSuccess = {
-                    dispatch(Msg.UpdateRecentRecipes(recipes = SerializableImmutableList(it)))
-                },
-                result = withContext(AppDispatchers.Data) {
-                    recipeRepository.getRecentRecipes()
-                }
-            )
+            if (arrayOf(loadBestRatedTask, loadRecentTask).all { it.await() })
+                dispatch(Msg.UpdatePreviewUiState(UiState.Success))
         }
     }
 
     private fun addToMyRecipes(
         recipeUiState: RecipeUiState,
-        unhandledErrorMessage: String,
+        unhandledErrorSnackbar: SnackbarMessage,
     ) = scope.launch {
         handleModifyRecipeApiResult(
             result = withContext(AppDispatchers.Data) {
                 recipeRepository.addToMyRecipes(recipeId = recipeUiState.id)
             },
-            unhandledErrorMessage = unhandledErrorMessage,
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
             onSuccess = ::loadRecipes,
         )
     }
 
     private fun removeFromMyRecipes(
         recipeUiState: RecipeUiState,
-        unhandledErrorMessage: String,
+        unhandledErrorSnackbar: SnackbarMessage,
     ) = scope.launch {
         handleModifyRecipeApiResult(
             result = withContext(AppDispatchers.Data) {
                 recipeRepository.removeFromMyRecipes(recipeId = recipeUiState.id)
             },
-            unhandledErrorMessage = unhandledErrorMessage,
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
             onSuccess = ::loadRecipes,
         )
+    }
+
+    private fun launchNewSearchTextUpdateQuery(text: String) {
+        dispatch(Msg.UpdateFoundRecipesUiState(UiState.Loading))
+
+        currentUpdateSearchTextTask?.cancel()
+        currentUpdateSearchTextTask = scope.launch {
+            delay(UPDATE_SEARCH_TEXT_DELAY)
+
+            handleRecipesApiResult(
+                result = withContext(AppDispatchers.Data) {
+                    recipeRepository.getRecipesByName(name = text)
+                },
+                onUnhandledError = { dispatch(Msg.UpdateFoundRecipesUiState(it.toUiState())) },
+                onErrorStatusCode = { dispatch(Msg.UpdateFoundRecipesUiState(UiState.Error())) },
+            ) {
+                dispatch(
+                    Msg.UpdateFoundRecipesUiState(
+                        recipesUiState = SerializableImmutableList(it).toUiState()
+                    )
+                )
+            }
+        }
     }
 
     // -------------------- API results handling --------------------
 
     private suspend inline fun handleRecipesApiResult(
         result: ApiResultWithCode<List<RecipeResponse>>,
+        onUnhandledError: (error: Throwable) -> Unit,
+        onErrorStatusCode: (status: HttpStatusCode) -> Unit,
         onSuccess: (recipes: ImmutableList<RecipeUiState>) -> Unit,
-    ) = when (result) {
-        is Either.Left -> {
-            result.value.printStackTrace()
-            dispatch(Msg.UpdateUiState(result.value.toUiState()))
-        }
-
-        is Either.Right -> handleRecipesStatus(
-            status = result.value,
-            onSuccess = onSuccess,
-        )
-    }
-
-    private suspend inline fun handleRecipesStatus(
-        status: Either<HttpStatusCode, List<RecipeResponse>>,
-        onSuccess: (recipes: ImmutableList<RecipeUiState>) -> Unit,
-    ) = when (status) {
-        is Either.Left -> when {
-            status.value.isForbidden -> globalEventRepository.sendLogOut(Reason.MANUAL)
-
-            else -> {
-                println(status.value)
-                dispatch(Msg.UpdateUiState(UiState.Error()))
+    ) = handleApiResult(
+        result = result,
+        onUnhandledError = onUnhandledError,
+        onErrorStatusCode = { status ->
+            when {
+                status.isForbidden -> globalEventRepository.sendLogOut(Reason.MANUAL)
+                else -> onErrorStatusCode(status)
             }
-        }
-
-        is Either.Right -> {
-            onSuccess(
-                withContext(AppDispatchers.Eval) {
-                    status.value
-                        .map(RecipeUiState.Companion::fromResponse)
-                        .toImmutableList()
-                }
-            )
-
-            dispatch(Msg.UpdateUiState(UiState.Success))
-        }
+        },
+    ) { recipes ->
+        onSuccess(
+            withContext(AppDispatchers.Eval) {
+                recipes.mapToImmutableList(RecipeUiState.Companion::fromResponse)
+            }
+        )
     }
 
     private suspend inline fun handleModifyRecipeApiResult(
         result: ApiResultWithCode<Unit>,
-        unhandledErrorMessage: String,
+        unhandledErrorSnackbar: SnackbarMessage,
         onSuccess: () -> Unit,
-    ) = when (result) {
-        is Either.Left -> {
-            result.value.printStackTrace()
-            globalEventRepository.sendSnackbar(
-                SnackbarMessage(
-                    message = unhandledErrorMessage,
-                    snackbarType = SnackbarType.NEGATIVE,
-                )
-            )
-        }
-
-        is Either.Right -> handleModifyRecipeStatus(
-            status = result.value,
-            unhandledErrorMessage = unhandledErrorMessage,
-            onSuccess = onSuccess,
-        )
-    }
-
-    private suspend inline fun handleModifyRecipeStatus(
-        status: Either<HttpStatusCode, Unit>,
-        unhandledErrorMessage: String,
-        onSuccess: () -> Unit,
-    ) = when (status) {
-        is Either.Left -> when {
-            status.value.isForbidden -> globalEventRepository.sendLogOut(Reason.ERROR)
-
-            else -> globalEventRepository.sendSnackbar(
-                SnackbarMessage(
-                    message = unhandledErrorMessage,
-                    snackbarType = SnackbarType.NEGATIVE,
-                )
-            )
-        }
-
-        is Either.Right -> onSuccess()
-    }
+    ) = handleApiResult(
+        result = result,
+        onSuccess = { onSuccess() },
+        onUnhandledError = { globalEventRepository.sendSnackbar(unhandledErrorSnackbar) },
+        onErrorStatusCode = { status ->
+            when {
+                status.isForbidden -> globalEventRepository.sendLogOut(Reason.ERROR)
+                else -> globalEventRepository.sendSnackbar(unhandledErrorSnackbar)
+            }
+        },
+    )
 }

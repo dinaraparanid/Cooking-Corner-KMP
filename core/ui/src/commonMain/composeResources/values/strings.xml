@@ -48,7 +48,7 @@
     <string name="profile_logout">Log out</string>
 
     <!-- Search -->
-    <string name="search_filter_placeholder">Search for new cooking recipes</string>
+    <string name="search_filter_placeholder">Search for new recipes</string>
     <string name="search_last_recipes">Last recipes</string>
     <string name="search_add_to_recipes">Add to your recipes</string>
     <string name="search_remove_from_recipes">Remove from your recipes</string>
@@ -58,6 +58,8 @@
     <string name="search_last_recipes_no_item_placeholder_row_2_2">search page to find new</string>
     <string name="search_last_recipes_no_item_placeholder_row_3">recipes you're interested in or you can use the</string>
     <string name="search_last_recipes_no_item_placeholder_row_4">home page to import or write your recipes.</string>
+    <string name="search_matching_results">Matching results:</string>
+    <string name="search_matching_results_none">No recipes matching the query were found</string>
 
     <!-- Recipe -->
     <string name="recipe_reviews" formatted="false">%1$s reviews</string>

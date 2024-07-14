@@ -12,6 +12,8 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.search_add_to_recipes
 import com.paranid5.cooking_corner.core.resources.search_remove_from_recipes
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
@@ -32,19 +34,19 @@ internal fun ModifyMyRecipesButton(
         }
     }
 
-    val unhandledErrorMessage = stringResource(Res.string.something_went_wrong)
+    val unhandledErrorSnackbar = UnhandledErrorSnackbar()
 
     fun addRecipe() = onUiIntent(
         UiIntent.AddToMyRecipesClick(
             recipeUiState = recipeUiState,
-            unhandledErrorMessage = unhandledErrorMessage,
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
         )
     )
 
     fun removeRecipe() = onUiIntent(
         UiIntent.RemoveFromMyRecipesClick(
             recipeUiState = recipeUiState,
-            unhandledErrorMessage = unhandledErrorMessage,
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
         )
     )
 
@@ -90,3 +92,9 @@ private fun ModifyMyRecipesButtonImpl(
         style = AppTheme.typography.captionSm,
     )
 }
+
+@Composable
+private fun UnhandledErrorSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.something_went_wrong),
+    snackbarType = SnackbarType.NEGATIVE,
+)

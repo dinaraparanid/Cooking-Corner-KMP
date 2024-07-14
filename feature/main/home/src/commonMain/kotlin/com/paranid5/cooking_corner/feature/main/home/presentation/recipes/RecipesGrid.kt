@@ -85,7 +85,7 @@ private fun RecipesGridContentImpl(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(PADDING_BETWEEN_RECIPES),
         horizontalArrangement = Arrangement.spacedBy(PADDING_BETWEEN_RECIPES),
-        columns = GridCells.Adaptive(getMinCellWidth(constraints.maxWidth))
+        columns = GridCells.Adaptive(getMinCellWidth(constraints.maxWidth)),
     ) {
         items(items = state.filteredRecipes) { recipe ->
             RecipeItem(

@@ -20,7 +20,7 @@ internal class SearchStoreProvider(
     sealed interface Msg {
         data class UpdateSearchText(val text: String) : Msg
 
-        data class UpdateUiState(val uiState: UiState<Unit>) : Msg
+        data object CancelSearching : Msg
 
         data class UpdateRecentRecipes(
             val recipes: SerializableImmutableList<RecipeUiState>
@@ -29,6 +29,12 @@ internal class SearchStoreProvider(
         data class UpdateBestRatedRecipes(
             val recipes: SerializableImmutableList<RecipeUiState>
         ) : Msg
+
+        data class UpdateFoundRecipesUiState(
+            val recipesUiState: UiState<SerializableImmutableList<RecipeUiState>>
+        ) : Msg
+
+        data class UpdatePreviewUiState(val uiState: UiState<Unit>) : Msg
     }
 
     fun provide(initialState: State): SearchStore = object :

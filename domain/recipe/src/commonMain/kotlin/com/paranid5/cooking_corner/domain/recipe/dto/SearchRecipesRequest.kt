@@ -4,8 +4,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MyRecipesRequest(
+data class SearchRecipesRequest(
     @SerialName("category_name") val categoryName: String = "",
     @SerialName("is_favourite") val isFavourite: Boolean = false,
-    @SerialName("ascending_order") val ascendingOrder: Boolean = false,
+    @SerialName("ascending_order") val ascendingOrder: Boolean = true,
 )
