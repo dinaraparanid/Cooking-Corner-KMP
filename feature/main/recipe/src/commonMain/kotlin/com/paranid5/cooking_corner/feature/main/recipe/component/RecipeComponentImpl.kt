@@ -60,15 +60,29 @@ internal class RecipeComponentImpl(
                 onBack(BackResult.Edit(recipeId = it))
             }
 
-            is RecipeUiIntent.Publish -> publishRecipe(
-                successSnackbar = intent.successSnackbar,
-                errorSnackbar = intent.errorSnackbar,
-            )
+            is RecipeUiIntent.Publish -> stateFlow.value.recipeId?.let {
+                publishRecipe(
+                    recipeId = it,
+                    successSnackbar = intent.successSnackbar,
+                    errorSnackbar = intent.errorSnackbar,
+                )
+            }
 
-            is RecipeUiIntent.Delete -> deleteRecipe(
-                successSnackbar = intent.successSnackbar,
-                errorSnackbar = intent.errorSnackbar,
-            )
+            is RecipeUiIntent.Delete -> stateFlow.value.recipeId?.let {
+                deleteRecipe(
+                    recipeId = it,
+                    successSnackbar = intent.successSnackbar,
+                    errorSnackbar = intent.errorSnackbar,
+                )
+            }
+
+            is RecipeUiIntent.Rate -> stateFlow.value.recipeId?.let {
+                rateRecipe(
+                    recipeId = it,
+                    rating = intent.rating,
+                    errorSnackbar = intent.errorSnackbar,
+                )
+            }
         }
     }
 
@@ -76,37 +90,43 @@ internal class RecipeComponentImpl(
         _stateFlow.updateState { copy(isKebabMenuVisible = isVisible) }
 
     private fun publishRecipe(
+        recipeId: Long,
         errorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
-    ) {
-        stateFlow.value.recipeId?.let {
-            componentScope.launch {
-                handleModifyRecipeApiResult(
-                    result = recipeRepository.publish(recipeId = it),
-                    errorSnackbar = errorSnackbar,
-                ) {
-                    globalEventRepository.sendSnackbar(successSnackbar)
-                    loadRecipe(recipeId = it)
-                }
-            }
+    ) = componentScope.launch {
+        handleModifyRecipeApiResult(
+            result = recipeRepository.publish(recipeId = recipeId),
+            errorSnackbar = errorSnackbar,
+        ) {
+            globalEventRepository.sendSnackbar(successSnackbar)
+            loadRecipe(recipeId = recipeId)
         }
     }
 
     private fun deleteRecipe(
+        recipeId: Long,
         errorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
-    ) {
-        stateFlow.value.recipeId?.let {
-            componentScope.launch {
-                handleModifyRecipeApiResult(
-                    result = recipeRepository.removeFromMyRecipes(recipeId = it),
-                    errorSnackbar = errorSnackbar,
-                ) {
-                    globalEventRepository.sendSnackbar(successSnackbar)
-                    onBack(BackResult.Dismiss)
-                }
-            }
+    ) = componentScope.launch {
+        handleModifyRecipeApiResult(
+            result = recipeRepository.removeFromMyRecipes(recipeId = recipeId),
+            errorSnackbar = errorSnackbar,
+        ) {
+            globalEventRepository.sendSnackbar(successSnackbar)
+            onBack(BackResult.Dismiss)
         }
+    }
+
+    private fun rateRecipe(
+        recipeId: Long,
+        rating: Int,
+        errorSnackbar: SnackbarMessage,
+    ) = componentScope.launch {
+        handleModifyRecipeApiResult(
+            result = recipeRepository.rate(recipeId = recipeId, rating = rating),
+            errorSnackbar = errorSnackbar,
+            onSuccess = { loadRecipe(recipeId = recipeId) },
+        )
     }
 
     private fun loadRecipe(recipeId: Long) {

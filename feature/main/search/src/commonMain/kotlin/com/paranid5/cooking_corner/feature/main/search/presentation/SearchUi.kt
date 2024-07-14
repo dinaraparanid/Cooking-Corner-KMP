@@ -24,8 +24,10 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -79,9 +81,10 @@ private fun SearchUiContent(
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
-    RecipesRow(
+    RecentRecipesRow(
         recipes = state.recentRecipes,
         onUiIntent = onUiIntent,
+        modifier = Modifier.fillMaxWidth(),
     )
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.big))
@@ -96,9 +99,25 @@ private fun SearchUiContent(
     RecipesRow(
         recipes = state.bestRatedRecipes,
         onUiIntent = onUiIntent,
+        modifier = Modifier.fillMaxWidth(),
     )
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+}
+
+@Composable
+private fun RecentRecipesRow(
+    recipes: ImmutableList<RecipeUiState>,
+    onUiIntent: (UiIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) = when {
+    recipes.isEmpty() -> NoItemsPlaceholder(modifier)
+
+    else -> RecipesRow(
+        recipes = recipes,
+        onUiIntent = onUiIntent,
+        modifier = modifier,
+    )
 }
 
 @Composable

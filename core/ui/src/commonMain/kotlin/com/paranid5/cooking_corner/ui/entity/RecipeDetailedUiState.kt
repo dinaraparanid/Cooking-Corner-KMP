@@ -12,6 +12,7 @@ data class RecipeDetailedUiState(
     val title: String,
     val description: String,
     val rating: Float,
+    val myRating: Float?,
     val preparingTime: Int,
     val cookingTime: Int,
     val author: String,

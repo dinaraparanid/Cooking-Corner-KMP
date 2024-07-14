@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -21,6 +24,7 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiInten
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.RecipeItem
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
 import com.paranid5.cooking_corner.utils.doNothing
@@ -58,7 +62,12 @@ private fun RecipesGridContent(
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) = when {
-    state.filteredRecipes.isEmpty() -> NoItemsPlaceholder(modifier)
+    state.filteredRecipes.isEmpty() -> NoItemsPlaceholder(
+        modifier
+            .verticalScroll(rememberScrollState())
+            .padding(top = AppTheme.dimensions.padding.extraLarge),
+    )
+
     else -> RecipesGridContentImpl(
         state = state,
         onUiIntent = onUiIntent,

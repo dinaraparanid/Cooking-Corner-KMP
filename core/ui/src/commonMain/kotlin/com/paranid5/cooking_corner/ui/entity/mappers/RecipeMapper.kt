@@ -33,6 +33,7 @@ fun RecipeDetailedUiState.Companion.fromResponse(response: RecipeResponse) =
         title = response.name,
         description = response.description.orEmpty(),
         rating = response.rating ?: 0F,
+        myRating = response.myRating,
         preparingTime = response.preparingTime ?: 0,
         cookingTime = response.cookingTime ?: 0,
         author = response.username,

@@ -32,4 +32,5 @@ data class RecipeResponse(
     @SerialName("creator_username") val username: String,
     @SerialName("category_name") val category: String? = null,
     @SerialName("tag_name") val tag: String? = null,
+    @SerialName("my_rating") val myRating: Float? = null,
 )

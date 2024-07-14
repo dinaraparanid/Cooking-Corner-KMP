@@ -21,11 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.recipe_cooking_time
-import com.paranid5.cooking_corner.core.resources.recipe_portions
-import com.paranid5.cooking_corner.core.resources.recipe_portions_value
-import com.paranid5.cooking_corner.core.resources.recipe_prep_time
-import com.paranid5.cooking_corner.core.resources.unit_minute
+import com.paranid5.cooking_corner.core.resources.something_went_wrong
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
+import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeState
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
@@ -147,10 +145,10 @@ fun RecipeDetailsContentData(
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.extraMedium))
 
-        TimesAndPortions(
-            preparingTime = recipeUiState.preparingTime,
-            cookingTime = recipeUiState.cookingTime,
-            portions = recipeUiState.portions,
+        RatingOrCookingDetails(
+            isOwned = isOwned,
+            recipeUiState = recipeUiState,
+            onUiIntent = onUiIntent,
             modifier = fillMaxWidthWithPaddingModifier,
         )
 
@@ -207,53 +205,38 @@ private fun RatingReviewsAuthor(
 }
 
 @Composable
-private fun TimesAndPortions(
-    preparingTime: Int,
-    cookingTime: Int,
-    portions: Int,
+private fun RatingOrCookingDetails(
+    isOwned: Boolean,
+    recipeUiState: RecipeDetailedUiState,
+    onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
-) = Row(modifier) {
-    LabelWithDescription(
-        title = stringResource(Res.string.recipe_prep_time),
-        description = "$preparingTime ${stringResource(Res.string.unit_minute)}",
-        modifier = Modifier.weight(1F),
+) = when {
+    isOwned -> CookingDetails(
+        modifier = modifier,
+        preparingTime = recipeUiState.preparingTime,
+        cookingTime = recipeUiState.cookingTime,
+        portions = recipeUiState.portions,
     )
 
-    LabelWithDescription(
-        title = stringResource(Res.string.recipe_cooking_time),
-        description = "$cookingTime ${stringResource(Res.string.unit_minute)}",
-        modifier = Modifier.weight(1F),
-    )
-
-    LabelWithDescription(
-        title = stringResource(Res.string.recipe_portions),
-        description = stringResource(Res.string.recipe_portions_value, portions),
-        modifier = Modifier.weight(1F),
-    )
+    else -> {
+        val errorSnackbar = ErrorSnackbar()
+        RatingSelector(
+            modifier = modifier,
+            myRating = recipeUiState.myRating,
+            onStarClick = { rating ->
+                onUiIntent(
+                    RecipeUiIntent.Rate(
+                        rating = rating,
+                        errorSnackbar = errorSnackbar,
+                    )
+                )
+            },
+        )
+    }
 }
 
 @Composable
-private fun LabelWithDescription(
-    title: String,
-    description: String,
-    modifier: Modifier = Modifier,
-) = Column(modifier) {
-    Text(
-        text = title,
-        modifier = Modifier.align(Alignment.CenterHorizontally),
-        color = AppTheme.colors.text.primary,
-        style = AppTheme.typography.regular,
-        fontFamily = AppTheme.typography.RalewayFontFamily,
-    )
-
-    Spacer(Modifier.height(AppTheme.dimensions.padding.minimum))
-
-    Text(
-        text = description,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.align(Alignment.CenterHorizontally),
-        color = AppTheme.colors.text.primary,
-        style = AppTheme.typography.body,
-        fontFamily = AppTheme.typography.RalewayFontFamily,
-    )
-}
+private fun ErrorSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.something_went_wrong),
+    snackbarType = SnackbarType.NEGATIVE,
+)

@@ -18,4 +18,9 @@ interface RecipeUiIntent {
     ) : RecipeUiIntent
 
     data object Edit : RecipeUiIntent
+
+    data class Rate(
+        val rating: Int,
+        val errorSnackbar: SnackbarMessage,
+    ) : RecipeUiIntent
 }

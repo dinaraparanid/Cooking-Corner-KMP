@@ -217,4 +217,14 @@ internal class RecipeApiImpl(
             }
         }
     }
+
+    override suspend fun rate(recipeId: Long, rating: Int): ApiResultWithCode<Unit> = Either.catch {
+        authRepository.withAuth { accessToken ->
+            withContext(AppDispatchers.Data) {
+                ktorClient.post(urlBuilder.buildRateUrl(recipeId = recipeId, rating = rating)) {
+                    bearerAuth(accessToken)
+                }
+            }
+        }
+    }
 }
