@@ -19,6 +19,7 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStoreProvider.Msg
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
@@ -98,7 +99,7 @@ internal class RecipeEditorExecutor(
                 dispatch(Msg.UpdateSource(intent.source))
 
             is UiIntent.UpdateCover ->
-                dispatch(Msg.UpdateCover(intent.cover))
+                dispatch(Msg.UpdateCover(ImageContainer.Bytes(intent.cover)))
 
             is UiIntent.UpdateVideoLink ->
                 dispatch(Msg.UpdateVideoLink(intent.videoLink))
@@ -113,7 +114,7 @@ internal class RecipeEditorExecutor(
         is UiIntent.Ingredient.Add -> {
             val ingredient = state().ingredientDialogState.inputIngredientUiState
             dispatch(Msg.Ingredient.Add(ingredient))
-            dispatch(Msg.Ingredient.UpdateDialogVisibility(isVisible = false))
+            dispatch(Msg.Ingredient.UpdateDialogState())
         }
 
         is UiIntent.Ingredient.Remove ->
@@ -125,15 +126,15 @@ internal class RecipeEditorExecutor(
         is UiIntent.Ingredient.UpdateTitle ->
             dispatch(Msg.Ingredient.UpdateTitle(intent.title))
 
-        is UiIntent.Ingredient.UpdateDialogVisibility ->
-            dispatch(Msg.Ingredient.UpdateDialogVisibility(isVisible = intent.isVisible))
+        is UiIntent.Ingredient.UpdateDialogState ->
+            dispatch(Msg.Ingredient.UpdateDialogState(intent.ingredientDialogState))
     }
 
     private fun executeStepIntent(intent: UiIntent.Step) = when (intent) {
         is UiIntent.Step.Add -> {
             val step = state().stepDialogState.inputStepUiState
             dispatch(Msg.Step.Add(step))
-            dispatch(Msg.Step.UpdateDialogVisibility(isVisible = false))
+            dispatch(Msg.Step.UpdateDialogState())
         }
 
         is UiIntent.Step.Remove ->
@@ -148,8 +149,8 @@ internal class RecipeEditorExecutor(
         is UiIntent.Step.UpdateTitle ->
             dispatch(Msg.Step.UpdateTitle(intent.title))
 
-        is UiIntent.Step.UpdateDialogVisibility ->
-            dispatch(Msg.Step.UpdateDialogVisibility(isVisible = intent.isVisible))
+        is UiIntent.Step.UpdateDialogState ->
+            dispatch(Msg.Step.UpdateDialogState(dialogState = intent.stepDialogState))
     }
 
     override fun executeAction(action: Unit) = loadCategories()

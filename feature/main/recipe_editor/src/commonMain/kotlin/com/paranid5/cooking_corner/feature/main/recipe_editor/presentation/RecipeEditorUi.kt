@@ -1,6 +1,5 @@
 package com.paranid5.cooking_corner.feature.main.recipe_editor.presentation
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -17,7 +15,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_failed_to_load
@@ -25,7 +22,6 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
@@ -34,9 +30,6 @@ import org.jetbrains.compose.resources.stringResource
 
 internal val DialogShape = RoundedCornerShape(24.dp)
 internal val FLOW_ROW_MIN_HEIGHT = 32.dp
-
-private val IMAGE_WIDTH = 320.dp
-private val IMAGE_HEIGHT = 180.dp
 
 @Composable
 fun RecipeEditorUi(
@@ -113,7 +106,7 @@ private fun RecipeEditorUiContentImpl(
             cover = state.recipeParamsUiState.cover,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
-            onUiIntent(UiIntent.UpdateCover(ImageContainer.Bytes(it)))
+            onUiIntent(UiIntent.UpdateCover(it))
         }
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
@@ -135,7 +128,7 @@ private fun RecipeEditorUiContentImpl(
             ingredientDialogState = state.ingredientDialogState,
             onConfirmButtonClick = { onUiIntent(UiIntent.Ingredient.Add) },
             onCancelButtonClick = {
-                onUiIntent(UiIntent.Ingredient.UpdateDialogVisibility(isVisible = false))
+                onUiIntent(UiIntent.Ingredient.UpdateDialogState(isVisible = false))
             },
             onTitleChange = { onUiIntent(UiIntent.Ingredient.UpdateTitle(title = it)) },
             onPortionChange = { onUiIntent(UiIntent.Ingredient.UpdatePortion(portion = it)) },
@@ -146,43 +139,10 @@ private fun RecipeEditorUiContentImpl(
             stepDialogState = state.stepDialogState,
             onConfirmButtonClick = { onUiIntent(UiIntent.Step.Add) },
             onCancelButtonClick = {
-                onUiIntent(UiIntent.Step.UpdateDialogVisibility(isVisible = false))
+                onUiIntent(UiIntent.Step.UpdateDialogState(isVisible = false))
             },
             onTitleChange = { onUiIntent(UiIntent.Step.UpdateTitle(title = it)) },
             onDescriptionChange = { onUiIntent(UiIntent.Step.UpdateDescription(description = it)) },
-            onPicked = {
-                println("DATA $it") // TODO: acquire picker result
-            }
+            onPicked = { onUiIntent(UiIntent.Step.UpdateCover(it)) },
         )
-}
-
-@Composable
-private fun RecipeCoverOrPicker(
-    cover: ImageContainer?,
-    modifier: Modifier = Modifier,
-    onPicked: (ByteArray) -> Unit,
-) {
-    val imageShape = RoundedCornerShape(AppTheme.dimensions.corners.medium)
-
-    val imageModifier = modifier
-        .clip(imageShape)
-        .size(width = IMAGE_WIDTH, height = IMAGE_HEIGHT)
-        .border(
-            width = AppTheme.dimensions.borders.extraSmall,
-            color = AppTheme.colors.button.primary,
-            shape = imageShape,
-        )
-
-    when (cover) {
-        null -> RecipeCoverPickerButton(
-            modifier = modifier,
-            onPicked = onPicked,
-        )
-
-        else -> RecipeCover(
-            cover = cover,
-            modifier = imageModifier,
-            onPicked = onPicked,
-        )
-    }
 }

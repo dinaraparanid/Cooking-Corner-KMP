@@ -8,6 +8,8 @@ import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.IngredientDialogState
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.StepDialogState
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
@@ -69,19 +71,32 @@ internal class RecipeEditorStoreProvider(
 
         sealed interface Ingredient : Msg {
             data class Add(val ingredient: IngredientUiState) : Ingredient
+
             data class Remove(val ingredient: IngredientUiState) : Ingredient
+
             data class UpdateTitle(val title: String) : Ingredient
+
             data class UpdatePortion(val portion: String) : Ingredient
-            data class UpdateDialogVisibility(val isVisible: Boolean) : Ingredient
+
+            data class UpdateDialogState(
+                val dialogState: IngredientDialogState = IngredientDialogState(),
+            ) : Ingredient
         }
 
         sealed interface Step : Msg {
             data class Add(val step: StepUiState) : Step
+
             data class Remove(val step: StepUiState) : Step
+
             data class UpdateTitle(val title: String) : Step
+
             data class UpdateDescription(val description: String) : Step
+
             data class UpdateCover(val cover: ByteArray?) : Step
-            data class UpdateDialogVisibility(val isVisible: Boolean) : Step
+
+            data class UpdateDialogState(
+                val dialogState: StepDialogState = StepDialogState(),
+            ) : Step
         }
     }
 

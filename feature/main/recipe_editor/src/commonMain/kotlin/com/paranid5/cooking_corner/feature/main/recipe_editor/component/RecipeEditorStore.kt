@@ -6,6 +6,8 @@ import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent.Factory.LaunchMode
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.IngredientDialogState
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.StepDialogState
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
@@ -19,6 +21,7 @@ import com.paranid5.cooking_corner.utils.orNil
 import com.paranid5.cooking_corner.utils.toIntOrZero
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlin.random.Random
 
 interface RecipeEditorStore : Store<UiIntent, State, Label> {
     sealed interface UiIntent {
@@ -64,23 +67,44 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
 
         data class UpdateSource(val source: String) : UiIntent
 
-        data class UpdateCover(val cover: ImageContainer) : UiIntent
+        data class UpdateCover(val cover: ByteArray?) : UiIntent
 
         sealed interface Ingredient : UiIntent {
             data object Add : Ingredient
+
             data class Remove(val ingredient: IngredientUiState) : Ingredient
+
             data class UpdateTitle(val title: String) : Ingredient
+
             data class UpdatePortion(val portion: String) : Ingredient
-            data class UpdateDialogVisibility(val isVisible: Boolean) : Ingredient
+
+            data class UpdateDialogState(
+                val ingredientDialogState: IngredientDialogState = IngredientDialogState(),
+            ) : Ingredient {
+                constructor(isVisible: Boolean) : this(
+                    ingredientDialogState = IngredientDialogState(isVisible = isVisible),
+                )
+            }
         }
 
         sealed interface Step : UiIntent {
             data object Add : Step
+
             data class Remove(val step: StepUiState) : Step
+
             data class UpdateTitle(val title: String) : Step
+
             data class UpdateDescription(val description: String) : Step
+
             data class UpdateCover(val cover: ByteArray?) : Step
-            data class UpdateDialogVisibility(val isVisible: Boolean) : Step
+
+            data class UpdateDialogState(
+                val stepDialogState: StepDialogState = StepDialogState(),
+            ) : Step {
+                constructor(isVisible: Boolean) : this(
+                    stepDialogState = StepDialogState(isVisible = isVisible)
+                )
+            }
         }
     }
 
@@ -106,40 +130,56 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         @Serializable
         @Immutable
         data class IngredientDialogState(
-            val isVisible: Boolean,
-            val title: String,
-            val portion: String,
+            val isVisible: Boolean = false,
+            val title: String = "",
+            val portion: String = "",
+            val key: Long = Random.nextLong(),
         ) {
             @Transient
             val inputIngredientUiState = IngredientUiState(
                 title = title,
                 portion = portion,
+                key = key,
             )
 
-            constructor() : this(isVisible = false, title = "", portion = "")
+            companion object {
+                fun fromUiState(ingredientUiState: IngredientUiState) =
+                    IngredientDialogState(
+                        isVisible = true,
+                        title = ingredientUiState.title,
+                        portion = ingredientUiState.portion,
+                        key = ingredientUiState.key,
+                    )
+            }
         }
 
         @Serializable
         @Immutable
         data class StepDialogState(
-            val isVisible: Boolean,
-            val title: String,
-            val description: String,
-            val cover: ImageContainer?,
+            val isVisible: Boolean = false,
+            val title: String = "",
+            val description: String = "",
+            val cover: ImageContainer? = null,
+            val key: Long = Random.nextLong(),
         ) {
             @Transient
             val inputStepUiState = StepUiState(
                 title = title,
                 description = description,
                 cover = cover,
+                key = key,
             )
 
-            constructor() : this(
-                isVisible = false,
-                title = "",
-                description = "",
-                cover = null,
-            )
+            companion object {
+                fun fromUiState(stepUiState: StepUiState) =
+                    StepDialogState(
+                        isVisible = true,
+                        title = stepUiState.title,
+                        description = stepUiState.description,
+                        cover = stepUiState.cover,
+                        key = stepUiState.key,
+                    )
+            }
         }
 
         @Transient

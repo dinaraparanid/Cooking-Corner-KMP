@@ -31,57 +31,55 @@ internal fun AddStepDialog(
     onDescriptionChange: (String) -> Unit,
     onPicked: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
+) = AppAlertDialog(
+    confirmButtonTitle = stringResource(Res.string.add),
+    modifier = modifier,
+    callbacks = AppAlertDialogCallbacks(
+        onDismissRequest = onCancelButtonClick,
+        onConfirmButtonClick = onConfirmButtonClick,
+    ),
+    properties = AppAlertDialogProperties.create(shape = DialogShape),
+    title = {
+        AppMainText(
+            text = stringResource(Res.string.recipe_editor_new_step),
+            fontWeight = FontWeight.Bold,
+            style = AppTheme.typography.h.h3,
+            modifier = Modifier
+                .padding(top = AppTheme.dimensions.padding.medium)
+                .align(Alignment.CenterHorizontally),
+        )
+    },
 ) {
-    AppAlertDialog(
-        confirmButtonTitle = stringResource(Res.string.add),
-        modifier = modifier,
-        callbacks = AppAlertDialogCallbacks(
-            onDismissRequest = onCancelButtonClick,
-            onConfirmButtonClick = onConfirmButtonClick,
+    Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
+
+    RecipeCoverOrPicker(
+        cover = stepDialogState.cover,
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        onPicked = onPicked,
+    )
+
+    Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
+
+    AppAnimatedOutlinedEditText(
+        value = stepDialogState.title,
+        onValueChange = onTitleChange,
+        placeholder = stringResource(Res.string.recipe_editor_step_title_placeholder),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = AppTheme.dimensions.padding.medium),
+    )
+
+    Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
+
+    AppAnimatedOutlinedEditText(
+        value = stepDialogState.description,
+        onValueChange = onDescriptionChange,
+        singleLine = false,
+        placeholder = stringResource(
+            Res.string.recipe_editor_step_description_placeholder
         ),
-        properties = AppAlertDialogProperties.create(shape = DialogShape),
-        title = {
-            AppMainText(
-                text = stringResource(Res.string.recipe_editor_new_step),
-                fontWeight = FontWeight.Bold,
-                style = AppTheme.typography.h.h3,
-                modifier = Modifier
-                    .padding(top = AppTheme.dimensions.padding.medium)
-                    .align(Alignment.CenterHorizontally),
-            )
-        },
-    ) {
-        Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
-
-        RecipeCoverPickerButton(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            onPicked = onPicked,
-        )
-
-        Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
-
-        AppAnimatedOutlinedEditText(
-            value = stepDialogState.title,
-            onValueChange = onTitleChange,
-            placeholder = stringResource(Res.string.recipe_editor_step_title_placeholder),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = AppTheme.dimensions.padding.medium),
-        )
-
-        Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
-
-        AppAnimatedOutlinedEditText(
-            value = stepDialogState.description,
-            onValueChange = onDescriptionChange,
-            singleLine = false,
-            placeholder = stringResource(
-                Res.string.recipe_editor_step_description_placeholder
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = AppTheme.dimensions.padding.medium),
-        )
-    }
-
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = AppTheme.dimensions.padding.medium),
+    )
 }

@@ -119,8 +119,8 @@ internal object RecipeEditorReducer : Reducer<State, Msg> {
         is Msg.Ingredient.UpdateTitle ->
             copy(ingredientDialogState = ingredientDialogState.copy(title = msg.title))
 
-        is Msg.Ingredient.UpdateDialogVisibility ->
-            copy(ingredientDialogState = ingredientDialogState.copy(isVisible = msg.isVisible))
+        is Msg.Ingredient.UpdateDialogState ->
+            copy(ingredientDialogState = msg.dialogState)
     }
 
     private fun State.reduceStepMsg(msg: Msg.Step): State = when (msg) {
@@ -145,7 +145,7 @@ internal object RecipeEditorReducer : Reducer<State, Msg> {
         is Msg.Step.UpdateTitle ->
             copy(stepDialogState = stepDialogState.copy(title = msg.title))
 
-        is Msg.Step.UpdateDialogVisibility ->
-            copy(stepDialogState = stepDialogState.copy(isVisible = msg.isVisible))
+        is Msg.Step.UpdateDialogState ->
+            copy(stepDialogState = msg.dialogState)
     }
 }

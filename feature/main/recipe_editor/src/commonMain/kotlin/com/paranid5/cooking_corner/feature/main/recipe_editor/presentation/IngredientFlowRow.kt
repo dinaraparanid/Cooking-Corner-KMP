@@ -9,11 +9,12 @@ import androidx.compose.ui.text.font.FontWeight
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_editor_add_ingredient_placeholder
 import com.paranid5.cooking_corner.core.resources.recipe_editor_ingredients
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.IngredientDialogState
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
+import com.paranid5.cooking_corner.ui.utils.combinedClickableWithRipple
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 
@@ -28,16 +29,22 @@ internal fun IngredientFlowRow(
     title = stringResource(Res.string.recipe_editor_ingredients),
     placeholder = stringResource(Res.string.recipe_editor_add_ingredient_placeholder),
     onAddButtonClick = {
-        onUiIntent(UiIntent.Ingredient.UpdateDialogVisibility(isVisible = true))
+        onUiIntent(UiIntent.Ingredient.UpdateDialogState(isVisible = true))
     },
-    onItemRemove = {
-        onUiIntent(UiIntent.Ingredient.Remove(ingredient = it))
-    }
-) { ingredient, onItemRemove, itemModifier ->
+    onItemClick = {
+        onUiIntent(
+            UiIntent.Ingredient.UpdateDialogState(
+                ingredientDialogState = IngredientDialogState.fromUiState(it),
+            )
+        )
+    },
+    onItemRemove = { onUiIntent(UiIntent.Ingredient.Remove(ingredient = it)) }
+) { ingredient, onItemClick, onItemRemove, itemModifier ->
     IngredientFlowRowItem(
         ingredientUiState = ingredient,
-        onItemRemove = onItemRemove,
         modifier = itemModifier,
+        onItemClick = onItemClick,
+        onItemRemove = onItemRemove,
     )
 }
 
@@ -45,8 +52,15 @@ internal fun IngredientFlowRow(
 private fun IngredientFlowRowItem(
     ingredientUiState: IngredientUiState,
     modifier: Modifier = Modifier,
+    onItemClick: (ingredientUiState: IngredientUiState) -> Unit,
     onItemRemove: (ingredientUiState: IngredientUiState) -> Unit,
-) = Row(modifier.clickableWithRipple(bounded = true) { onItemRemove(ingredientUiState) }) {
+) = Row(
+    modifier.combinedClickableWithRipple(
+        bounded = true,
+        onClick = { onItemClick(ingredientUiState) },
+        onLongClick = { onItemRemove(ingredientUiState) },
+    )
+) {
     AppMainText(
         text = "${ingredientUiState.title} - ${ingredientUiState.portion}",
         style = AppTheme.typography.regular,

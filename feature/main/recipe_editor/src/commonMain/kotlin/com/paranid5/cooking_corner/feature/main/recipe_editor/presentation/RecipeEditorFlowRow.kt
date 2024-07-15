@@ -31,9 +31,15 @@ internal fun <T> RecipeEditorFlowRow(
     title: String,
     placeholder: String,
     onAddButtonClick: () -> Unit,
+    onItemClick: (item: T) -> Unit,
     onItemRemove: (item: T) -> Unit,
     modifier: Modifier = Modifier,
-    itemContent: @Composable (item: T, onItemRemove: (item: T) -> Unit, modifier: Modifier) -> Unit
+    itemContent: @Composable (
+        item: T,
+        onItemClick: (item: T) -> Unit,
+        onItemRemove: (item: T) -> Unit,
+        modifier: Modifier
+    ) -> Unit
 ) = Column(modifier) {
     AppMainText(
         text = title,
@@ -74,7 +80,9 @@ internal fun <T> RecipeEditorFlowRow(
             )
         }
 
-        items.forEach { ingredient -> itemContent(ingredient, onItemRemove, itemModifier) }
+        items.forEach { ingredient ->
+            itemContent(ingredient, onItemClick, onItemRemove, itemModifier)
+        }
 
         FlowRowAddButton(
             modifier = Modifier

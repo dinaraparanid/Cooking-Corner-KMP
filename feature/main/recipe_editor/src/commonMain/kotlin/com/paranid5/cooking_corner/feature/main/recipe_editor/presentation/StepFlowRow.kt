@@ -9,11 +9,12 @@ import androidx.compose.ui.text.font.FontWeight
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_editor_add_step_placeholder
 import com.paranid5.cooking_corner.core.resources.recipe_editor_steps
+import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.StepDialogState
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.entity.StepUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
+import com.paranid5.cooking_corner.ui.utils.combinedClickableWithRipple
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 
@@ -27,11 +28,19 @@ internal fun StepFlowRow(
     modifier = modifier,
     title = stringResource(Res.string.recipe_editor_steps),
     placeholder = stringResource(Res.string.recipe_editor_add_step_placeholder),
-    onAddButtonClick = { onUiIntent(UiIntent.Step.UpdateDialogVisibility(isVisible = true)) },
+    onAddButtonClick = { onUiIntent(UiIntent.Step.UpdateDialogState(isVisible = true)) },
+    onItemClick = {
+        onUiIntent(
+            UiIntent.Step.UpdateDialogState(
+                stepDialogState = StepDialogState.fromUiState(it),
+            )
+        )
+    },
     onItemRemove = { onUiIntent(UiIntent.Step.Remove(step = it)) },
-) { step, onItemRemove, itemModifier ->
+) { step, onItemClick, onItemRemove, itemModifier ->
     StepFlowRowItem(
         stepUiState = step,
+        onItemClick = onItemClick,
         onItemRemove = onItemRemove,
         modifier = itemModifier,
     )
@@ -41,8 +50,15 @@ internal fun StepFlowRow(
 private fun StepFlowRowItem(
     stepUiState: StepUiState,
     modifier: Modifier = Modifier,
+    onItemClick: (stepUiState: StepUiState) -> Unit,
     onItemRemove: (stepUiState: StepUiState) -> Unit,
-) = Row(modifier.clickableWithRipple(bounded = true) { onItemRemove(stepUiState) }) {
+) = Row(
+    modifier.combinedClickableWithRipple(
+        bounded = true,
+        onClick = { onItemClick(stepUiState) },
+        onLongClick = { onItemRemove(stepUiState) },
+    )
+) {
     AppMainText(
         text = stepUiState.title,
         style = AppTheme.typography.regular,
