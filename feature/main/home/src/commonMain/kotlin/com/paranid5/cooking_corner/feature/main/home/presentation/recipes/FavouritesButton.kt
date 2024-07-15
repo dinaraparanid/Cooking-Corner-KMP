@@ -42,14 +42,14 @@ internal fun FavouritesButton(
     val unhandledErrorMessage = stringResource(Res.string.something_went_wrong)
 
     fun onLikeClick() = onUiIntent(
-        UiIntent.LikeClick(
+        UiIntent.RecipeLikeClick(
             recipeId = recipeUiState.id,
             unhandledErrorMessage = unhandledErrorMessage,
         )
     )
 
     fun onDislikeClick() = onUiIntent(
-        UiIntent.DislikeClick(
+        UiIntent.RecipeResetLikeClick(
             recipeId = recipeUiState.id,
             unhandledErrorMessage = unhandledErrorMessage,
         )

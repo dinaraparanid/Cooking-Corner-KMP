@@ -9,8 +9,8 @@ import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 
@@ -24,6 +24,8 @@ internal class HomeStoreProvider(
         data class UpdateSearchText(val text: String) : Msg
 
         data object UpdateOrder : Msg
+
+        data object UpdateFavouritesShown : Msg
 
         data class SelectCategory(val index: Int) : Msg
 

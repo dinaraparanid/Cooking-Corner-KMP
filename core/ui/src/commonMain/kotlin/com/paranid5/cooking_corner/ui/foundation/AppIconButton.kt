@@ -27,6 +27,7 @@ fun AppIconButton(
     icon: ImageVector,
     tint: Color,
     modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) = IconButton(
     onClick = onClick,
@@ -36,5 +37,6 @@ fun AppIconButton(
         imageVector = icon,
         tint = tint,
         contentDescription = null,
+        modifier = iconModifier,
     )
 }

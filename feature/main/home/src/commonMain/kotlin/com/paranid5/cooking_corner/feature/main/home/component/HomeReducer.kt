@@ -8,6 +8,7 @@ internal object HomeReducer : Reducer<State, Msg> {
     override fun State.reduce(msg: Msg): State = when (msg) {
         is Msg.UpdateSearchText -> copy(searchText = msg.text)
         is Msg.UpdateOrder -> copy(isAscendingOrder = isAscendingOrder.not())
+        is Msg.UpdateFavouritesShown -> copy(areFavouritesShown = areFavouritesShown.not())
         is Msg.SelectCategory -> copy(selectedCategoryIndex = msg.index)
         is Msg.UpdateRecipesUiState -> copy(recipesUiState = msg.recipesUiState)
         is Msg.UpdateCategoriesUiState -> copy(categoriesUiState = msg.categoriesUiState)

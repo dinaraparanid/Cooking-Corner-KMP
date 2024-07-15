@@ -7,7 +7,6 @@ import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
 import com.paranid5.cooking_corner.domain.category.CategoryRepository
-import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
@@ -52,14 +51,14 @@ internal class HomeExecutor(
 
             is UiIntent.OrderClick -> dispatch(Msg.UpdateOrder)
 
-            is UiIntent.ShowFavourites -> doNothing // TODO: Show favourites
+            is UiIntent.UpdateFavouritesShown -> dispatch(Msg.UpdateFavouritesShown)
 
-            is UiIntent.LikeClick -> addToFavourites(
+            is UiIntent.RecipeLikeClick -> addToFavourites(
                 recipeId = intent.recipeId,
                 unhandledErrorMessage = intent.unhandledErrorMessage,
             )
 
-            is UiIntent.DislikeClick -> removeFromFavourites(
+            is UiIntent.RecipeResetLikeClick -> removeFromFavourites(
                 recipeId = intent.recipeId,
                 unhandledErrorMessage = intent.unhandledErrorMessage,
             )

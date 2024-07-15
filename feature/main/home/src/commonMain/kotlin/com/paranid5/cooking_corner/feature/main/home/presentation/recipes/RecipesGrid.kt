@@ -62,7 +62,7 @@ private fun RecipesGridContent(
     onUiIntent: (UiIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) = when {
-    state.filteredRecipes.isEmpty() -> NoItemsPlaceholder(
+    state.shownRecipes.isEmpty() -> NoItemsPlaceholder(
         modifier
             .verticalScroll(rememberScrollState())
             .padding(top = AppTheme.dimensions.padding.extraLarge),
@@ -87,7 +87,7 @@ private fun RecipesGridContentImpl(
         horizontalArrangement = Arrangement.spacedBy(PADDING_BETWEEN_RECIPES),
         columns = GridCells.Adaptive(getMinCellWidth(constraints.maxWidth)),
     ) {
-        items(items = state.filteredRecipes) { recipe ->
+        items(items = state.shownRecipes) { recipe ->
             RecipeItem(
                 recipe = recipe,
                 onErrorButtonClick = doNothing, // TODO: Error handling

@@ -31,14 +31,14 @@ interface HomeStore : Store<UiIntent, State, Label> {
 
         data object OrderClick : UiIntent
 
-        data object ShowFavourites : UiIntent
+        data object UpdateFavouritesShown : UiIntent
 
-        data class LikeClick(
+        data class RecipeLikeClick(
             val recipeId: Long,
             val unhandledErrorMessage: String,
         ) : UiIntent
 
-        data class DislikeClick(
+        data class RecipeResetLikeClick(
             val recipeId: Long,
             val unhandledErrorMessage: String,
         ) : UiIntent
@@ -52,6 +52,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
         val recipesUiState: UiState<SerializableImmutableList<RecipeUiState>>,
         val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>>,
         val isAscendingOrder: Boolean,
+        val areFavouritesShown: Boolean,
     ) {
         companion object {
             private const val NOT_SELECTED = 0
@@ -72,9 +73,11 @@ interface HomeStore : Store<UiIntent, State, Label> {
         private val searchTextLowercase = searchText.lowercase()
 
         @Transient
-        val filteredRecipes = recipesUiState
+        val shownRecipes = recipesUiState
             .getOrNull()
-            ?.filterToImmutableList { searchTextLowercase in it.title }
+            ?.filterToImmutableList {
+                it.isShown
+            }
             .orNil()
 
         @Transient
@@ -86,7 +89,14 @@ interface HomeStore : Store<UiIntent, State, Label> {
             recipesUiState = UiState.Undefined,
             categoriesUiState = UiState.Undefined,
             isAscendingOrder = true,
+            areFavouritesShown = false,
         )
+
+        private inline val RecipeUiState.isShown
+            get() = searchTextLowercase in title.lowercase() && when {
+                areFavouritesShown -> isLiked
+                else -> true
+            }
     }
 
     sealed interface Label {

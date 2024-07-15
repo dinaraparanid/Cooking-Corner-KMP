@@ -9,23 +9,28 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_add
 import com.paranid5.cooking_corner.core.resources.ic_ascending_filter
 import com.paranid5.cooking_corner.core.resources.ic_descending_filter
 import com.paranid5.cooking_corner.core.resources.ic_generate
-import com.paranid5.cooking_corner.core.resources.like
+import com.paranid5.cooking_corner.core.resources.ic_like
+import com.paranid5.cooking_corner.core.resources.ic_liked
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.ui.foundation.AppIconButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
+
+private val ICON_SIZE = 32.dp
 
 @Composable
 internal fun HomeTopBar(
@@ -92,11 +97,10 @@ private fun HomeTopBarImpl(
             onClick = { onUiIntent(UiIntent.OrderClick) },
         )
 
-        AppIconButton(
-            icon = vectorResource(Res.drawable.like),
-            tint = AppTheme.colors.orange,
+        LikeButton(
+            isLiked = state.areFavouritesShown,
             modifier = Modifier.align(Alignment.CenterVertically),
-            onClick = { onUiIntent(UiIntent.ShowFavourites) },
+            onClick = { onUiIntent(UiIntent.UpdateFavouritesShown) },
         )
     }
 }
@@ -125,5 +129,27 @@ private fun OrderButton(
         icon = vectorResource(iconRes),
         modifier = modifier,
         onClick = onClick,
+    )
+}
+
+@Composable
+private fun LikeButton(
+    isLiked: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    val iconRes = remember(isLiked) {
+        when {
+            isLiked -> Res.drawable.ic_liked
+            else -> Res.drawable.ic_like
+        }
+    }
+
+    AppIconButton(
+        icon = vectorResource(iconRes),
+        tint = AppTheme.colors.orange,
+        modifier = modifier,
+        iconModifier = Modifier.size(ICON_SIZE),
+        onClick = { onClick() },
     )
 }
