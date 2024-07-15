@@ -49,6 +49,8 @@ kotlin {
     }
 
     sourceSets {
+        val desktopMain by getting
+
         androidMain.dependencies {
             implementation(libs.peekaboo.image.picker)
         }
@@ -77,6 +79,9 @@ kotlin {
             implementation(libs.decompose.extensions.compose)
 
             implementation(libs.bundles.component)
+        }
+        desktopMain.dependencies {
+            implementation(libs.javax.activation)
         }
         iosMain.dependencies {
             implementation(libs.peekaboo.image.picker)

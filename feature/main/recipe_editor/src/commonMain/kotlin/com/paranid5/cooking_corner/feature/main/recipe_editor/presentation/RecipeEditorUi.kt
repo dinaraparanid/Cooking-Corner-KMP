@@ -26,7 +26,6 @@ import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.utils.doNothing
 import org.jetbrains.compose.resources.stringResource
 
 internal val DialogShape = RoundedCornerShape(24.dp)
@@ -104,7 +103,7 @@ private fun RecipeEditorUiContentImpl(
         Spacer(Modifier.height(AppTheme.dimensions.padding.extraMedium))
 
         RecipeCoverPickerButton(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            // TODO: launch picker
+            println("DATA $it")
         }
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
@@ -141,6 +140,8 @@ private fun RecipeEditorUiContentImpl(
             },
             onTitleChange = { onUiIntent(UiIntent.Step.UpdateTitle(title = it)) },
             onDescriptionChange = { onUiIntent(UiIntent.Step.UpdateDescription(description = it)) },
-            onPickImage = doNothing // TODO: launch picker
+            onPicked = {
+                println("DATA $it") // TODO: acquire picker result
+            }
         )
 }

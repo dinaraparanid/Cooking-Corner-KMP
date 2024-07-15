@@ -28,6 +28,7 @@ ktor = "3.0.0-wasm2"
 coil = "3.0.0-alpha06"
 paging = "3.3.0-alpha02-0.4.0"
 peekaboo = "0.5.2"
+javax-activation = "1.1.1"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
@@ -72,6 +73,8 @@ paging-compose = { group = "app.cash.paging", name = "paging-compose-common", ve
 kolor = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
 
 peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", version.ref = "peekaboo" }
+
+javax-activation = { module = "javax.activation:activation", version.ref = "javax-activation" }
 
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }

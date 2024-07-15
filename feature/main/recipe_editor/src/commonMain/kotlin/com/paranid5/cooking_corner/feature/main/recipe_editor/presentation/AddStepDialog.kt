@@ -29,7 +29,7 @@ internal fun AddStepDialog(
     onCancelButtonClick: () -> Unit,
     onTitleChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
-    onPickImage: () -> Unit,
+    onPicked: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AppAlertDialog(
@@ -55,7 +55,7 @@ internal fun AddStepDialog(
 
         RecipeCoverPickerButton(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = onPickImage,
+            onPicked = onPicked,
         )
 
         Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
