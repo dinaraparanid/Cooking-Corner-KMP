@@ -12,22 +12,25 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.RecipeItem
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
 import com.paranid5.cooking_corner.utils.doNothing
+import org.jetbrains.compose.resources.stringResource
 
 private const val MIN_RECIPES_IN_ROW = 2
 private val RECIPE_MAX_WIDTH = 185.dp
@@ -49,7 +52,10 @@ internal fun RecipesGrid(
             )
 
         is UiState.Error ->
-            Text("TODO: Error Stub", Modifier.align(Alignment.Center))
+            AppErrorStub(
+                errorMessage = stringResource(Res.string.something_went_wrong),
+                modifier = Modifier.align(Alignment.Center),
+            )
 
         is UiState.Loading, is UiState.Undefined ->
             AppProgressIndicator(Modifier.align(Alignment.Center))

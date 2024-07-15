@@ -24,17 +24,17 @@ import org.jetbrains.compose.resources.painterResource
 private val ICON_SIZE = 18.dp
 
 @Composable
-fun AppNoItemsPlaceholder(
+fun AppContentStub(
     modifier: Modifier = Modifier,
     imageModifier: Modifier = Modifier,
     descriptionModifier: Modifier = Modifier,
     descriptionContent: @Composable ColumnScope.() -> Unit,
 ) = Column(modifier) {
-    NoItemsPlaceholderImage(imageModifier.align(Alignment.CenterHorizontally))
+    AppContentStubImage(imageModifier.align(Alignment.CenterHorizontally))
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.medium))
 
-    NotItemsPlaceholderDescription(
+    AppContentStubDescription(
         modifier = descriptionModifier.align(Alignment.CenterHorizontally),
         content = descriptionContent,
     )
@@ -43,14 +43,14 @@ fun AppNoItemsPlaceholder(
 }
 
 @Composable
-private fun NoItemsPlaceholderImage(modifier: Modifier = Modifier) = Image(
+private fun AppContentStubImage(modifier: Modifier = Modifier) = Image(
     painter = painterResource(Res.drawable.no_items_placeholder),
     contentDescription = null,
     modifier = modifier,
 )
 
 @Composable
-private fun NotItemsPlaceholderDescription(
+private fun AppContentStubDescription(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) = Column(
@@ -61,7 +61,7 @@ private fun NotItemsPlaceholderDescription(
 )
 
 @Composable
-fun AppNoItemsPlaceholderDescriptionRow(
+fun AppContentStubDescriptionRow(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) = Row(
@@ -72,7 +72,7 @@ fun AppNoItemsPlaceholderDescriptionRow(
 )
 
 @Composable
-fun AppNoItemsPlaceholderDescriptionText(
+fun AppContentStubDescriptionText(
     text: String,
     modifier: Modifier = Modifier,
 ) = AppMainText(
@@ -83,7 +83,7 @@ fun AppNoItemsPlaceholderDescriptionText(
 )
 
 @Composable
-fun AppNoItemsPlaceholderDescriptionIcon(
+fun AppContentStubDescriptionIcon(
     icon: ImageVector,
     modifier: Modifier = Modifier,
 ) = Image(

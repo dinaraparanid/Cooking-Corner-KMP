@@ -14,18 +14,18 @@ import com.paranid5.cooking_corner.core.resources.home_no_item_placeholder_row_5
 import com.paranid5.cooking_corner.core.resources.ic_add
 import com.paranid5.cooking_corner.core.resources.ic_generate
 import com.paranid5.cooking_corner.core.resources.search_tab
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholder
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStub
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholderDescriptionIcon as DescriptionIcon
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholderDescriptionRow as DescriptionRow
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholderDescriptionText as DescriptionText
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStubDescriptionIcon as DescriptionIcon
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStubDescriptionRow as DescriptionRow
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStubDescriptionText as DescriptionText
 
 private val IMAGE_SIZE = 265.dp
 
 @Composable
 internal fun NoItemsPlaceholder(modifier: Modifier = Modifier) =
-    AppNoItemsPlaceholder(
+    AppContentStub(
         modifier = modifier,
         imageModifier = Modifier.size(IMAGE_SIZE),
     ) {

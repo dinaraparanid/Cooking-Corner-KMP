@@ -46,6 +46,7 @@
     <string name="profile_edit">Edit</string>
     <string name="profile_placeholder_unknown">Unknown</string>
     <string name="profile_logout">Log out</string>
+    <string name="profile_error">Failed to load profile. Try again</string>
 
     <!-- Search -->
     <string name="search_filter_placeholder">Search for new recipes</string>
@@ -82,6 +83,7 @@
     <string name="recipe_no_ingredients_description">No ingredients were provided during creation of the recipe. You can always edit your recipe to change that.</string>
     <string name="recipe_published">Your recipe was successfully published</string>
     <string name="recipe_removed">Your recipe was successfully deleted</string>
+    <string name="recipe_failed_to_load">Failed to load recipe. Try again</string>
 
     <!-- Generate -->
     <string name="generate_provide_link">Provide a link to a site that has a cooking recipe and we will create a recipe from it and add it to your list.</string>

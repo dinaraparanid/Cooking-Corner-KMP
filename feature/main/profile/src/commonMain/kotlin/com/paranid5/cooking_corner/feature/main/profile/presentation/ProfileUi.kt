@@ -26,6 +26,7 @@ import com.paranid5.cooking_corner.core.resources.ic_edit
 import com.paranid5.cooking_corner.core.resources.profile_cooking_experience
 import com.paranid5.cooking_corner.core.resources.profile_edit
 import com.paranid5.cooking_corner.core.resources.profile_email
+import com.paranid5.cooking_corner.core.resources.profile_error
 import com.paranid5.cooking_corner.core.resources.profile_logout
 import com.paranid5.cooking_corner.core.resources.profile_name
 import com.paranid5.cooking_corner.core.resources.profile_placeholder_unknown
@@ -36,6 +37,7 @@ import com.paranid5.cooking_corner.feature.main.profile.component.ProfileState
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileUiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.getOrThrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -94,7 +96,10 @@ fun ProfileUi(
                 Content()
 
             is UiState.Error ->
-                Text("TODO: Error stub", Modifier.align(Alignment.Center))
+                AppErrorStub(
+                    errorMessage = stringResource(Res.string.profile_error),
+                    modifier = Modifier.align(Alignment.Center),
+                )
 
             is UiState.Loading, is UiState.Undefined ->
                 AppProgressIndicator(Modifier.align(Alignment.Center))

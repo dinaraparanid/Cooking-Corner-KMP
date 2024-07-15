@@ -15,20 +15,20 @@ import com.paranid5.cooking_corner.core.resources.search_last_recipes_no_item_pl
 import com.paranid5.cooking_corner.core.resources.search_matching_results_none
 import com.paranid5.cooking_corner.core.resources.search_tab
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholder
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholderDescriptionIcon as DescriptionIcon
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholderDescriptionRow as DescriptionRow
-import com.paranid5.cooking_corner.ui.foundation.placeholder.AppNoItemsPlaceholderDescriptionText as DescriptionText
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStubDescriptionIcon as DescriptionIcon
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStubDescriptionRow as DescriptionRow
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppContentStubDescriptionText as DescriptionText
 
 private val LATEST_IMAGE_SIZE = 144.dp
 private val FOUND_IMAGE_SIZE = 265.dp
 
 @Composable
 internal fun LatestRecipesNoItemsPlaceholder(modifier: Modifier = Modifier) =
-    AppNoItemsPlaceholder(
+    AppContentStub(
         modifier = modifier,
         imageModifier = Modifier.size(LATEST_IMAGE_SIZE),
     ) {
@@ -50,7 +50,7 @@ internal fun LatestRecipesNoItemsPlaceholder(modifier: Modifier = Modifier) =
 
 @Composable
 internal fun FoundRecipesNoItemsPlaceholder(modifier: Modifier = Modifier) =
-    AppNoItemsPlaceholder(
+    AppContentStub(
         modifier = modifier,
         imageModifier = Modifier.size(FOUND_IMAGE_SIZE),
     ) {

@@ -6,18 +6,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.search_best_rated
 import com.paranid5.cooking_corner.core.resources.search_last_recipes
+import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
@@ -37,7 +38,10 @@ internal fun Preview(
             )
 
         is UiState.Error ->
-            Text("TODO: Error Stub", Modifier.align(Alignment.Center))
+            AppErrorStub(
+                errorMessage = stringResource(Res.string.something_went_wrong),
+                modifier = Modifier.align(Alignment.Center),
+            )
 
         is UiState.Loading, is UiState.Undefined ->
             AppProgressIndicator(Modifier.align(Alignment.Center))

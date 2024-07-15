@@ -16,15 +16,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.recipe_failed_to_load
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.foundation.AppMainText
+import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.utils.doNothing
+import org.jetbrains.compose.resources.stringResource
 
 internal val DialogShape = RoundedCornerShape(24.dp)
 internal val FLOW_ROW_MIN_HEIGHT = 32.dp
@@ -60,9 +63,8 @@ private fun RecipeEditorUiContent(
             modifier = Modifier.fillMaxSize(),
         )
 
-        is UiState.Error -> AppMainText(
-            text = "TODO: Error stub",
-            style = AppTheme.typography.h.h1,
+        is UiState.Error -> AppErrorStub(
+            errorMessage = stringResource(Res.string.recipe_failed_to_load),
             modifier = Modifier.align(Alignment.Center),
         )
 

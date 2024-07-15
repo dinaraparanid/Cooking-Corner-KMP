@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.recipe_failed_to_load
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
@@ -33,6 +34,7 @@ import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.getOrThrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme
@@ -77,10 +79,9 @@ private fun RecipeDetailsContent(
     when (val recipeUiState = state.recipeUiState) {
         is UiState.Data -> Content(recipeUiState.getOrThrow())
 
-        is UiState.Error -> AppMainText(
-            text = "TODO: Error Stub",
-            style = AppTheme.typography.h.h1,
-            modifier = Modifier.align(Alignment.Center)
+        is UiState.Error -> AppErrorStub(
+            errorMessage = stringResource(Res.string.recipe_failed_to_load),
+            modifier = Modifier.align(Alignment.Center),
         )
 
         is UiState.Loading, is UiState.Undefined -> Loader()
