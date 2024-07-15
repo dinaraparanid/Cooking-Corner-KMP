@@ -1,10 +1,8 @@
 package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 
-import arrow.core.Either
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
-import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
 import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
@@ -99,8 +97,8 @@ internal class RecipeEditorExecutor(
             is UiIntent.UpdateSource ->
                 dispatch(Msg.UpdateSource(intent.source))
 
-            is UiIntent.UpdateThumbnail ->
-                dispatch(Msg.UpdateCover(intent.thumbnail))
+            is UiIntent.UpdateCover ->
+                dispatch(Msg.UpdateCover(intent.cover))
 
             is UiIntent.UpdateVideoLink ->
                 dispatch(Msg.UpdateVideoLink(intent.videoLink))

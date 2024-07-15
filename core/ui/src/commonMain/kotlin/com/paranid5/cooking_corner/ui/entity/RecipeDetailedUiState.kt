@@ -1,7 +1,6 @@
 package com.paranid5.cooking_corner.ui.entity
 
 import androidx.compose.runtime.Immutable
-import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import kotlinx.serialization.Serializable
 
@@ -21,7 +20,7 @@ data class RecipeDetailedUiState(
     val portions: Int,
     val byUser: Boolean,
     val isPublished: Boolean,
-    val coverUrlState: UiState<String>,
+    val cover: ImageContainer?,
     val steps: SerializableImmutableList<StepUiState>,
     val ingredients: SerializableImmutableList<IngredientUiState>,
 )

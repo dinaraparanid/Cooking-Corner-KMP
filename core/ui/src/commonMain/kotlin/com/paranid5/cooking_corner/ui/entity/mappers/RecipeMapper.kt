@@ -3,14 +3,12 @@ package com.paranid5.cooking_corner.ui.entity.mappers
 import com.paranid5.cooking_corner.domain.recipe.dto.IngredientDTO
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.recipe.dto.StepDTO
-import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
-import com.paranid5.cooking_corner.ui.getOrNull
-import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.mapToImmutableList
 import com.paranid5.cooking_corner.utils.orNil
@@ -26,7 +24,7 @@ fun RecipeUiState.Companion.fromResponse(response: RecipeResponse) =
         author = response.username.orEmpty(),
         isLiked = response.isFavourite ?: false,
         isMyRecipe = response.isMyRecipe ?: false,
-        coverUrlState = response.iconPath?.toUiState() ?: UiState.Success,
+        cover = response.iconPath?.let(ImageContainer::Uri),
     )
 
 fun RecipeDetailedUiState.Companion.fromResponse(response: RecipeResponse) =
@@ -44,7 +42,7 @@ fun RecipeDetailedUiState.Companion.fromResponse(response: RecipeResponse) =
         portions = response.portions ?: 0,
         byUser = response.isMyRecipe ?: false,
         isPublished = response.isPrivate?.not() ?: false,
-        coverUrlState = response.iconPath?.toUiState() ?: UiState.Success,
+        cover = response.iconPath?.let(ImageContainer::Uri),
         ingredients = SerializableImmutableList(
             response
                 .ingredients
@@ -72,11 +70,10 @@ fun StepUiState.Companion.fromResponse(response: StepDTO) =
     StepUiState(
         title = response.title.orEmpty(),
         description = response.description.orEmpty(),
-        coverUrlState = response.imagePath?.toUiState() ?: UiState.Success,
+        cover = response.imagePath?.let(ImageContainer::Uri),
     )
 
-fun StepUiState.toRequest() =
-    StepDTO(title = title, description = description, imagePath = coverUrlState.getOrNull())
+fun StepUiState.toRequest() = StepDTO(title = title, description = description)
 
 fun RecipeParamsUiState.Companion.fromResponse(response: RecipeResponse) =
     RecipeParamsUiState(

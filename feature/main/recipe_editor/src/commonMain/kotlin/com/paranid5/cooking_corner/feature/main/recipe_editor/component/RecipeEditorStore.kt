@@ -9,6 +9,7 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
@@ -63,7 +64,7 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
 
         data class UpdateSource(val source: String) : UiIntent
 
-        data class UpdateThumbnail(val thumbnail: ByteArray?) : UiIntent
+        data class UpdateCover(val cover: ImageContainer) : UiIntent
 
         sealed interface Ingredient : UiIntent {
             data object Add : Ingredient
@@ -124,13 +125,13 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
             val isVisible: Boolean,
             val title: String,
             val description: String,
-            val cover: ByteArray?,
+            val cover: ImageContainer?,
         ) {
             @Transient
             val inputStepUiState = StepUiState(
                 title = title,
                 description = description,
-                coverUrlState = UiState.Success, // TODO: handle cover
+                cover = cover,
             )
 
             constructor() : this(

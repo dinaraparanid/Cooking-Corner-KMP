@@ -11,6 +11,7 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
@@ -60,7 +61,7 @@ internal class RecipeEditorStoreProvider(
 
         data class UpdateSource(val source: String) : Msg
 
-        data class UpdateCover(val cover: ByteArray?) : Msg
+        data class UpdateCover(val cover: ImageContainer) : Msg
 
         data class UpdateCategoriesUiState(
             val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>>

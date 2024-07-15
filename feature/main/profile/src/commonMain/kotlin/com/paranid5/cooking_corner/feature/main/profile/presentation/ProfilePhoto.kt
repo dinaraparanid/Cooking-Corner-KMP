@@ -18,6 +18,7 @@ import com.paranid5.cooking_corner.ui.foundation.coverModel
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.isUndefinedOrLoading
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.utils.doNothing
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -27,12 +28,12 @@ internal fun ProfilePhoto(
 ) = AppLoadingBox(
     isLoading = photoUrlState.isUndefinedOrLoading,
     isError = photoUrlState is UiState.Error,
-    onErrorButtonClick = { }, // TODO: retry
+    onErrorButtonClick = doNothing, // TODO: retry
     modifier = modifier
 ) {
     SubcomposeAsyncImage(
         modifier = Modifier.fillMaxSize(),
-        model = coverModel(coverUrl = photoUrlState.getOrNull()),
+        model = coverModel(data = photoUrlState.getOrNull()),
         contentDescription = null,
         alignment = Alignment.Center,
         contentScale = ContentScale.Crop,

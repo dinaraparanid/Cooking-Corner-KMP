@@ -133,8 +133,7 @@ fun RecipeDetailsContentData(
         Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
         RecipeClippedCover(
-            coverUrlState = recipeUiState.coverUrlState,
-            onErrorButtonClick = {}, // TODO: Error handle
+            cover = recipeUiState.cover,
             modifier = Modifier
                 .size(width = COVER_WIDTH, height = COVER_HEIGHT)
                 .align(Alignment.CenterHorizontally),

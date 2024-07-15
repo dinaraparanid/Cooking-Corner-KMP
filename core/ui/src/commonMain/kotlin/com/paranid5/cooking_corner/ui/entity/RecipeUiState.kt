@@ -1,7 +1,6 @@
 package com.paranid5.cooking_corner.ui.entity
 
 import androidx.compose.runtime.Immutable
-import com.paranid5.cooking_corner.ui.UiState
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -16,7 +15,7 @@ data class RecipeUiState(
     val author: String,
     val isLiked: Boolean,
     val isMyRecipe: Boolean,
-    val coverUrlState: UiState<String> = UiState.Undefined,
+    val cover: ImageContainer? = null,
 ) {
     @Transient
     val totalTime = preparingTime + cookingTime

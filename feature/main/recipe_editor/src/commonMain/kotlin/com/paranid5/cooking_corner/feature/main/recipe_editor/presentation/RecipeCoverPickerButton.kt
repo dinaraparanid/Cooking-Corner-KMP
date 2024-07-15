@@ -11,39 +11,38 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_select_cover
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
+import com.paranid5.cooking_corner.ui.foundation.picker.ImagePickerLauncher
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal expect fun RecipeCoverPickerButton(
+internal fun RecipeCoverPickerButton(
     modifier: Modifier = Modifier,
     onPicked: (ByteArray) -> Unit,
-)
-
-@Composable
-internal fun RecipeCoverPickerButtonUi(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) = AppOutlinedRippleButton(
-    modifier = modifier,
-    shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
-    colors = ButtonDefaults.buttonColors(
-        containerColor = AppTheme.colors.background.primaryDarkest,
-        disabledContainerColor = AppTheme.colors.background.primaryDarker,
-    ),
-    border = BorderStroke(
-        width = AppTheme.dimensions.borders.minimum,
-        color = AppTheme.colors.button.primary,
-    ),
-    contentPadding = PaddingValues(
-        vertical = AppTheme.dimensions.padding.medium,
-        horizontal = AppTheme.dimensions.padding.extraBig,
-    ),
-    onClick = onClick
 ) {
-    AppMainText(
-        text = stringResource(Res.string.recipe_select_cover),
-        style = AppTheme.typography.h.h3,
-        fontWeight = FontWeight.Bold,
-    )
+    val launchPicker = ImagePickerLauncher(onPicked)
+
+    AppOutlinedRippleButton(
+        modifier = modifier,
+        shape = RoundedCornerShape(AppTheme.dimensions.corners.small),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = AppTheme.colors.background.primaryDarkest,
+            disabledContainerColor = AppTheme.colors.background.primaryDarker,
+        ),
+        border = BorderStroke(
+            width = AppTheme.dimensions.borders.minimum,
+            color = AppTheme.colors.button.primary,
+        ),
+        contentPadding = PaddingValues(
+            vertical = AppTheme.dimensions.padding.medium,
+            horizontal = AppTheme.dimensions.padding.extraBig,
+        ),
+        onClick = { launchPicker() }
+    ) {
+        AppMainText(
+            text = stringResource(Res.string.recipe_select_cover),
+            style = AppTheme.typography.h.h3,
+            fontWeight = FontWeight.Bold,
+        )
+    }
 }

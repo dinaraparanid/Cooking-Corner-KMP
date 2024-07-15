@@ -24,7 +24,7 @@ data class RecipeParamsUiState(
     val dishesInput: String = "",
     val videoLink: String = "",
     val source: String = "",
-    val cover: ByteArray? = null,
+    val cover: ImageContainer? = null,
     val ingredients: SerializableImmutableList<IngredientUiState> = SerializableImmutableList(),
     val steps: SerializableImmutableList<StepUiState> = SerializableImmutableList(),
 )

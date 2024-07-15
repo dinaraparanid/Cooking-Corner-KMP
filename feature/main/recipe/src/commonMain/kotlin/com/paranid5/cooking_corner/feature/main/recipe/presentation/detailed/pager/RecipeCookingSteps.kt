@@ -86,8 +86,7 @@ private fun RecipeCookingStep(
         Spacer(Modifier.height(AppTheme.dimensions.padding.small))
 
         RecipeClippedCover(
-            coverUrlState = stepUiState.coverUrlState,
-            onErrorButtonClick = {}, // TODO: Error handle
+            cover = stepUiState.cover,
             modifier = Modifier
                 .size(width = COVER_WIDTH, height = COVER_HEIGHT)
                 .align(Alignment.CenterHorizontally),

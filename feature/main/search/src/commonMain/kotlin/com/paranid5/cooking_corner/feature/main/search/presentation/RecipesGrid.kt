@@ -27,7 +27,6 @@ import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
-import com.paranid5.cooking_corner.utils.doNothing
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 
@@ -80,7 +79,6 @@ private fun RecipesGridContent(
             items(items = foundRecipes) { recipe ->
                 RecipeItem(
                     recipe = recipe,
-                    onErrorButtonClick = doNothing, // TODO: Error handling
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(RECIPE_HEIGHT)

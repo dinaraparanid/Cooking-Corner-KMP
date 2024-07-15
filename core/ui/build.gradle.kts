@@ -49,8 +49,11 @@ kotlin {
     }
 
     sourceSets {
+        val desktopMain by getting
+
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
+            implementation(libs.peekaboo.image.picker)
         }
         commonMain.dependencies {
             implementation(projects.core.utils)
@@ -78,6 +81,12 @@ kotlin {
             implementation(libs.kolor)
 
             implementation(libs.kodein)
+        }
+        desktopMain.dependencies {
+            implementation(libs.javax.activation)
+        }
+        iosMain.dependencies {
+            implementation(libs.peekaboo.image.picker)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

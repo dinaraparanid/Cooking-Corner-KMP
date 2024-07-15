@@ -12,11 +12,11 @@ import coil3.size.Scale
 private const val DEFAULT_ANIMATION_DURATION = 400
 
 fun coverModel(
-    coverUrl: String?,
+    data: Any?,
     context: PlatformContext,
     animationMillis: Int = DEFAULT_ANIMATION_DURATION,
 ): ImageRequest = ImageRequest.Builder(context)
-    .data(coverUrl)
+    .data(data)
     .networkCachePolicy(CachePolicy.ENABLED)
     .diskCachePolicy(CachePolicy.ENABLED)
     .memoryCachePolicy(CachePolicy.ENABLED)
@@ -27,10 +27,10 @@ fun coverModel(
 
 @Composable
 fun coverModel(
-    coverUrl: String?,
+    data: Any?,
     animationMillis: Int = DEFAULT_ANIMATION_DURATION,
 ) = coverModel(
-    coverUrl = coverUrl,
+    data = data,
     context = LocalPlatformContext.current,
     animationMillis = animationMillis,
 )

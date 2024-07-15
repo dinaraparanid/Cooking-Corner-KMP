@@ -29,7 +29,6 @@ import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp
-import com.paranid5.cooking_corner.utils.doNothing
 import org.jetbrains.compose.resources.stringResource
 
 private const val MIN_RECIPES_IN_ROW = 2
@@ -96,7 +95,6 @@ private fun RecipesGridContentImpl(
         items(items = state.shownRecipes) { recipe ->
             RecipeItem(
                 recipe = recipe,
-                onErrorButtonClick = doNothing, // TODO: Error handling
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(RECIPE_HEIGHT)

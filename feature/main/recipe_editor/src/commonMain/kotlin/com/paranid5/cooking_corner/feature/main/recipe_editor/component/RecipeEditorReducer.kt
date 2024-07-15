@@ -3,6 +3,7 @@ package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStoreProvider.Msg
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.with
 import com.paranid5.cooking_corner.utils.without
@@ -139,7 +140,7 @@ internal object RecipeEditorReducer : Reducer<State, Msg> {
             copy(stepDialogState = stepDialogState.copy(description = msg.description))
 
         is Msg.Step.UpdateCover ->
-            copy(stepDialogState = stepDialogState.copy(cover = msg.cover))
+            copy(stepDialogState = stepDialogState.copy(cover = ImageContainer.Bytes(msg.cover)))
 
         is Msg.Step.UpdateTitle ->
             copy(stepDialogState = stepDialogState.copy(title = msg.title))

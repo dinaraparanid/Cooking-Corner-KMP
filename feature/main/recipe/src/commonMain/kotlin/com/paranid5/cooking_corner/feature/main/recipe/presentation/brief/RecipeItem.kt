@@ -27,7 +27,6 @@ private val COVER_HEIGHT = 100.dp
 fun RecipeItem(
     recipe: RecipeUiState,
     modifier: Modifier = Modifier,
-    onErrorButtonClick: (() -> Unit)? = null,
     actionButton: @Composable (Modifier) -> Unit,
 ) {
     val appPadding = AppTheme.dimensions.padding
@@ -57,8 +56,7 @@ fun RecipeItem(
         }
 
         RecipeClippedCover(
-            coverUrlState = recipe.coverUrlState,
-            onErrorButtonClick = onErrorButtonClick,
+            cover = recipe.cover,
             modifier = Modifier
                 .size(width = COVER_WIDTH, height = COVER_HEIGHT)
                 .constrainAs(cover) {
