@@ -11,6 +11,6 @@ internal object SearchReducer : Reducer<State, Msg> {
         is Msg.UpdateBestRatedRecipes -> copy(bestRatedRecipes = msg.recipes)
         is Msg.UpdateRecentRecipes -> copy(recentRecipes = msg.recipes)
         is Msg.UpdateFoundRecipesUiState -> copy(foundRecipesUiState = msg.recipesUiState)
-        is Msg.UpdatePreviewUiState -> copy(previewUiState = msg.uiState)
+        is Msg.UpdatePreviewUiState -> copy(previewUiState = msg.uiState, isSearching = false)
     }
 }

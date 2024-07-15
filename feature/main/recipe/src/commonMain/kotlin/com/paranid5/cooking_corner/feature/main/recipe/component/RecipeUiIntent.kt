@@ -5,6 +5,8 @@ import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 interface RecipeUiIntent {
     data object Back : RecipeUiIntent
 
+    data object Refresh : RecipeUiIntent
+
     data class ChangeKebabMenuVisibility(val isVisible: Boolean) : RecipeUiIntent
 
     data class Publish(

@@ -5,6 +5,7 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.essenty.lifecycle.doOnCreate
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.paranid5.cooking_corner.component.componentScope
 import com.paranid5.cooking_corner.component.getComponentState
 import com.paranid5.cooking_corner.component.toStateFlow
@@ -55,11 +56,12 @@ internal class ProfileComponentImpl(
     ).toStateFlow()
 
     init {
-        doOnCreate { componentScope.launch { loadProfile() } }
+        doOnResume { loadProfile() }
     }
 
     override fun onUiIntent(intent: ProfileUiIntent) {
         when (intent) {
+            is ProfileUiIntent.Refresh -> loadProfile()
             is ProfileUiIntent.Edit -> doNothing // TODO: Edit profile
             is ProfileUiIntent.LogOut -> componentScope.launch { logOut(Reason.MANUAL) }
         }
@@ -72,25 +74,27 @@ internal class ProfileComponentImpl(
         is Slot.Edit -> ProfileChild.Edit
     }
 
-    private suspend fun loadProfile() {
+    private fun loadProfile() {
         _stateFlow.updateState { copy(uiState = UiState.Loading) }
 
-        val uiState = withContext(AppDispatchers.Data) {
-            authRepository.getMe().fold(
-                ifLeft = Throwable::toUiState,
-                ifRight = { res ->
-                    res.fold(
-                        ifLeft = { status ->
-                            if (status.isForbidden) logOut(Reason.ERROR)
-                            null
-                        },
-                        ifRight = { ProfileUiState.fromResponse(it).toUiState() }
-                    )
-                }
-            )
-        } ?: return
+        componentScope.launch {
+            val uiState = withContext(AppDispatchers.Data) {
+                authRepository.getMe().fold(
+                    ifLeft = Throwable::toUiState,
+                    ifRight = { res ->
+                        res.fold(
+                            ifLeft = { status ->
+                                if (status.isForbidden) logOut(Reason.ERROR)
+                                null
+                            },
+                            ifRight = { ProfileUiState.fromResponse(it).toUiState() }
+                        )
+                    }
+                )
+            } ?: return@launch
 
-        _stateFlow.updateState { copy(uiState = uiState) }
+            _stateFlow.updateState { copy(uiState = uiState) }
+        }
     }
 
     private suspend fun logOut(reason: Reason) =

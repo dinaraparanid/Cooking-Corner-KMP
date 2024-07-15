@@ -60,5 +60,8 @@ inline fun Throwable.toUiState() = UiState.Error(this::class.qualifiedName)
 inline val <T> UiState<T>.isUndefinedOrLoading
     get() = this is UiState.Undefined || this is UiState.Loading
 
+inline val <T> UiState<T>.isLoadingOrRefreshing
+    get() = this is UiState.Undefined || this is UiState.Refreshing
+
 inline val <T> UiState<T>.isOk
     get() = this is UiState.Success || this is UiState.Data

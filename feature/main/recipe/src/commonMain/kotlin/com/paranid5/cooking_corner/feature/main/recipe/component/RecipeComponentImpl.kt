@@ -10,7 +10,6 @@ import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.core.common.HttpStatusCode
 import com.paranid5.cooking_corner.core.common.isForbidden
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
-import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
@@ -43,15 +42,16 @@ internal class RecipeComponentImpl(
     override val stateFlow = _stateFlow.asStateFlow()
 
     init {
-        doOnResume {
-            loadUsername()
-            loadRecipe(recipeId)
-        }
+        doOnResume { loadRecipe(recipeId = recipeId) }
     }
 
     override fun onUiIntent(intent: RecipeUiIntent) {
         when (intent) {
             is RecipeUiIntent.Back -> onBack(BackResult.Dismiss)
+
+            is RecipeUiIntent.Refresh -> stateFlow.value.recipeId?.let {
+                loadRecipe(recipeId = it)
+            }
 
             is RecipeUiIntent.ChangeKebabMenuVisibility ->
                 changeKebabMenuVisibility(isVisible = intent.isVisible)
@@ -86,6 +86,11 @@ internal class RecipeComponentImpl(
         }
     }
 
+    private fun loadRecipe(recipeId: Long) {
+        loadUsername()
+        loadRecipeDetails(recipeId)
+    }
+
     private fun changeKebabMenuVisibility(isVisible: Boolean) =
         _stateFlow.updateState { copy(isKebabMenuVisible = isVisible) }
 
@@ -99,7 +104,7 @@ internal class RecipeComponentImpl(
             errorSnackbar = errorSnackbar,
         ) {
             globalEventRepository.sendSnackbar(successSnackbar)
-            loadRecipe(recipeId = recipeId)
+            loadRecipeDetails(recipeId = recipeId)
         }
     }
 
@@ -125,11 +130,11 @@ internal class RecipeComponentImpl(
         handleModifyRecipeApiResult(
             result = recipeRepository.rate(recipeId = recipeId, rating = rating),
             errorSnackbar = errorSnackbar,
-            onSuccess = { loadRecipe(recipeId = recipeId) },
+            onSuccess = { loadRecipeDetails(recipeId = recipeId) },
         )
     }
 
-    private fun loadRecipe(recipeId: Long) {
+    private fun loadRecipeDetails(recipeId: Long) {
         _stateFlow.updateState { copy(recipeUiState = UiState.Loading) }
 
         componentScope.launch {

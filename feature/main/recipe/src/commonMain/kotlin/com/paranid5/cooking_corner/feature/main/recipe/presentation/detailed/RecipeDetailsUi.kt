@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,11 +34,12 @@ import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippe
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.pager.RecipePager
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
-import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.AppPullRefreshIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
-import com.paranid5.cooking_corner.ui.getOrNull
+import com.paranid5.cooking_corner.ui.foundation.rememberPullRefreshWithDuration
 import com.paranid5.cooking_corner.ui.getOrThrow
+import com.paranid5.cooking_corner.ui.isLoadingOrRefreshing
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -58,40 +61,49 @@ fun RecipeDetailsUi(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun RecipeDetailsContent(
     state: RecipeState,
     onUiIntent: (RecipeUiIntent) -> Unit,
     modifier: Modifier = Modifier,
-) = Box(modifier) {
-    @Composable
-    fun Content(recipeUiState: RecipeDetailedUiState) = RecipeDetailsContentData(
-        isOwned = state.isOwned,
-        recipeUiState = recipeUiState,
-        isKebabMenuVisible = state.isKebabMenuVisible,
-        onUiIntent = onUiIntent,
-        modifier = Modifier.fillMaxSize(),
+) {
+    val (pullRefreshState, isRefreshingShown) = rememberPullRefreshWithDuration(
+        isRefreshing = state.recipeUiState.isLoadingOrRefreshing,
+        onRefresh = { onUiIntent(RecipeUiIntent.Refresh) }
     )
 
-    @Composable
-    fun Loader() = AppProgressIndicator(modifier = Modifier.align(Alignment.Center))
-
-    when (val recipeUiState = state.recipeUiState) {
-        is UiState.Data -> Content(recipeUiState.getOrThrow())
-
-        is UiState.Error -> AppErrorStub(
-            errorMessage = stringResource(Res.string.recipe_failed_to_load),
-            modifier = Modifier.align(Alignment.Center),
+    Box(modifier.pullRefresh(pullRefreshState)) {
+        @Composable
+        fun Content(recipeUiState: RecipeDetailedUiState) = RecipeDetailsContentData(
+            isOwned = state.isOwned,
+            recipeUiState = recipeUiState,
+            isKebabMenuVisible = state.isKebabMenuVisible,
+            onUiIntent = onUiIntent,
+            modifier = Modifier.fillMaxSize(),
         )
 
-        is UiState.Loading, is UiState.Undefined -> Loader()
+        @Composable
+        fun Loader() = AppProgressIndicator(modifier = Modifier.align(Alignment.Center))
 
-        is UiState.Success -> error("Illegal state: UiState.Success")
+        when (val recipeUiState = state.recipeUiState) {
+            is UiState.Data -> Content(recipeUiState.getOrThrow())
 
-        is UiState.Refreshing -> recipeUiState
-            .getOrNull()
-            ?.let { Content(recipeUiState = it) }
-            ?: Loader()
+            is UiState.Error -> AppErrorStub(
+                errorMessage = stringResource(Res.string.recipe_failed_to_load),
+                modifier = Modifier.align(Alignment.Center),
+            )
+
+            is UiState.Loading, is UiState.Undefined, is UiState.Refreshing -> Loader()
+
+            is UiState.Success -> error("Illegal state: UiState.Success")
+        }
+
+        AppPullRefreshIndicator(
+            isRefreshing = isRefreshingShown,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
     }
 }
 

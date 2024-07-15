@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,9 +41,12 @@ import com.paranid5.cooking_corner.feature.main.profile.component.ProfileState
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileUiIntent
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.AppPullRefreshIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
+import com.paranid5.cooking_corner.ui.foundation.rememberPullRefreshWithDuration
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.getOrThrow
+import com.paranid5.cooking_corner.ui.isLoadingOrRefreshing
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -47,6 +54,7 @@ import org.jetbrains.compose.resources.vectorResource
 private val PHOTO_SIZE = 200.dp
 private val SEPARATOR_HEIGHT = 1.dp
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileUi(
     component: ProfileComponent,
@@ -54,6 +62,11 @@ fun ProfileUi(
 ) {
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
+
+    val (pullRefreshState, isRefreshingShown) = rememberPullRefreshWithDuration(
+        isRefreshing = state.uiState.isLoadingOrRefreshing,
+        onRefresh = { onUiIntent(ProfileUiIntent.Refresh) },
+    )
 
     @Composable
     fun BoxScope.Content() {
@@ -90,7 +103,11 @@ fun ProfileUi(
         }
     }
 
-    Box(modifier) {
+    Box(
+        modifier
+            .pullRefresh(pullRefreshState)
+            .verticalScroll(rememberScrollState())
+    ) {
         when (state.uiState) {
             is UiState.Data, is UiState.Refreshing, is UiState.Success ->
                 Content()
@@ -104,6 +121,12 @@ fun ProfileUi(
             is UiState.Loading, is UiState.Undefined ->
                 AppProgressIndicator(Modifier.align(Alignment.Center))
         }
+
+        AppPullRefreshIndicator(
+            isRefreshing = isRefreshingShown,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
     }
 }
 
