@@ -59,7 +59,6 @@ kotlin {
 
             implementation(projects.domain.recipe)
             implementation(projects.domain.category)
-            implementation(projects.domain.tag)
             implementation(projects.domain.globalEvent)
 
             implementation(compose.runtime)

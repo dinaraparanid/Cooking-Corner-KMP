@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 
+typealias SpinnerItem = @Composable (Int, String, Modifier) -> Unit
+
 @Composable
 fun AppSpinner(
     items: ImmutableList<String>,
@@ -27,12 +28,12 @@ fun AppSpinner(
     dropdownModifier: Modifier = Modifier,
     background: Color = AppTheme.colors.background.primary,
     previewItemIndex: Int = selectedItemIndices.firstOrNull() ?: 0,
-    selectedItemFactory: @Composable (Int, String, Modifier) -> Unit = { _, text, mod ->
-        DefaultSelectedItem(text, mod)
+    selectedItemFactory: SpinnerItem = { _, text, mod ->
+        DefaultAppSpinnerSelectedItem(text, mod)
     },
-    previewItemFactory: @Composable (Int, String, Modifier) -> Unit = selectedItemFactory,
-    dropdownItemFactory: @Composable (Int, String, Modifier) -> Unit = { _, text, mod ->
-        DefaultItem(text, mod)
+    previewItemFactory: SpinnerItem = selectedItemFactory,
+    dropdownItemFactory: SpinnerItem = { _, text, mod ->
+        DefaultAppSpinnerItem(text, mod)
     },
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -68,28 +69,24 @@ fun AppSpinner(
 }
 
 @Composable
-private fun DefaultSelectedItem(text: String, modifier: Modifier = Modifier) {
+fun DefaultAppSpinnerSelectedItem(text: String, modifier: Modifier = Modifier) {
     val updText by rememberUpdatedState(text)
 
-    Text(
+    AppMainText(
         text = updText,
         modifier = modifier,
-        color = AppTheme.colors.text.primary,
         style = AppTheme.typography.regular,
         fontWeight = FontWeight.Bold,
-        fontFamily = AppTheme.typography.RalewayFontFamily,
     )
 }
 
 @Composable
-private fun DefaultItem(text: String, modifier: Modifier = Modifier) {
+fun DefaultAppSpinnerItem(text: String, modifier: Modifier = Modifier) {
     val updText by rememberUpdatedState(text)
 
-    Text(
+    AppMainText(
         text = updText,
         modifier = modifier,
-        color = AppTheme.colors.text.primary,
         style = AppTheme.typography.regular,
-        fontFamily = AppTheme.typography.RalewayFontFamily,
     )
 }

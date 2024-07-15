@@ -85,8 +85,6 @@ internal object RecipeEditorReducer : Reducer<State, Msg> {
                 .copy(source = msg.source)
         )
 
-        is Msg.UpdateTagsUiState -> copy(tagsUiState = msg.tagsUiState)
-
         is Msg.UpdateVideoLink -> copy(
             recipeParamsUiState = recipeParamsUiState
                 .copy(videoLink = msg.videoLink)

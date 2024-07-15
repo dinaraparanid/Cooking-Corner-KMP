@@ -8,7 +8,6 @@ data class RecipeModifyParams(
     val description: String?,
     val iconPath: String?,
     val category: String?,
-    val tag: String?,
     val preparingTime: Int?,
     val cookingTime: Int?,
     val waitingTime: Int?,

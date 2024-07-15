@@ -6,23 +6,20 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.paranid5.cooking_corner.domain.category.CategoryRepository
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.recipe.RecipeRepository
-import com.paranid5.cooking_corner.domain.tag.TagRepository
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.StepUiState
-import com.paranid5.cooking_corner.ui.entity.TagUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 
 internal class RecipeEditorStoreProvider(
     private val storeFactory: StoreFactory,
     private val recipeRepository: RecipeRepository,
     private val categoryRepository: CategoryRepository,
-    private val tagRepository: TagRepository,
     private val globalEventRepository: GlobalEventRepository,
 ) {
     sealed interface Msg {
@@ -69,10 +66,6 @@ internal class RecipeEditorStoreProvider(
             val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>>
         ) : Msg
 
-        data class UpdateTagsUiState(
-            val tagsUiState: UiState<SerializableImmutableList<TagUiState>>
-        ) : Msg
-
         sealed interface Ingredient : Msg {
             data class Add(val ingredient: IngredientUiState) : Ingredient
             data class Remove(val ingredient: IngredientUiState) : Ingredient
@@ -100,7 +93,6 @@ internal class RecipeEditorStoreProvider(
                 RecipeEditorExecutor(
                     recipeRepository = recipeRepository,
                     categoryRepository = categoryRepository,
-                    tagRepository = tagRepository,
                     globalEventRepository = globalEventRepository,
                 )
             },
@@ -112,14 +104,12 @@ internal class RecipeEditorStoreProvider(
         private val storeFactory: StoreFactory,
         private val recipeRepository: RecipeRepository,
         private val categoryRepository: CategoryRepository,
-        private val tagRepository: TagRepository,
         private val globalEventRepository: GlobalEventRepository,
     ) {
         fun create() = RecipeEditorStoreProvider(
             storeFactory = storeFactory,
             recipeRepository = recipeRepository,
             categoryRepository = categoryRepository,
-            tagRepository = tagRepository,
             globalEventRepository = globalEventRepository,
         )
     }

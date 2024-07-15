@@ -10,7 +10,6 @@ data class UpdateRecipeRequest(
     @SerialName("description") val description: String? = null,
     @SerialName("icon_path") val iconPath: String? = null,
     @SerialName("category_name") val category: String? = null,
-    @SerialName("tag_name") val tag: String? = null,
     @SerialName("preparing_time") val preparingTime: Int? = null,
     @SerialName("cooking_time") val cookingTime: Int? = null,
     @SerialName("waiting_time") val waitingTime: Int? = null,

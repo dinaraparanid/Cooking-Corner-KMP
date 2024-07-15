@@ -28,6 +28,13 @@ fun <T> AppSpinnerWithArrow(
     initial: String,
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier,
+    selectedItemFactory: SpinnerItem = { _, text, mod ->
+        DefaultAppSpinnerSelectedItem(text, mod)
+    },
+    previewItemFactory: SpinnerItem = selectedItemFactory,
+    dropdownItemFactory: SpinnerItem = { _, text, mod ->
+        DefaultAppSpinnerItem(text, mod)
+    },
     onItemSelected: (index: Int) -> Unit,
 ) = Box(modifier.background(AppTheme.colors.background.primary)) {
     AppSpinnerContent(
@@ -36,6 +43,9 @@ fun <T> AppSpinnerWithArrow(
         title = title,
         initial = initial,
         onItemSelected = onItemSelected,
+        selectedItemFactory = selectedItemFactory,
+        previewItemFactory = previewItemFactory,
+        dropdownItemFactory = dropdownItemFactory,
         modifier = contentModifier
             .fillMaxWidth()
             .align(Alignment.CenterStart)
@@ -58,6 +68,9 @@ private fun <T> AppSpinnerContent(
     items: ImmutableList<T>,
     title: T.() -> String,
     initial: String,
+    selectedItemFactory: SpinnerItem,
+    previewItemFactory: SpinnerItem,
+    dropdownItemFactory: SpinnerItem,
     modifier: Modifier = Modifier,
     onItemSelected: (index: Int) -> Unit,
 ) {
@@ -71,6 +84,9 @@ private fun <T> AppSpinnerContent(
         modifier = modifier,
         items = titles,
         selectedItemIndices = persistentListOf(selectedItemIndex),
+        selectedItemFactory = selectedItemFactory,
+        previewItemFactory = previewItemFactory,
+        dropdownItemFactory = dropdownItemFactory,
         onItemSelected = { index, _ -> onItemSelected(index) }
     )
 }

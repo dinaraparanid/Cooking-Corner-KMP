@@ -25,13 +25,12 @@ import com.paranid5.cooking_corner.core.resources.recipe_editor_preparation_time
 import com.paranid5.cooking_corner.core.resources.recipe_editor_proteins
 import com.paranid5.cooking_corner.core.resources.recipe_editor_rest_time
 import com.paranid5.cooking_corner.core.resources.recipe_editor_source
-import com.paranid5.cooking_corner.core.resources.recipe_editor_tag
 import com.paranid5.cooking_corner.core.resources.recipe_editor_video_link
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.CategoryUiState
-import com.paranid5.cooking_corner.ui.entity.TagUiState
+import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppSpinnerWithArrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
@@ -83,15 +82,14 @@ internal fun RecipeEditorParams(
         title = CategoryUiState::title,
         initial = stringResource(Res.string.recipe_editor_category),
         modifier = ClippedOutlinedModifier,
+        selectedItemFactory = { _, text, modifier ->
+            AppMainText(
+                text = text,
+                modifier = modifier,
+                style = AppTheme.typography.regular,
+            )
+        }
     ) { onUiIntent(UiIntent.UpdateSelectedCategory(index = it)) }
-
-    AppSpinnerWithArrow(
-        selectedItemIndex = state.selectedTagIndex,
-        items = state.tags,
-        title = TagUiState::title,
-        initial = stringResource(Res.string.recipe_editor_tag),
-        modifier = ClippedOutlinedModifier,
-    ) { onUiIntent(UiIntent.UpdateSelectedTag(index = it)) }
 
     RecipeEditorTextField(
         value = recipeParamsUiState.preparationTimeInput,
