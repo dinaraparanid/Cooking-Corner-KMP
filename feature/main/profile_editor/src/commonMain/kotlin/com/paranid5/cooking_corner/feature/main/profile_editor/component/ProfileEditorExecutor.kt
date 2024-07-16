@@ -44,6 +44,18 @@ internal class ProfileEditorExecutor(
             )
 
             is UiIntent.UpdateCover -> dispatch(Msg.UpdateCover(cover = intent.cover))
+
+            is UiIntent.UpdateUsername -> dispatch(Msg.UpdateUsername(username = intent.username))
+
+            is UiIntent.UpdateName -> dispatch(Msg.UpdateName(name = intent.name))
+
+            is UiIntent.UpdateSurname -> dispatch(Msg.UpdateSurname(surname = intent.surname))
+
+            is UiIntent.UpdateEmail -> dispatch(Msg.UpdateEmail(email = intent.email))
+
+            is UiIntent.UpdateCookingExperience -> dispatch(
+                Msg.UpdateCookingExperience(cookingExperience = intent.cookingExperience)
+            )
         }
     }
 
@@ -82,7 +94,7 @@ internal class ProfileEditorExecutor(
                         email = profileUiState.email,
                         name = profileUiState.name,
                         surname = profileUiState.surname,
-                        cookingExperienceYears = profileUiState.cookingExperienceYears,
+                        cookingExperienceYears = profileUiState.cookingExperience.toIntOrNull(),
                     )
                 },
                 onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },

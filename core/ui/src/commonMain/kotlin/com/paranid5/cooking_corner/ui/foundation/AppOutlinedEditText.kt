@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.ui.foundation
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -41,7 +42,7 @@ fun AppOutlinedEditText(
         disabledIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
     ),
-    placeholder = placeholder?.let { { Placeholder(text = it) } },
+    placeholder = placeholder?.let { { ExtraText(text = it) } },
     modifier = modifier.border(
         width = AppTheme.dimensions.borders.minimum,
         color = AppTheme.colors.button.primary,
@@ -58,7 +59,9 @@ fun AppAnimatedOutlinedEditText(
     singleLine: Boolean = true,
     isError: Boolean = false,
     errorMessage: String? = null,
+    suffix: String? = null,
     shape: Shape = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall),
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) = OutlinedTextField(
     modifier = modifier,
     value = value,
@@ -69,6 +72,7 @@ fun AppAnimatedOutlinedEditText(
     ),
     singleLine = singleLine,
     isError = isError,
+    keyboardOptions = keyboardOptions,
     colors = TextFieldDefaults.colors(
         focusedTextColor = AppTheme.colors.text.tertiriary,
         unfocusedTextColor = AppTheme.colors.text.tertiriary,
@@ -83,12 +87,13 @@ fun AppAnimatedOutlinedEditText(
         disabledIndicatorColor = AppTheme.colors.button.primary,
         unfocusedIndicatorColor = AppTheme.colors.button.primary,
     ),
-    label = placeholder?.let { { Placeholder(text = it) } },
+    label = placeholder?.let { { ExtraText(text = it) } },
+    suffix = suffix?.let { { ExtraText(text = it) } },
     supportingText = errorMessage.takeIf { isError }?.let { { Error(text = it) } },
 )
 
 @Composable
-private fun Placeholder(text: String, modifier: Modifier = Modifier) = AppMainText(
+private fun ExtraText(text: String, modifier: Modifier = Modifier) = AppMainText(
     text = text,
     modifier = modifier,
     color = AppTheme.colors.text.tertiriary,

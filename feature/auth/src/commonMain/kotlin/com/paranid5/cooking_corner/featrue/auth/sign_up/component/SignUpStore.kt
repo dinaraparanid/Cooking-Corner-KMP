@@ -11,7 +11,7 @@ import kotlinx.serialization.Transient
 
 internal interface SignUpStore : Store<UiIntent, State, Label> {
     private companion object {
-        const val MIN_INPUT_LENGTH = 6
+        const val USERNAME_MIN_INPUT_LENGTH = 6
     }
 
     sealed interface UiIntent {
@@ -40,13 +40,13 @@ internal interface SignUpStore : Store<UiIntent, State, Label> {
         val isPasswordVisible: Boolean,
     ) {
         @Transient
-        val isUsernameShort = login.length < MIN_INPUT_LENGTH
+        val isUsernameShort = login.length < USERNAME_MIN_INPUT_LENGTH
 
         @Transient
         val isUsernameShortErrorVisible = isUsernameShort && login.isNotEmpty()
 
         @Transient
-        val isPasswordShort = password.length < MIN_INPUT_LENGTH
+        val isPasswordShort = password.length < USERNAME_MIN_INPUT_LENGTH
 
         @Transient
         val isPasswordShortErrorVisible = isPasswordShort && password.isNotEmpty()

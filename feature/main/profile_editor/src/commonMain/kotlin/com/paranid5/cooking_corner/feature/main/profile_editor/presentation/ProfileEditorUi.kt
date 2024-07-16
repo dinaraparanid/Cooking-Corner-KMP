@@ -142,6 +142,7 @@ private fun ProfileEditorUiContent(
         onUiIntent = onUiIntent,
         modifier = Modifier.constrainAs(params) {
             top.linkTo(saveButton.bottom, margin = appPadding.medium)
+            bottom.linkTo(parent.bottom, margin = appPadding.medium)
             start.linkTo(parent.start, margin = appPadding.medium)
             end.linkTo(parent.end, margin = appPadding.medium)
             width = Dimension.fillToConstraints

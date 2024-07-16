@@ -127,6 +127,7 @@
 
     <!-- Units -->
     <string name="unit_minute">min</string>
+    <string name="unit_years">years</string>
 
     <!-- General -->
     <string name="retry">Retry</string>

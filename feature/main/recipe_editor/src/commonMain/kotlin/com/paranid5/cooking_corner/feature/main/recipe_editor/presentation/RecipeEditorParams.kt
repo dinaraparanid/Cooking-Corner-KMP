@@ -58,7 +58,7 @@ internal fun RecipeEditorParams(
     modifier: Modifier = Modifier
 ) = Column(
     modifier = modifier,
-    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium)
+    verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.padding.medium),
 ) {
     RecipeEditorTextField(
         value = recipeParamsUiState.name,

@@ -73,7 +73,9 @@ fun ProfileUi(
     fun BoxScope.Content() {
         ProfileUiImpl(
             state = state,
-            modifier = Modifier.align(Alignment.TopCenter),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = AppTheme.dimensions.padding.medium),
         )
 
         Column(

@@ -12,7 +12,7 @@ data class ProfileUiState(
     val email: String,
     val name: String,
     val surname: String,
-    val cookingExperienceYears: Int?,
+    val cookingExperience: String,
     val cover: ImageContainer?,
 ) {
     companion object {
@@ -21,7 +21,7 @@ data class ProfileUiState(
             email = response.email.orEmpty(),
             name = response.name.orEmpty(),
             surname = response.surname.orEmpty(),
-            cookingExperienceYears = response.cookingExperienceYears,
+            cookingExperience = response.cookingExperienceYears.toString(),
             cover = response.imagePath?.let(ImageContainer::Uri),
         )
     }

@@ -20,6 +20,16 @@ internal class ProfileEditorStoreProvider(
         data class UpdateProfileUiState(val profileUiState: UiState<ProfileUiState>) : Msg
 
         data class UpdateCover(val cover: ByteArray?) : Msg
+
+        data class UpdateUsername(val username: String) : Msg
+
+        data class UpdateName(val name: String) : Msg
+
+        data class UpdateSurname(val surname: String) : Msg
+
+        data class UpdateEmail(val email: String) : Msg
+
+        data class UpdateCookingExperience(val cookingExperience: String) : Msg
     }
 
     fun provide(initialState: State): ProfileEditorStore = object :
