@@ -18,9 +18,9 @@ private val DEFAULT_ICON_SIZE = 20.dp
 
 @Composable
 fun AppBackButton(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier.size(DEFAULT_ICON_SIZE),
+    onClick: () -> Unit,
 ) = IconButton(
     onClick = onClick,
     modifier = modifier,

@@ -23,6 +23,8 @@ interface ProfileEditorStore : Store<UiIntent, State, Label> {
         ) : UiIntent
 
         data class UpdateProfileUiState(val profileUiState: UiState<ProfileUiState>) : UiIntent
+
+        data class UpdateCover(val cover: ByteArray?) : UiIntent
     }
 
     @Serializable

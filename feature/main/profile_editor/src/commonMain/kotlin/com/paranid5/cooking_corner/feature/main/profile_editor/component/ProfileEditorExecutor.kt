@@ -42,6 +42,8 @@ internal class ProfileEditorExecutor(
             is UiIntent.UpdateProfileUiState -> dispatch(
                 Msg.UpdateProfileUiState(profileUiState = intent.profileUiState)
             )
+
+            is UiIntent.UpdateCover -> dispatch(Msg.UpdateCover(cover = intent.cover))
         }
     }
 

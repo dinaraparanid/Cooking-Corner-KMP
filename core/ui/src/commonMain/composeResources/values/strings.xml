@@ -48,6 +48,7 @@
     <string name="profile_placeholder_unknown">Not specified</string>
     <string name="profile_logout">Log out</string>
     <string name="profile_error">Failed to load profile. Try again</string>
+    <string name="profile_updated">Profile was successfully updated</string>
 
     <!-- Search -->
     <string name="search_filter_placeholder">Search for new recipes</string>
@@ -94,7 +95,6 @@
     <string name="generate_generating_recipe">Generating your recipe</string>
 
     <!-- Recipe Editor -->
-    <string name="recipe_editor_save">Save</string>
     <string name="recipe_select_cover">Select Cover</string>
     <string name="recipe_editor_name">Name</string>
     <string name="recipe_editor_description">Description</string>
@@ -134,5 +134,6 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="add">Add</string>
+    <string name="save">Save</string>
     <string name="token_expired">Authorization token is expired, please try to authorize again.</string>
 </resources>

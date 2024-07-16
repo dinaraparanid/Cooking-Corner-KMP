@@ -18,6 +18,8 @@ internal class ProfileEditorStoreProvider(
 ) {
     sealed interface Msg {
         data class UpdateProfileUiState(val profileUiState: UiState<ProfileUiState>) : Msg
+
+        data class UpdateCover(val cover: ByteArray?) : Msg
     }
 
     fun provide(initialState: State): ProfileEditorStore = object :

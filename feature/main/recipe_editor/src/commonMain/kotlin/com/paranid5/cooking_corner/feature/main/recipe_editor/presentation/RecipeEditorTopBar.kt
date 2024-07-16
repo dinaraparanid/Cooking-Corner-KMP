@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_editor_recipe_uploaded
-import com.paranid5.cooking_corner.core.resources.recipe_editor_save
+import com.paranid5.cooking_corner.core.resources.save
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
@@ -73,7 +73,7 @@ private fun SaveButton(
         .clickableWithRipple(bounded = true, enabled = enabled, onClick = onClick)
 ) {
     AppMainText(
-        text = stringResource(Res.string.recipe_editor_save),
+        text = stringResource(Res.string.save),
         style = AppTheme.typography.h.h2,
         modifier = Modifier.padding(
             vertical = AppTheme.dimensions.padding.small,

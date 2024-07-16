@@ -1,17 +1,22 @@
-package com.paranid5.cooking_corner.feature.main.recipe_editor.presentation
+package com.paranid5.cooking_corner.feature.main.profile_editor.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_photo
+import com.paranid5.cooking_corner.core.resources.placeholder_profile
 import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.entity.data
 import com.paranid5.cooking_corner.ui.foundation.AppErrorPlaceholder
@@ -22,9 +27,11 @@ import com.paranid5.cooking_corner.ui.foundation.picker.ImagePickerLauncher
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
 
+private val IMAGE_SIZE = 200.dp
+
 @Composable
-internal fun RecipeCover(
-    cover: ImageContainer,
+internal fun ProfileCoverWithPicker(
+    cover: ImageContainer?,
     modifier: Modifier = Modifier,
     onPicked: (ByteArray) -> Unit,
 ) {
@@ -32,11 +39,19 @@ internal fun RecipeCover(
 
     Box(modifier) {
         SubcomposeAsyncImage(
-            modifier = Modifier.fillMaxSize(),
-            model = coverModel(data = cover.data),
+            model = coverModel(data = cover?.data),
             contentDescription = null,
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(IMAGE_SIZE)
+                .align(Alignment.TopCenter)
+                .clip(CircleShape)
+                .border(
+                    width = AppTheme.dimensions.borders.minimum,
+                    color = AppTheme.colors.button.primary,
+                    shape = CircleShape,
+                ),
             loading = {
                 AppLoadingBox(
                     isLoading = true,
@@ -44,7 +59,10 @@ internal fun RecipeCover(
                 )
             },
             error = {
-                AppErrorPlaceholder(Modifier.fillMaxSize())
+                AppErrorPlaceholder(
+                    image = vectorResource(Res.drawable.placeholder_profile),
+                    modifier = Modifier.fillMaxSize(),
+                )
             },
         )
 
