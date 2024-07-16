@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_edit
 import com.paranid5.cooking_corner.core.resources.profile_cooking_experience
+import com.paranid5.cooking_corner.core.resources.profile_cooking_experience_value
 import com.paranid5.cooking_corner.core.resources.profile_edit
 import com.paranid5.cooking_corner.core.resources.profile_email
 import com.paranid5.cooking_corner.core.resources.profile_error
@@ -204,7 +205,9 @@ private fun ProfileUiContent(
 
         ProfileUiContentItem(
             title = stringResource(Res.string.profile_cooking_experience),
-            value = profileUiState.cookingExperience ?: placeholderUnknown,
+            value = profileUiState.cookingExperienceYears?.let {
+                stringResource(Res.string.profile_cooking_experience_value, it)
+            } ?: placeholderUnknown,
         )
     }
 }

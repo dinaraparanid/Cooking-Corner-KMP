@@ -17,6 +17,7 @@ import com.paranid5.cooking_corner.domain.global_event.GlobalEvent
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
+import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent.BackResult
 import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
 import com.paranid5.cooking_corner.feature.main.profile.utils.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
@@ -34,26 +35,13 @@ internal class ProfileComponentImpl(
     componentContext: ComponentContext,
     private val authRepository: AuthRepository,
     private val globalEventRepository: GlobalEventRepository,
-    private val onBack: () -> Unit,
+    private val onBack: (BackResult) -> Unit,
 ) : ProfileComponent, ComponentContext by componentContext {
-    @Serializable
-    sealed interface Slot {
-        @Serializable
-        data object Edit : Slot
-    }
 
     private val componentState = getComponentState(defaultState = ProfileState())
 
     private val _stateFlow = MutableStateFlow(componentState.value)
     override val stateFlow = _stateFlow.asStateFlow()
-
-    private val childSlotNavigation = SlotNavigation<Slot>()
-
-    override val childSlot: StateFlow<ChildSlot<*, ProfileChild>> = childSlot(
-        source = childSlotNavigation,
-        serializer = Slot.serializer(),
-        childFactory = ::createChildSlot,
-    ).toStateFlow()
 
     init {
         doOnResume { loadProfile() }
@@ -62,16 +50,9 @@ internal class ProfileComponentImpl(
     override fun onUiIntent(intent: ProfileUiIntent) {
         when (intent) {
             is ProfileUiIntent.Refresh -> loadProfile()
-            is ProfileUiIntent.Edit -> doNothing // TODO: Edit profile
+            is ProfileUiIntent.Edit -> onBack(BackResult.Edit)
             is ProfileUiIntent.LogOut -> componentScope.launch { logOut(Reason.MANUAL) }
         }
-    }
-
-    private fun createChildSlot(
-        configuration: Slot,
-        componentContext: ComponentContext,
-    ) = when (configuration) {
-        is Slot.Edit -> ProfileChild.Edit
     }
 
     private fun loadProfile() {
@@ -106,7 +87,7 @@ internal class ProfileComponentImpl(
     ) : ProfileComponent.Factory {
         override fun create(
             componentContext: ComponentContext,
-            onBack: () -> Unit,
+            onBack: (BackResult) -> Unit,
         ): ProfileComponent = ProfileComponentImpl(
             componentContext = componentContext,
             authRepository = authRepository,

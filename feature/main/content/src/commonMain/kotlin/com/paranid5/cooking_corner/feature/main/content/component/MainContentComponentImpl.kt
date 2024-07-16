@@ -14,6 +14,7 @@ import com.paranid5.cooking_corner.domain.global_event.sendSnackbar
 import com.paranid5.cooking_corner.feature.main.generate.component.GenerateComponent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
+import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent.Factory.LaunchMode
@@ -30,6 +31,7 @@ internal class MainContentComponentImpl(
     private val recipeComponentFactory: RecipeComponent.Factory,
     private val generateComponentFactory: GenerateComponent.Factory,
     private val recipeEditorComponentFactory: RecipeEditorComponent.Factory,
+    private val profileEditorComponentFactory: ProfileEditorComponent.Factory,
     private val globalEventRepository: GlobalEventRepository,
     private val onBack: () -> Unit,
 ) : MainContentComponent, ComponentContext by componentContext {
@@ -79,6 +81,10 @@ internal class MainContentComponentImpl(
                     launchMode = config.launchMode,
                 )
             )
+
+            is MainContentConfig.ProfileEditor -> MainContentChild.ProfileEditor(
+                component = buildProfileEditorComponent(componentContext)
+            )
         }
 
     private fun buildHomeComponent(componentContext: ComponentContext) =
@@ -123,7 +129,14 @@ internal class MainContentComponentImpl(
     private fun buildProfileComponent(componentContext: ComponentContext) =
         profileComponentFactory.create(
             componentContext = componentContext,
-            onBack = navigation::pop,
+            onBack = { result ->
+                when (result) {
+                    is ProfileComponent.BackResult.Dismiss -> navigation.pop()
+                    is ProfileComponent.BackResult.Edit -> navigation.bringToFront(
+                        MainContentConfig.ProfileEditor
+                    )
+                }
+            }
         )
 
     private fun buildRecipeDetailsComponent(
@@ -162,15 +175,28 @@ internal class MainContentComponentImpl(
     private fun buildRecipeEditorComponent(
         componentContext: ComponentContext,
         launchMode: LaunchMode,
-    ) =
-        recipeEditorComponentFactory.create(
+    ) = recipeEditorComponentFactory.create(
+        componentContext = componentContext,
+        launchMode = launchMode,
+        onBack = { result ->
+            when (result) {
+                is RecipeEditorComponent.BackResult.Dismiss -> doNothing
+                is RecipeEditorComponent.BackResult.Uploaded -> componentScope.launch {
+                    globalEventRepository.sendSnackbar(result.snackbarMessage)
+                }
+            }
+
+            navigation.pop()
+        }
+    )
+
+    private fun buildProfileEditorComponent(componentContext: ComponentContext) =
+        profileEditorComponentFactory.create(
             componentContext = componentContext,
-            launchMode = launchMode,
             onBack = { result ->
                 when (result) {
-                    is RecipeEditorComponent.BackResult.Dismiss -> doNothing
-
-                    is RecipeEditorComponent.BackResult.Uploaded -> componentScope.launch {
+                    is ProfileEditorComponent.BackResult.Dismiss -> doNothing
+                    is ProfileEditorComponent.BackResult.Updated -> componentScope.launch {
                         globalEventRepository.sendSnackbar(result.snackbarMessage)
                     }
                 }
@@ -186,6 +212,7 @@ internal class MainContentComponentImpl(
         private val recipeComponentFactory: RecipeComponent.Factory,
         private val generateComponentFactory: GenerateComponent.Factory,
         private val recipeEditorComponentFactory: RecipeEditorComponent.Factory,
+        private val profileEditorComponentFactory: ProfileEditorComponent.Factory,
         private val globalEventRepository: GlobalEventRepository,
     ) : MainContentComponent.Factory {
         override fun create(
@@ -199,6 +226,7 @@ internal class MainContentComponentImpl(
             recipeComponentFactory = recipeComponentFactory,
             generateComponentFactory = generateComponentFactory,
             recipeEditorComponentFactory = recipeEditorComponentFactory,
+            profileEditorComponentFactory = profileEditorComponentFactory,
             globalEventRepository = globalEventRepository,
             onBack = onBack,
         )

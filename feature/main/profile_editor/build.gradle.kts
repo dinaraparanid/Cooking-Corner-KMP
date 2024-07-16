@@ -12,7 +12,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "featureMainContent"
+        moduleName = "featureMainProfileEditor"
         browser {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
@@ -43,22 +43,19 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "content"
+            baseName = "recipeEditor"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.core.ui)
+            implementation(projects.core.utils)
             api(projects.core.component)
-            implementation(projects.feature.main.splash)
-            implementation(projects.feature.main.search)
-            implementation(projects.feature.main.home)
-            implementation(projects.feature.main.profile)
-            implementation(projects.feature.main.recipe)
-            implementation(projects.feature.main.generate)
-            implementation(projects.feature.main.recipeEditor)
-            implementation(projects.feature.main.profileEditor)
+
+            api(projects.domain.auth)
+            api(projects.domain.globalEvent)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -66,6 +63,12 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
+
+            implementation(libs.kotlinx.collections.immutable)
+
+            implementation(libs.constraintlayout)
+
+            implementation(libs.coil.compose.core)
 
             implementation(libs.decompose.extensions.compose)
 
@@ -75,7 +78,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.paranid5.cooking_corner.feature.main.content"
+    namespace = "com.paranid5.cooking_corner.feature.main.profile_editor"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

@@ -11,6 +11,6 @@ data class ProfileUiState(
     val name: String?,
     val surname: String?,
     val email: String?,
-    val cookingExperience: String?,
+    val cookingExperienceYears: Int?,
     val photoUrl: UiState<String> = UiState.Undefined,
 )

@@ -8,7 +8,7 @@ import com.paranid5.cooking_corner.core.common.AppDispatchers
 import com.paranid5.cooking_corner.domain.auth.AuthApi
 import com.paranid5.cooking_corner.domain.auth.dto.AuthorizeRequest
 import com.paranid5.cooking_corner.domain.auth.dto.LoginResponse
-import com.paranid5.cooking_corner.domain.auth.dto.ProfileResponse
+import com.paranid5.cooking_corner.domain.auth.dto.ProfileDTO
 import com.paranid5.cooking_corner.utils.toAppStatusCode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -92,7 +92,7 @@ internal class AuthApiImpl(
         }
     }
 
-    override suspend fun getMe(accessToken: String): ApiResultWithCode<ProfileResponse> =
+    override suspend fun getMe(accessToken: String): ApiResultWithCode<ProfileDTO> =
         Either.catch {
             suspend fun sendRequest() = withContext(AppDispatchers.Data) {
                 ktorClient.post(urlBuilder.buildGetMeUrl()) {
@@ -104,6 +104,37 @@ internal class AuthApiImpl(
                 val response = sendRequest()
                 ensure(response.status.isSuccess()) { response.toAppStatusCode() }
                 response.body()
+            }
+        }
+
+    override suspend fun updateProfile(
+        accessToken: String,
+        username: String,
+        email: String,
+        name: String,
+        surname: String,
+        cookingExperienceYears: Int?,
+    ): ApiResultWithCode<Unit> =
+        Either.catch {
+            suspend fun sendRequest() = withContext(AppDispatchers.Data) {
+                ktorClient.post(urlBuilder.buildEditUserDataUrl()) {
+                    bearerAuth(accessToken)
+                    contentType(ContentType.Application.Json)
+                    setBody(
+                        ProfileDTO(
+                            username = username,
+                            email = email,
+                            name = name,
+                            surname = surname,
+                            cookingExperienceYears = cookingExperienceYears,
+                        )
+                    )
+                }
+            }
+
+            either {
+                val response = sendRequest()
+                ensure(response.status.isSuccess()) { response.toAppStatusCode() }
             }
         }
 }

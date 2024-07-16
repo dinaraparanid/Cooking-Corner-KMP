@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.paranid5.cooking_corner.feature.main.generate.component.GenerateComponent
 import com.paranid5.cooking_corner.feature.main.home.component.HomeComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
+import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorComponent
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeComponent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
@@ -43,5 +44,10 @@ sealed interface MainContentChild {
     @Immutable
     class RecipeEditor internal constructor(
         internal val component: RecipeEditorComponent
+    ) : MainContentChild
+
+    @Immutable
+    class ProfileEditor internal constructor(
+        internal val component: ProfileEditorComponent
     ) : MainContentChild
 }

@@ -49,6 +49,12 @@ inline fun <reified T> UiState<T>.getOrThrow(): T {
     return requireNotNull(getOrNull()) { "Serializable container with no State" }
 }
 
+inline fun <reified D : Any> UiState<D>.udpateData(func: D.() -> D) =
+    when (this) {
+        is UiState.Data -> func(getOrThrow()).toUiState()
+        else -> this
+    }
+
 inline fun <reified D : Any> D.toUiState() =
     UiState.Data<D>(SerializableContainer(this, serializer()))
 

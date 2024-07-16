@@ -22,4 +22,7 @@ sealed interface MainContentConfig {
 
     @Serializable
     data class RecipeEditor(val launchMode: LaunchMode) : MainContentConfig
+
+    @Serializable
+    data object ProfileEditor : MainContentConfig
 }

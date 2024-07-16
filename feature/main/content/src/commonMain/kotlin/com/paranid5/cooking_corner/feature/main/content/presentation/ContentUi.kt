@@ -14,6 +14,7 @@ import com.paranid5.cooking_corner.feature.main.content.component.MainContentChi
 import com.paranid5.cooking_corner.feature.main.generate.presentation.GenerateUi
 import com.paranid5.cooking_corner.feature.main.home.presentation.HomeUi
 import com.paranid5.cooking_corner.feature.main.profile.presentation.ProfileUi
+import com.paranid5.cooking_corner.feature.main.profile_editor.presentation.ProfileEditorUi
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.RecipeDetailsUi
 import com.paranid5.cooking_corner.feature.main.recipe_editor.presentation.RecipeEditorUi
 import com.paranid5.cooking_corner.feature.main.search.presentation.SearchUi
@@ -67,6 +68,11 @@ internal fun ContentUi(
             )
 
             is MainContentChild.RecipeEditor -> RecipeEditorUi(
+                component = child.component,
+                modifier = screenModifier,
+            )
+
+            is MainContentChild.ProfileEditor -> ProfileEditorUi(
                 component = child.component,
                 modifier = screenModifier,
             )
