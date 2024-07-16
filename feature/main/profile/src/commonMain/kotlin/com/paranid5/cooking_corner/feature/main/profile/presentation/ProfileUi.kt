@@ -70,6 +70,14 @@ fun ProfileUi(
     )
 
     @Composable
+    fun BoxScope.buildProfileButtonsModifier() =
+        Modifier
+            .fillMaxWidth()
+            .align(Alignment.BottomCenter)
+            .padding(bottom = AppTheme.dimensions.padding.large)
+            .padding(horizontal = AppTheme.dimensions.padding.extraLarge)
+
+    @Composable
     fun BoxScope.Content() {
         ProfileUiImpl(
             state = state,
@@ -78,32 +86,25 @@ fun ProfileUi(
                 .padding(top = AppTheme.dimensions.padding.medium),
         )
 
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = AppTheme.dimensions.padding.large)
-                .padding(horizontal = AppTheme.dimensions.padding.extraLarge)
-        ) {
-            ProfileButton(
-                text = stringResource(Res.string.profile_edit),
-                icon = vectorResource(Res.drawable.ic_edit),
-                onClick = { onUiIntent(ProfileUiIntent.Edit) },
-                modifier = Modifier.fillMaxWidth(),
-            )
+        ProfileButtons(
+            isProfileEditable = true,
+            onUiIntent = onUiIntent,
+            modifier = buildProfileButtonsModifier(),
+        )
+    }
 
-            Spacer(Modifier.height(AppTheme.dimensions.padding.large))
+    @Composable
+    fun BoxScope.Error() {
+        AppErrorStub(
+            errorMessage = stringResource(Res.string.profile_error),
+            modifier = Modifier.align(Alignment.Center),
+        )
 
-            ProfileButton(
-                text = stringResource(Res.string.profile_logout),
-                onClick = { onUiIntent(ProfileUiIntent.LogOut) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = AppTheme.colors.button.secondaryDarker,
-                    disabledContainerColor = AppTheme.colors.button.secondaryDarker,
-                )
-            )
-        }
+        ProfileButtons(
+            isProfileEditable = false,
+            onUiIntent = onUiIntent,
+            modifier = buildProfileButtonsModifier(),
+        )
     }
 
     Box(
@@ -116,10 +117,7 @@ fun ProfileUi(
                 Content()
 
             is UiState.Error ->
-                AppErrorStub(
-                    errorMessage = stringResource(Res.string.profile_error),
-                    modifier = Modifier.align(Alignment.Center),
-                )
+                Error()
 
             is UiState.Loading, is UiState.Undefined ->
                 AppProgressIndicator(Modifier.align(Alignment.Center))
@@ -162,6 +160,34 @@ private fun ProfileUiImpl(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = AppTheme.dimensions.padding.extraBig)
+    )
+}
+
+@Composable
+private fun ProfileButtons(
+    isProfileEditable: Boolean,
+    onUiIntent: (ProfileUiIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) = Column(modifier) {
+    if (isProfileEditable) {
+        ProfileButton(
+            text = stringResource(Res.string.profile_edit),
+            icon = vectorResource(Res.drawable.ic_edit),
+            onClick = { onUiIntent(ProfileUiIntent.Edit) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        Spacer(Modifier.height(AppTheme.dimensions.padding.large))
+    }
+
+    ProfileButton(
+        text = stringResource(Res.string.profile_logout),
+        onClick = { onUiIntent(ProfileUiIntent.LogOut) },
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = AppTheme.colors.button.secondaryDarker,
+            disabledContainerColor = AppTheme.colors.button.secondaryDarker,
+        )
     )
 }
 
