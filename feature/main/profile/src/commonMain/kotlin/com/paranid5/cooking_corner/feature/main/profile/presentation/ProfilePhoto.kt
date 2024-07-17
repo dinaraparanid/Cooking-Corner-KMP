@@ -11,41 +11,24 @@ import androidx.compose.ui.layout.ContentScale
 import coil3.compose.SubcomposeAsyncImage
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.placeholder_profile
-import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.foundation.AppLoadingBox
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.coverModel
-import com.paranid5.cooking_corner.ui.getOrNull
-import com.paranid5.cooking_corner.ui.isUndefinedOrLoading
 import com.paranid5.cooking_corner.ui.theme.AppTheme
-import com.paranid5.cooking_corner.utils.doNothing
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 internal fun ProfilePhoto(
-    photoUrlState: UiState<String>,
+    photoUrl: String?,
     modifier: Modifier = Modifier,
-) = AppLoadingBox(
-    isLoading = photoUrlState.isUndefinedOrLoading,
-    isError = photoUrlState is UiState.Error,
-    onErrorButtonClick = doNothing, // TODO: retry
-    modifier = modifier
-) {
-    SubcomposeAsyncImage(
-        modifier = Modifier.fillMaxSize(),
-        model = coverModel(data = photoUrlState.getOrNull()),
-        contentDescription = null,
-        alignment = Alignment.Center,
-        contentScale = ContentScale.Crop,
-        loading = { AppProgressIndicator(Modifier.fillMaxSize()) },
-        error = {
-            ProfilePhotoThumbnail(
-                photoUrlState = photoUrlState,
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
-    )
-}
+) = SubcomposeAsyncImage(
+    modifier = modifier,
+    model = coverModel(data = photoUrl),
+    contentDescription = null,
+    alignment = Alignment.Center,
+    contentScale = ContentScale.Crop,
+    loading = { AppProgressIndicator(Modifier.fillMaxSize()) },
+    error = { ProfilePhotoPlaceholder(Modifier.fillMaxSize()) },
+)
 
 @Composable
 private fun ProfilePhotoPlaceholder(modifier: Modifier = Modifier) =
@@ -56,17 +39,3 @@ private fun ProfilePhotoPlaceholder(modifier: Modifier = Modifier) =
             modifier = Modifier.align(Alignment.Center),
         )
     }
-
-@Composable
-private fun ProfilePhotoThumbnail(
-    photoUrlState: UiState<String>,
-    modifier: Modifier = Modifier,
-) = when (photoUrlState) {
-    is UiState.Undefined,
-    is UiState.Data,
-    is UiState.Success,
-    is UiState.Error -> ProfilePhotoPlaceholder(modifier)
-
-    is UiState.Loading,
-    is UiState.Refreshing -> AppProgressIndicator(modifier)
-}

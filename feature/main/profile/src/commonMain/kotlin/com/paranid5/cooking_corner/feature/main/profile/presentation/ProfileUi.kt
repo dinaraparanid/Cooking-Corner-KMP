@@ -40,6 +40,7 @@ import com.paranid5.cooking_corner.core.resources.profile_username
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileState
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileUiIntent
+import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.AppPullRefreshIndicator
@@ -78,9 +79,10 @@ fun ProfileUi(
             .padding(horizontal = AppTheme.dimensions.padding.extraLarge)
 
     @Composable
-    fun BoxScope.Content() {
+    fun BoxScope.Content(profileUiState: ProfileUiState) {
         ProfileUiImpl(
             state = state,
+            profileUiState = profileUiState,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = AppTheme.dimensions.padding.medium),
@@ -114,7 +116,7 @@ fun ProfileUi(
     ) {
         when (state.uiState) {
             is UiState.Data, is UiState.Refreshing, is UiState.Success ->
-                Content()
+                state.uiState.getOrNull()?.let { Content(profileUiState = it) }
 
             is UiState.Error ->
                 Error()
@@ -134,10 +136,11 @@ fun ProfileUi(
 @Composable
 private fun ProfileUiImpl(
     state: ProfileState,
+    profileUiState: ProfileUiState,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     ProfilePhoto(
-        photoUrlState = state.uiState.getOrThrow().photoUrl,
+        photoUrl = profileUiState.photoUrl,
         modifier = Modifier
             .size(PHOTO_SIZE)
             .align(Alignment.CenterHorizontally)

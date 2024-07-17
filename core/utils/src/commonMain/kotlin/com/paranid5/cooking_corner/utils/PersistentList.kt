@@ -16,6 +16,16 @@ infix fun <T> ImmutableList<T>.with(element: T): ImmutableList<T> =
 infix fun <T> ImmutableList<T>.without(element: T): ImmutableList<T> =
     (this - element).toImmutableList()
 
+inline fun <T, K> ImmutableList<T>.put(element: T, key: (T) -> K): ImmutableList<T> {
+    val requiredKey = key(element)
+    val (first, second) = span { key(it) == requiredKey }
+    return buildPersistentList {
+        addAll(first)
+        add(element)
+        addAll(second)
+    }
+}
+
 inline fun <T, R> Iterable<T>.mapToImmutableList(transform: (T) -> R): ImmutableList<R> =
     map(transform).toImmutableList()
 

@@ -1,7 +1,6 @@
 package com.paranid5.cooking_corner.feature.main.profile.entity
 
 import androidx.compose.runtime.Immutable
-import com.paranid5.cooking_corner.ui.UiState
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,5 +11,5 @@ data class ProfileUiState(
     val surname: String?,
     val email: String?,
     val cookingExperienceYears: Int?,
-    val photoUrl: UiState<String> = UiState.Undefined,
+    val photoUrl: String?,
 )
