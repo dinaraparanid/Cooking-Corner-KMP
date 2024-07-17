@@ -47,7 +47,6 @@ import com.paranid5.cooking_corner.ui.foundation.AppPullRefreshIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.foundation.rememberPullRefreshWithDuration
 import com.paranid5.cooking_corner.ui.getOrNull
-import com.paranid5.cooking_corner.ui.getOrThrow
 import com.paranid5.cooking_corner.ui.isLoadingOrRefreshing
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
@@ -139,7 +138,7 @@ private fun ProfileUiImpl(
     profileUiState: ProfileUiState,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
-    ProfilePhoto(
+    ProfileCover(
         photoUrl = profileUiState.photoUrl,
         modifier = Modifier
             .size(PHOTO_SIZE)

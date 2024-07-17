@@ -50,9 +50,10 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.ui)
+            api(projects.core.ui)
             api(projects.core.utils)
             api(projects.core.component)
+            api(projects.data)
 
             implementation(projects.domain.auth)
             implementation(projects.domain.globalEvent)
@@ -64,7 +65,10 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
-            implementation(libs.coil.compose.core)
+            api(libs.coil.compose.core)
+            api(libs.coil.compose)
+            api(libs.coil.mp)
+            api(libs.coil.ktor)
 
             implementation(libs.decompose.extensions.compose)
 

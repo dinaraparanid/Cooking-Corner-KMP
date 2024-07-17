@@ -18,7 +18,12 @@ internal actual fun KtorClient() = HttpClient(OkHttp) {
     }
 
     install(ContentNegotiation) {
-        json(Json { ignoreUnknownKeys = true })
+        json(
+            Json {
+                ignoreUnknownKeys = true
+                encodeDefaults = true
+            }
+        )
     }
 
     install(Logging) {

@@ -6,6 +6,7 @@ import com.paranid5.cooking_corner.core.common.isForbidden
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.getMe
 import com.paranid5.cooking_corner.domain.auth.updateProfile
+import com.paranid5.cooking_corner.domain.auth.updateProfileCover
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
@@ -17,6 +18,8 @@ import com.paranid5.cooking_corner.feature.main.profile_editor.component.Profile
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStoreProvider.Msg
 import com.paranid5.cooking_corner.feature.main.profile_editor.domain.ProfileUiState
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
+import com.paranid5.cooking_corner.ui.entity.data
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.handleApiResult
@@ -87,33 +90,75 @@ internal class ProfileEditorExecutor(
         val profileUiState = state().profileUiState.getOrNull() ?: return
 
         scope.launch {
-            handleApiResult(
-                result = withContext(AppDispatchers.Data) {
-                    authRepository.updateProfile(
-                        username = profileUiState.username,
-                        email = profileUiState.email,
-                        name = profileUiState.name,
-                        surname = profileUiState.surname,
-                        cookingExperienceYears = profileUiState.cookingExperience.toIntOrNull(),
-                    )
-                },
-                onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },
-                onErrorStatusCode = { status ->
-                    when {
-                        status.isForbidden ->
-                            globalEventRepository.sendLogOut(Reason.ERROR)
+            saveProfileData(
+                profileUiState = profileUiState,
+                unhandledErrorSnackbar = unhandledErrorSnackbar,
+                userAlreadyExistsSnackbar = userAlreadyExistsSnackbar,
+                successSnackbar = successSnackbar,
+            )
+        }
+    }
 
-                        status.value == USER_ALREADY_EXISTS ->
-                            showSnackbar(userAlreadyExistsSnackbar)
+    private suspend fun saveProfileData(
+        profileUiState: ProfileUiState,
+        unhandledErrorSnackbar: SnackbarMessage,
+        userAlreadyExistsSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) = handleApiResult(
+        result = withContext(AppDispatchers.Data) {
+            authRepository.updateProfile(
+                username = profileUiState.username,
+                email = profileUiState.email,
+                name = profileUiState.name,
+                surname = profileUiState.surname,
+                cookingExperienceYears = profileUiState.cookingExperience.toIntOrNull(),
+            )
+        },
+        onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },
+        onErrorStatusCode = { status ->
+            when {
+                status.isForbidden ->
+                    globalEventRepository.sendLogOut(Reason.ERROR)
 
-                        else -> showSnackbar(unhandledErrorSnackbar)
-                    }
-                }
-            ) {
-                showSnackbar(successSnackbar)
-                publish(Label.Back)
+                status.value == USER_ALREADY_EXISTS ->
+                    showSnackbar(userAlreadyExistsSnackbar)
+
+                else -> showSnackbar(unhandledErrorSnackbar)
             }
         }
+    ) {
+        (profileUiState.cover as? ImageContainer.Bytes)?.value?.let {
+            saveProfileCover(
+                profileCover = it,
+                unhandledErrorSnackbar = unhandledErrorSnackbar,
+                successSnackbar = successSnackbar,
+            )
+        }
+    }
+
+    private suspend fun saveProfileCover(
+        profileCover: ByteArray,
+        unhandledErrorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) = handleApiResult(
+        result = withContext(AppDispatchers.Data) {
+            authRepository.updateProfileCover(cover = profileCover)
+        },
+        onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },
+        onErrorStatusCode = { status ->
+            when {
+                status.isForbidden ->
+                    globalEventRepository.sendLogOut(Reason.ERROR)
+
+                else -> showSnackbar(unhandledErrorSnackbar)
+            }
+        },
+        onSuccess = { onSuccess(successSnackbar) },
+    )
+
+    private suspend inline fun onSuccess(successSnackbar: SnackbarMessage,) {
+        showSnackbar(successSnackbar)
+        publish(Label.Back)
     }
 
     private suspend fun showSnackbar(snackbarMessage: SnackbarMessage) =

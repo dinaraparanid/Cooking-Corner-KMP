@@ -27,4 +27,9 @@ interface AuthApi {
         surname: String,
         cookingExperienceYears: Int?,
     ): ApiResultWithCode<Unit>
+
+    suspend fun updateProfileCover(
+        accessToken: String,
+        cover: ByteArray,
+    ): ApiResultWithCode<Unit>
 }

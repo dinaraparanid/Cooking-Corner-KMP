@@ -26,3 +26,6 @@ suspend inline fun AuthRepository.updateProfile(
         cookingExperienceYears = cookingExperienceYears,
     )
 }.flatten()
+
+suspend inline fun AuthRepository.updateProfileCover(cover: ByteArray): ApiResultWithCode<Unit> =
+    Either.catch { updateProfileCover(accessToken = requireAccessToken(), cover = cover) }.flatten()

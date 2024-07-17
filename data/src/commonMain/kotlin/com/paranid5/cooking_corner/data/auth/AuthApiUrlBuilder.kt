@@ -10,4 +10,6 @@ internal class AuthApiUrlBuilder(private val baseUrl: String) {
     fun buildGetMeUrl() = "$baseUrl/get_User/me"
 
     fun buildEditUserDataUrl() = "$baseUrl/edit_user_data"
+
+    fun buildEditUserImageUrl() = "$baseUrl/edit_user_image"
 }

@@ -11,13 +11,13 @@ import androidx.compose.ui.layout.ContentScale
 import coil3.compose.SubcomposeAsyncImage
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.placeholder_profile
-import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
+import com.paranid5.cooking_corner.ui.foundation.AppLoadingBox
 import com.paranid5.cooking_corner.ui.foundation.coverModel
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
-internal fun ProfilePhoto(
+internal fun ProfileCover(
     photoUrl: String?,
     modifier: Modifier = Modifier,
 ) = SubcomposeAsyncImage(
@@ -26,7 +26,7 @@ internal fun ProfilePhoto(
     contentDescription = null,
     alignment = Alignment.Center,
     contentScale = ContentScale.Crop,
-    loading = { AppProgressIndicator(Modifier.fillMaxSize()) },
+    loading = { AppLoadingBox(isLoading = true, modifier = Modifier.fillMaxSize()) },
     error = { ProfilePhotoPlaceholder(Modifier.fillMaxSize()) },
 )
 

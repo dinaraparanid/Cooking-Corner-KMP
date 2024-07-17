@@ -14,10 +14,14 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.FormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
@@ -25,6 +29,7 @@ import kotlinx.coroutines.withContext
 
 private const val USERNAME_BODY_KEY = "username"
 private const val PASSWORD_BODY_KEY = "password"
+private const val IMAGE_BASE_URL = "https://storage.yandexcloud.net/cooking-corner-backet"
 
 internal class AuthApiImpl(
     private val ktorClient: HttpClient,
@@ -103,7 +108,9 @@ internal class AuthApiImpl(
             either {
                 val response = sendRequest()
                 ensure(response.status.isSuccess()) { response.toAppStatusCode() }
-                response.body()
+                val profile = response.body<ProfileDTO>()
+                val imagePath = profile.imagePath?.let { "$IMAGE_BASE_URL/$it" }
+                profile.copy(imagePath = imagePath)
             }
         }
 
@@ -137,4 +144,28 @@ internal class AuthApiImpl(
                 ensure(response.status.isSuccess()) { response.toAppStatusCode() }
             }
         }
+
+    override suspend fun updateProfileCover(
+        accessToken: String,
+        cover: ByteArray,
+    ): ApiResultWithCode<Unit> = Either.catch {
+        suspend fun sendRequest() = withContext(AppDispatchers.Data) {
+            ktorClient.submitFormWithBinaryData(
+                url = urlBuilder.buildEditUserImageUrl(),
+                formData = formData {
+                    append("file", cover, Headers.build {
+                        append(HttpHeaders.ContentDisposition, "filename=\"profile\"")
+                    })
+                }
+            ) {
+                bearerAuth(accessToken)
+                contentType(ContentType.Image.Any)
+            }
+        }
+
+        either {
+            val response = sendRequest()
+            ensure(response.status.isSuccess()) { response.toAppStatusCode() }
+        }
+    }
 }
