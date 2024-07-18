@@ -42,6 +42,7 @@ import com.paranid5.cooking_corner.feature.main.profile.component.ProfileState
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileUiIntent
 import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.AppPullRefreshIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
@@ -220,17 +221,17 @@ private fun ProfileUiContent(
 
         ProfileUiContentItem(
             title = stringResource(Res.string.profile_name),
-            value = profileUiState.name ?: placeholderUnknown,
+            value = profileUiState.name?.takeIf(String::isNotBlank) ?: placeholderUnknown,
         )
 
         ProfileUiContentItem(
             title = stringResource(Res.string.profile_surname),
-            value = profileUiState.surname ?: placeholderUnknown,
+            value = profileUiState.surname?.takeIf(String::isNotBlank) ?: placeholderUnknown,
         )
 
         ProfileUiContentItem(
             title = stringResource(Res.string.profile_email),
-            value = profileUiState.email ?: placeholderUnknown,
+            value = profileUiState.email?.takeIf(String::isNotBlank) ?: placeholderUnknown,
         )
 
         ProfileUiContentItem(
@@ -247,10 +248,8 @@ private fun ProfileUiContentItem(
     title: String,
     value: String,
     modifier: Modifier = Modifier,
-) = Text(
+) = AppMainText(
     modifier = modifier,
     text = "$title: $value",
-    color = AppTheme.colors.text.primary,
     style = AppTheme.typography.h.h2,
-    fontFamily = AppTheme.typography.RalewayFontFamily,
 )

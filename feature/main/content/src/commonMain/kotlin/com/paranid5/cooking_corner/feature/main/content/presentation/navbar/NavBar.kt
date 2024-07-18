@@ -1,6 +1,7 @@
 package com.paranid5.cooking_corner.feature.main.content.presentation.navbar
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.NavigationRail
@@ -95,11 +96,15 @@ internal fun NavBarPC(
             )
             .clip(shape),
     ) {
+        val itemModifier = Modifier
+            .weight(1F)
+            .padding(horizontal = AppTheme.dimensions.padding.small)
+
         NavBarItem(
             title = stringResource(Res.string.nav_bar_search),
             image = vectorResource(Res.drawable.search_tab),
             isCurrent = currentScreen is MainContentChild.Search,
-            modifier = Modifier.weight(1F),
+            modifier = itemModifier,
             onClick = { onUiIntent(MainContentUiIntent.ShowSearch) },
         )
 
@@ -107,7 +112,7 @@ internal fun NavBarPC(
             title = stringResource(Res.string.nav_bar_home),
             image = vectorResource(Res.drawable.home_tab),
             isCurrent = currentScreen is MainContentChild.Home,
-            modifier = Modifier.weight(1F),
+            modifier = itemModifier,
             onClick = { onUiIntent(MainContentUiIntent.ShowHome) },
         )
 
@@ -115,7 +120,7 @@ internal fun NavBarPC(
             title = stringResource(Res.string.nav_bar_profile),
             image = vectorResource(Res.drawable.profile_tab),
             isCurrent = currentScreen is MainContentChild.Profile,
-            modifier = Modifier.weight(1F),
+            modifier = itemModifier,
             onClick = { onUiIntent(MainContentUiIntent.ShowProfile) },
         )
     }

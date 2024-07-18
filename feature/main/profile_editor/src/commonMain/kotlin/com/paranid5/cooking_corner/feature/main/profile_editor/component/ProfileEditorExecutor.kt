@@ -133,7 +133,7 @@ internal class ProfileEditorExecutor(
                 unhandledErrorSnackbar = unhandledErrorSnackbar,
                 successSnackbar = successSnackbar,
             )
-        }
+        } ?: onSuccess(successSnackbar)
     }
 
     private suspend fun saveProfileCover(

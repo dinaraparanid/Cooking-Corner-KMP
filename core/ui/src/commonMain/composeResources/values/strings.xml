@@ -21,7 +21,7 @@
 
     <!-- Main Nav Bar -->
     <string name="nav_bar_search">Search</string>
-    <string name="nav_bar_home">Home</string>
+    <string name="nav_bar_home">My Recipes</string>
     <string name="nav_bar_profile">Profile</string>
 
     <!-- Home -->
