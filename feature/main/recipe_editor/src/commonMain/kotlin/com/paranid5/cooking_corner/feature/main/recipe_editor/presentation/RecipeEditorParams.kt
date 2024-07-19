@@ -1,14 +1,10 @@
 package com.paranid5.cooking_corner.feature.main.recipe_editor.presentation
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_editor_carbohydrates
 import com.paranid5.cooking_corner.core.resources.recipe_editor_category
@@ -34,21 +30,6 @@ import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppSpinnerWithArrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
-
-internal inline val ParamShape
-    @Composable
-    get() = RoundedCornerShape(AppTheme.dimensions.corners.extraSmall)
-
-internal inline val ClippedOutlinedModifier
-    @Composable
-    get() = Modifier
-        .fillMaxWidth()
-        .clip(ParamShape)
-        .border(
-            width = 1.dp,
-            color = AppTheme.colors.button.primary,
-            shape = ParamShape,
-        )
 
 @Composable
 internal fun RecipeEditorParams(
@@ -81,7 +62,10 @@ internal fun RecipeEditorParams(
         items = state.categories,
         title = CategoryUiState::title,
         initial = stringResource(Res.string.recipe_editor_category),
-        modifier = ClippedOutlinedModifier,
+        modifier = when {
+            state.isCategoryEmptyErrorVisible -> ClippedOutlinedErrorModifier
+            else -> ClippedOutlinedModifier
+        },
         selectedItemFactory = { _, text, modifier ->
             AppMainText(
                 text = text,

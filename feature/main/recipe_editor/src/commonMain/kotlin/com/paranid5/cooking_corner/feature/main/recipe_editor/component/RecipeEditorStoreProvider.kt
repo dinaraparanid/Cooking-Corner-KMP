@@ -65,6 +65,10 @@ internal class RecipeEditorStoreProvider(
 
         data class UpdateCover(val cover: ImageContainer) : Msg
 
+        data object ShowNameEmptyError : Msg
+
+        data object ShowCategoryEmptyError : Msg
+
         data class UpdateCategoriesUiState(
             val categoriesUiState: UiState<SerializableImmutableList<CategoryUiState>>
         ) : Msg

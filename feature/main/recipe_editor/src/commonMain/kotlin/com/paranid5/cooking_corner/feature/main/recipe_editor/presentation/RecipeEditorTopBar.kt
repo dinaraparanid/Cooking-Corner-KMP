@@ -46,7 +46,7 @@ internal fun RecipeEditorTopBar(
 
         Spacer(Modifier.weight(1F))
 
-        SaveButton(enabled = state.isSaveButtonEnabled, modifier = generalModifier) {
+        SaveButton(generalModifier) {
             onUiIntent(
                 UiIntent.Save(
                     launchMode = state.launchMode,
@@ -60,7 +60,6 @@ internal fun RecipeEditorTopBar(
 
 @Composable
 private fun SaveButton(
-    enabled: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) = Box(
@@ -70,7 +69,7 @@ private fun SaveButton(
             color = AppTheme.colors.button.primary,
             shape = RoundedCornerShape(AppTheme.dimensions.corners.medium)
         )
-        .clickableWithRipple(bounded = true, enabled = enabled, onClick = onClick)
+        .clickableWithRipple(bounded = true, onClick = onClick)
 ) {
     AppMainText(
         text = stringResource(Res.string.save),

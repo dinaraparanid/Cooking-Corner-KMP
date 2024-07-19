@@ -54,19 +54,11 @@ interface HomeStore : Store<UiIntent, State, Label> {
         val isAscendingOrder: Boolean,
         val areFavouritesShown: Boolean,
     ) {
-        companion object {
-            private const val NOT_SELECTED = 0
-        }
-
         @Transient
-        val selectedCategoryTitle = selectedCategoryIndex
-            .takeIf { it > NOT_SELECTED }
-            ?.let { index ->
-                categoriesUiState
-                    .getOrNull()
-                    ?.getOrNull(index)
-                    ?.title
-            }
+        val selectedCategoryTitle = categoriesUiState
+            .getOrNull()
+            ?.getOrNull(selectedCategoryIndex)
+            ?.title
             .orEmpty()
 
         @Transient
@@ -75,9 +67,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
         @Transient
         val shownRecipes = recipesUiState
             .getOrNull()
-            ?.filterToImmutableList {
-                it.isShown
-            }
+            ?.filterToImmutableList { it.isShown }
             .orNil()
 
         @Transient
@@ -85,7 +75,7 @@ interface HomeStore : Store<UiIntent, State, Label> {
 
         constructor() : this(
             searchText = "",
-            selectedCategoryIndex = NOT_SELECTED,
+            selectedCategoryIndex = 0,
             recipesUiState = UiState.Undefined,
             categoriesUiState = UiState.Undefined,
             isAscendingOrder = true,

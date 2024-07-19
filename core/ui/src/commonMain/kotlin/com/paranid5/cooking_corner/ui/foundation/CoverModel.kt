@@ -17,8 +17,9 @@ fun coverModel(
     animationMillis: Int = DEFAULT_ANIMATION_DURATION,
 ): ImageRequest = ImageRequest.Builder(context)
     .data(data)
-    .diskCachePolicy(CachePolicy.WRITE_ONLY)
-    .memoryCachePolicy(CachePolicy.DISABLED)
+    .networkCachePolicy(CachePolicy.ENABLED)
+    .diskCachePolicy(CachePolicy.ENABLED)
+    .memoryCachePolicy(CachePolicy.ENABLED)
     .precision(Precision.EXACT)
     .scale(Scale.FILL)
     .crossfade(animationMillis)

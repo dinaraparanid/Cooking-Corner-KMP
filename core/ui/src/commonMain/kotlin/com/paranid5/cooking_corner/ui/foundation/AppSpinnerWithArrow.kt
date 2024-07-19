@@ -25,7 +25,7 @@ fun <T> AppSpinnerWithArrow(
     selectedItemIndex: Int,
     items: ImmutableList<T>,
     title: T.() -> String,
-    initial: String,
+    initial: String? = null,
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier,
     selectedItemFactory: SpinnerItem = { _, text, mod ->
@@ -37,7 +37,7 @@ fun <T> AppSpinnerWithArrow(
     },
     onItemSelected: (index: Int) -> Unit,
 ) = Box(modifier.background(AppTheme.colors.background.primary)) {
-    AppSpinnerContent(
+    AppSpinnerWithArrowContent(
         selectedItemIndex = selectedItemIndex,
         items = items,
         title = title,
@@ -63,11 +63,11 @@ fun <T> AppSpinnerWithArrow(
 }
 
 @Composable
-private fun <T> AppSpinnerContent(
+private fun <T> AppSpinnerWithArrowContent(
     selectedItemIndex: Int,
     items: ImmutableList<T>,
     title: T.() -> String,
-    initial: String,
+    initial: String?,
     selectedItemFactory: SpinnerItem,
     previewItemFactory: SpinnerItem,
     dropdownItemFactory: SpinnerItem,
@@ -102,11 +102,11 @@ private fun AppSpinnerArrow(modifier: Modifier = Modifier) = Image(
 private fun <T> rememberTitles(
     items: ImmutableList<T>,
     title: T.() -> String,
-    initial: String,
+    initial: String?,
 ): State<ImmutableList<String>> = remember(items, title, initial) {
     derivedStateOf {
         buildPersistentList {
-            add(initial)
+            initial?.let(::add)
             addAll(items.map(title))
         }
     }

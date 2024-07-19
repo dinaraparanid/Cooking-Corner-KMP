@@ -117,9 +117,10 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
         val ingredientDialogState: IngredientDialogState = IngredientDialogState(),
         val stepDialogState: StepDialogState = StepDialogState(),
         val isAddStepDialogVisible: Boolean = false,
-        val isNameEmptyErrorVisible: Boolean = false,
         val selectedCategoryIndexInput: Int = NOT_SELECTED,
         val selectedTagIndexInput: Int = NOT_SELECTED,
+        val isNameEmptyErrorVisible: Boolean = false,
+        val isCategoryEmptyErrorVisible: Boolean = false,
         val uiState: UiState<Unit> = UiState.Undefined,
     ) {
         companion object {
@@ -211,12 +212,6 @@ interface RecipeEditorStore : Store<UiIntent, State, Label> {
 
         @Transient
         val isCategorySelected = selectedCategoryTitleOrNull != null
-
-        @Transient
-        val selectedCategoryTitle = selectedCategoryTitleOrNull.orEmpty()
-
-        @Transient
-        val isSaveButtonEnabled = isNameEmpty.not() && isCategorySelected
 
         @Transient
         val preparationTimeMinutes = recipeParamsUiState.preparationTimeInput.toIntOrZero()

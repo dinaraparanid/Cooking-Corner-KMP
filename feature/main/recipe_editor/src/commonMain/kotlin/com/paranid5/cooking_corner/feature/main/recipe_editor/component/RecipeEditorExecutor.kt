@@ -206,16 +206,27 @@ internal class RecipeEditorExecutor(
         launchMode: LaunchMode,
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
-    ) = when (launchMode) {
-        is LaunchMode.Edit -> edit(
-            unhandledErrorSnackbar = unhandledErrorSnackbar,
-            successSnackbar = successSnackbar,
-        )
+    ) {
+        val isNameEmpty = state().isNameEmpty
+        val isCategoryNotSelected = state().isCategorySelected.not()
 
-        is LaunchMode.New, is LaunchMode.Generate -> create(
-            unhandledErrorSnackbar = unhandledErrorSnackbar,
-            successSnackbar = successSnackbar,
-        )
+        if (isNameEmpty || isCategoryNotSelected) {
+            if (isNameEmpty) dispatch(Msg.ShowNameEmptyError)
+            if (isCategoryNotSelected) dispatch(Msg.ShowCategoryEmptyError)
+            return
+        }
+
+        when (launchMode) {
+            is LaunchMode.Edit -> edit(
+                unhandledErrorSnackbar = unhandledErrorSnackbar,
+                successSnackbar = successSnackbar,
+            )
+
+            is LaunchMode.New, is LaunchMode.Generate -> create(
+                unhandledErrorSnackbar = unhandledErrorSnackbar,
+                successSnackbar = successSnackbar,
+            )
+        }
     }
 
     private suspend fun create(

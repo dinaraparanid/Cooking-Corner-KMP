@@ -79,7 +79,10 @@ internal object RecipeEditorReducer : Reducer<State, Msg> {
                 .copy(restTimeInput = msg.restTimeInput)
         )
 
-        is Msg.UpdateSelectedCategory -> copy(selectedCategoryIndexInput = msg.index)
+        is Msg.UpdateSelectedCategory -> copy(
+            isCategoryEmptyErrorVisible = msg.index == State.NOT_SELECTED,
+            selectedCategoryIndexInput = msg.index,
+        )
 
         is Msg.UpdateSelectedTag -> copy(selectedTagIndexInput = msg.index)
 
@@ -93,13 +96,17 @@ internal object RecipeEditorReducer : Reducer<State, Msg> {
                 .copy(videoLink = msg.videoLink)
         )
 
-        is Msg.Ingredient -> reduceIngredientMsg(msg)
+        is Msg.ShowNameEmptyError -> copy(isNameEmptyErrorVisible = true)
 
-        is Msg.Step -> reduceStepMsg(msg)
+        is Msg.ShowCategoryEmptyError -> copy(isCategoryEmptyErrorVisible = true)
 
         is Msg.UpdateUiState -> msg.recipeUiState
             ?.let { copy(uiState = msg.uiState, recipeParamsUiState = it) }
             ?: copy(uiState = msg.uiState)
+
+        is Msg.Ingredient -> reduceIngredientMsg(msg)
+
+        is Msg.Step -> reduceStepMsg(msg)
     }
 
     private fun State.reduceIngredientMsg(msg: Msg.Ingredient): State = when (msg) {
