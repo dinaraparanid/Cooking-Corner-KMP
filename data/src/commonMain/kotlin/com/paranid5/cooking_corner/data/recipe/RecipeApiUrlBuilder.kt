@@ -34,4 +34,6 @@ internal class RecipeApiUrlBuilder(private val baseUrl: String) {
     fun buildRateUrl() = "$baseUrl/recipes/rate_recipe"
 
     fun buildGenerateRecipeUrl() = "$baseUrl/recipes/generate_recipe"
+
+    fun buildUploadRecipeImageUrl() = "$baseUrl/recipes/upload_recipe_image"
 }

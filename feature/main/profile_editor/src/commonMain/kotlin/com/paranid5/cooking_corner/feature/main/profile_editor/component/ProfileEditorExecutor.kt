@@ -6,7 +6,7 @@ import com.paranid5.cooking_corner.core.common.isForbidden
 import com.paranid5.cooking_corner.domain.auth.AuthRepository
 import com.paranid5.cooking_corner.domain.auth.getMe
 import com.paranid5.cooking_corner.domain.auth.updateProfile
-import com.paranid5.cooking_corner.domain.auth.updateProfileCover
+import com.paranid5.cooking_corner.domain.auth.uploadProfileCover
 import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
@@ -19,7 +19,6 @@ import com.paranid5.cooking_corner.feature.main.profile_editor.component.Profile
 import com.paranid5.cooking_corner.feature.main.profile_editor.domain.ProfileUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.ImageContainer
-import com.paranid5.cooking_corner.ui.entity.data
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.handleApiResult
@@ -127,8 +126,8 @@ internal class ProfileEditorExecutor(
             }
         }
     ) {
-        (profileUiState.cover as? ImageContainer.Bytes)?.value?.let {
-            saveProfileCover(
+        (profileUiState.cover as? ImageContainer.Bytes?)?.value?.let {
+            uploadProfileCover(
                 profileCover = it,
                 unhandledErrorSnackbar = unhandledErrorSnackbar,
                 successSnackbar = successSnackbar,
@@ -136,20 +135,18 @@ internal class ProfileEditorExecutor(
         } ?: onSuccess(successSnackbar)
     }
 
-    private suspend fun saveProfileCover(
+    private suspend fun uploadProfileCover(
         profileCover: ByteArray,
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
     ) = handleApiResult(
         result = withContext(AppDispatchers.Data) {
-            authRepository.updateProfileCover(cover = profileCover)
+            authRepository.uploadProfileCover(cover = profileCover)
         },
         onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },
         onErrorStatusCode = { status ->
             when {
-                status.isForbidden ->
-                    globalEventRepository.sendLogOut(Reason.ERROR)
-
+                status.isForbidden -> globalEventRepository.sendLogOut(Reason.ERROR)
                 else -> showSnackbar(unhandledErrorSnackbar)
             }
         },

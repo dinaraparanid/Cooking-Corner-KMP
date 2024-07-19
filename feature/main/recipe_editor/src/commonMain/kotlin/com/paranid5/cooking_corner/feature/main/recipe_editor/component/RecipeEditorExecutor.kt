@@ -272,8 +272,12 @@ internal class RecipeEditorExecutor(
         handleModifyApiResult(
             result = resultJob.await(),
             unhandledErrorSnackbar = unhandledErrorSnackbar,
-            successSnackbar = successSnackbar,
-        )
+        ) {
+            storeCoverOrFinish(
+                unhandledErrorSnackbar = unhandledErrorSnackbar,
+                successSnackbar = successSnackbar,
+            )
+        }
     }
 
     private suspend fun edit(
@@ -320,8 +324,42 @@ internal class RecipeEditorExecutor(
         handleModifyApiResult(
             result = resultJob.await(),
             unhandledErrorSnackbar = unhandledErrorSnackbar,
-            successSnackbar = successSnackbar,
-        )
+        ) {
+            storeCoverOrFinish(
+                unhandledErrorSnackbar = unhandledErrorSnackbar,
+                successSnackbar = successSnackbar,
+            )
+        }
+    }
+
+    private suspend fun uploadRecipeCover(
+        recipeCover: ByteArray,
+        unhandledErrorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) = handleModifyApiResult(
+        unhandledErrorSnackbar = unhandledErrorSnackbar,
+        result = withContext(AppDispatchers.Data) {
+            recipeRepository.uploadRecipeCover(cover = recipeCover)
+        },
+        onSuccess = { onSuccess(successSnackbar) }
+    )
+
+    private suspend fun storeCoverOrFinish(
+        unhandledErrorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) {
+        (state().recipeParamsUiState.cover as? ImageContainer.Bytes?)?.value?.let {
+            uploadRecipeCover(
+                recipeCover = it,
+                unhandledErrorSnackbar = unhandledErrorSnackbar,
+                successSnackbar = successSnackbar
+            )
+        } ?: onSuccess(successSnackbar = successSnackbar)
+    }
+
+    private suspend inline fun onSuccess(successSnackbar: SnackbarMessage) {
+        showSnackbar(successSnackbar)
+        publish(Label.Back)
     }
 
     // -------------------- API results handling --------------------
@@ -329,15 +367,13 @@ internal class RecipeEditorExecutor(
     private suspend inline fun handleModifyApiResult(
         result: ApiResultWithCode<Unit>,
         unhandledErrorSnackbar: SnackbarMessage,
-        successSnackbar: SnackbarMessage,
+        onSuccess: () -> Unit,
     ) = handleApiResult(
         result = result,
-        onUnhandledError = { showSnackbar(snackbarMessage = unhandledErrorSnackbar) },
+        onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },
         onErrorStatusCode = { showSnackbar(unhandledErrorSnackbar) },
-    ) {
-        showSnackbar(successSnackbar)
-        publish(Label.Back)
-    }
+        onSuccess = { onSuccess() },
+    )
 
     private suspend fun showSnackbar(snackbarMessage: SnackbarMessage) =
         globalEventRepository.sendSnackbar(snackbarMessage)

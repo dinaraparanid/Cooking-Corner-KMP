@@ -39,4 +39,6 @@ interface RecipeApi {
     suspend fun rate(recipeId: Long, rating: Int): ApiResultWithCode<Unit>
 
     suspend fun generate(url: String): ApiResultWithCode<RecipeResponse>
+
+    suspend fun uploadRecipeCover(cover: ByteArray): ApiResultWithCode<Unit>
 }

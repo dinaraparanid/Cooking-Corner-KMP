@@ -27,5 +27,5 @@ suspend inline fun AuthRepository.updateProfile(
     )
 }.flatten()
 
-suspend inline fun AuthRepository.updateProfileCover(cover: ByteArray): ApiResultWithCode<Unit> =
-    Either.catch { updateProfileCover(accessToken = requireAccessToken(), cover = cover) }.flatten()
+suspend inline fun AuthRepository.uploadProfileCover(cover: ByteArray): ApiResultWithCode<Unit> =
+    Either.catch { uploadProfileCover(accessToken = requireAccessToken(), cover = cover) }.flatten()

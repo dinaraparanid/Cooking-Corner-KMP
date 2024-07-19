@@ -108,9 +108,7 @@ internal class AuthApiImpl(
             either {
                 val response = sendRequest()
                 ensure(response.status.isSuccess()) { response.toAppStatusCode() }
-                val profile = response.body<ProfileDTO>()
-                val imagePath = profile.imagePath?.let { "$IMAGE_BASE_URL/$it" }
-                profile.copy(imagePath = imagePath)
+                response.body()
             }
         }
 
@@ -145,7 +143,7 @@ internal class AuthApiImpl(
             }
         }
 
-    override suspend fun updateProfileCover(
+    override suspend fun uploadProfileCover(
         accessToken: String,
         cover: ByteArray,
     ): ApiResultWithCode<Unit> = Either.catch {

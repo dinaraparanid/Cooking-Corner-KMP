@@ -14,6 +14,8 @@ import com.paranid5.cooking_corner.utils.mapToImmutableList
 import com.paranid5.cooking_corner.utils.orNil
 import com.paranid5.cooking_corner.utils.toStringOrEmpty
 
+private const val IMAGE_BASE_URL = "https://storage.yandexcloud.net/cooking-corner-backet"
+
 fun RecipeUiState.Companion.fromResponse(response: RecipeResponse) =
     RecipeUiState(
         id = response.id ?: 0,
@@ -24,7 +26,7 @@ fun RecipeUiState.Companion.fromResponse(response: RecipeResponse) =
         author = response.username.orEmpty(),
         isLiked = response.isFavourite ?: false,
         isMyRecipe = response.isMyRecipe ?: false,
-        cover = response.iconPath?.let(ImageContainer::Uri),
+        cover = response.iconPath?.let(::ImageContainerUri),
     )
 
 fun RecipeDetailedUiState.Companion.fromResponse(response: RecipeResponse) =
@@ -42,7 +44,7 @@ fun RecipeDetailedUiState.Companion.fromResponse(response: RecipeResponse) =
         portions = response.portions ?: 0,
         byUser = response.isMyRecipe ?: false,
         isPublished = response.isPrivate?.not() ?: false,
-        cover = response.iconPath?.let(ImageContainer::Uri),
+        cover = response.iconPath?.let(::ImageContainerUri),
         ingredients = SerializableImmutableList(
             response
                 .ingredients
@@ -70,7 +72,7 @@ fun StepUiState.Companion.fromResponse(response: StepDTO) =
     StepUiState(
         title = response.title.orEmpty(),
         description = response.description.orEmpty(),
-        cover = response.imagePath?.let(ImageContainer::Uri),
+        cover = response.imagePath?.let(::ImageContainerUri),
     )
 
 fun StepUiState.toRequest() = StepDTO(title = title, description = description)
@@ -105,3 +107,6 @@ fun RecipeParamsUiState.Companion.fromResponse(response: RecipeResponse) =
                 .orNil()
         ),
     )
+
+private fun ImageContainerUri(path: String) =
+    ImageContainer.Uri("$IMAGE_BASE_URL/$path")
