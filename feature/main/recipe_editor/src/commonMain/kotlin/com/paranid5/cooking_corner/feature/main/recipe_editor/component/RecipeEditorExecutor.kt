@@ -1,5 +1,6 @@
 package com.paranid5.cooking_corner.feature.main.recipe_editor.component
 
+import arrow.core.raise.nullable
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.core.common.AppDispatchers
@@ -27,10 +28,19 @@ import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
 import com.paranid5.cooking_corner.ui.entity.mappers.toRequest
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
-import com.paranid5.cooking_corner.utils.handleApiResult
+import com.paranid5.cooking_corner.utils.api.ApiResult
+import com.paranid5.cooking_corner.utils.api.acquireApiResult
+import com.paranid5.cooking_corner.utils.api.getOrNull
+import com.paranid5.cooking_corner.utils.doNothing
+import com.paranid5.cooking_corner.utils.api.handleApiResult
 import com.paranid5.cooking_corner.utils.mapToImmutableList
 import com.paranid5.cooking_corner.utils.toIntOrZero
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -216,29 +226,51 @@ internal class RecipeEditorExecutor(
             return
         }
 
-        when (launchMode) {
-            is LaunchMode.Edit -> edit(
-                unhandledErrorSnackbar = unhandledErrorSnackbar,
-                successSnackbar = successSnackbar,
-            )
-
-            is LaunchMode.New, is LaunchMode.Generate -> create(
+        uploadCoverAndProceed(unhandledErrorSnackbar = unhandledErrorSnackbar) { recipeCover, stepsCovers ->
+            uploadRecipe(
+                launchMode = launchMode,
+                recipeCoverUrl = recipeCover,
+                stepsCoversUrls = stepsCovers,
                 unhandledErrorSnackbar = unhandledErrorSnackbar,
                 successSnackbar = successSnackbar,
             )
         }
     }
 
+    private suspend fun uploadRecipe(
+        launchMode: LaunchMode,
+        recipeCoverUrl: String?,
+        stepsCoversUrls: List<String?>,
+        unhandledErrorSnackbar: SnackbarMessage,
+        successSnackbar: SnackbarMessage,
+    ) = when (launchMode) {
+        is LaunchMode.Edit -> edit(
+            recipeCoverUrl = recipeCoverUrl,
+            stepsCoversUrls = stepsCoversUrls,
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
+            successSnackbar = successSnackbar,
+        )
+
+        is LaunchMode.New, is LaunchMode.Generate -> create(
+            recipeCoverUrl = recipeCoverUrl,
+            stepsCoversUrls = stepsCoversUrls,
+            unhandledErrorSnackbar = unhandledErrorSnackbar,
+            successSnackbar = successSnackbar,
+        )
+    }
+
     private suspend fun create(
+        recipeCoverUrl: String?,
+        stepsCoversUrls: List<String?>,
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
     ) {
-        val ingredientsJob = scope.async(AppDispatchers.Eval) {
-            state().recipeParamsUiState.ingredients.map(IngredientUiState::toRequest)
+        val ingredientsTask = scope.async(AppDispatchers.Eval) {
+            buildIngredientsRequests()
         }
 
-        val stepsJob = scope.async(AppDispatchers.Eval) {
-            state().recipeParamsUiState.steps.map(StepUiState::toRequest)
+        val stepsTask = scope.async(AppDispatchers.Eval) {
+            buildStepsRequests(stepsCoversUrls = stepsCoversUrls)
         }
 
         val resultJob = scope.async(AppDispatchers.Data) {
@@ -247,7 +279,7 @@ internal class RecipeEditorExecutor(
                     RecipeModifyParams(
                         name = recipeParamsUiState.name,
                         description = recipeParamsUiState.description,
-                        iconPath = null,
+                        iconPath = recipeCoverUrl,
                         category = selectedCategoryTitleOrNull,
                         preparingTime = preparationTimeMinutes,
                         cookingTime = cookingTimeMinutes,
@@ -262,34 +294,32 @@ internal class RecipeEditorExecutor(
                         dishes = recipeParamsUiState.dishesInput,
                         videoLink = recipeParamsUiState.videoLink,
                         source = recipeParamsUiState.source,
-                        ingredients = ingredientsJob.await(),
-                        steps = stepsJob.await(),
+                        ingredients = ingredientsTask.await(),
+                        steps = stepsTask.await(),
                     )
                 )
             }
         }
 
-        handleModifyApiResult(
+        handleRecipeApiResult(
             result = resultJob.await(),
             unhandledErrorSnackbar = unhandledErrorSnackbar,
-        ) {
-            storeCoverOrFinish(
-                unhandledErrorSnackbar = unhandledErrorSnackbar,
-                successSnackbar = successSnackbar,
-            )
-        }
+            onSuccess = { onSuccess(successSnackbar = successSnackbar) },
+        )
     }
 
     private suspend fun edit(
+        recipeCoverUrl: String?,
+        stepsCoversUrls: List<String?>,
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
     ) {
         val ingredientsJob = scope.async(AppDispatchers.Eval) {
-            state().recipeParamsUiState.ingredients.map(IngredientUiState::toRequest)
+            buildIngredientsRequests()
         }
 
         val stepsJob = scope.async(AppDispatchers.Eval) {
-            state().recipeParamsUiState.steps.map(StepUiState::toRequest)
+            buildStepsRequests(stepsCoversUrls = stepsCoversUrls)
         }
 
         val resultJob = scope.async(AppDispatchers.Data) {
@@ -299,7 +329,7 @@ internal class RecipeEditorExecutor(
                     RecipeModifyParams(
                         name = recipeParamsUiState.name,
                         description = recipeParamsUiState.description,
-                        iconPath = null,
+                        iconPath = recipeCoverUrl,
                         category = selectedCategoryTitleOrNull,
                         preparingTime = preparationTimeMinutes,
                         cookingTime = cookingTimeMinutes,
@@ -321,41 +351,70 @@ internal class RecipeEditorExecutor(
             }
         }
 
-        handleModifyApiResult(
+        handleRecipeApiResult(
             result = resultJob.await(),
             unhandledErrorSnackbar = unhandledErrorSnackbar,
-        ) {
-            storeCoverOrFinish(
-                unhandledErrorSnackbar = unhandledErrorSnackbar,
-                successSnackbar = successSnackbar,
-            )
+            onSuccess = { onSuccess(successSnackbar = successSnackbar) },
+        )
+    }
+
+    private fun buildIngredientsRequests() =
+        state().recipeParamsUiState.ingredients.map(IngredientUiState::toRequest)
+
+    private fun buildStepsRequests(stepsCoversUrls: List<String?>) =
+        state()
+            .recipeParamsUiState
+            .steps
+            .map(StepUiState::toRequest)
+            .zip(stepsCoversUrls) { step, cover -> step.copy(imagePath = cover) }
+
+    private suspend inline fun uploadCoverAndProceed(
+        unhandledErrorSnackbar: SnackbarMessage,
+        then: (recipeCover: String?, stepsCovers: List<String?>) -> Unit,
+    ) {
+        val steps = state().recipeParamsUiState.steps
+
+        val stepsCoversUrls = steps
+            .asFlow()
+            .map { (it.cover as? ImageContainer.Bytes?)?.value }
+            .map { coverData -> coverData?.let { uploadCover(cover = it) } }
+            .onEach {
+                when (it) {
+                    is ApiResult.Data, null -> doNothing
+                    is ApiResult.Forbidden -> logOutWithError()
+                    is ApiResult.ApiError, is ApiResult.UnhandledError ->
+                        showSnackbar(unhandledErrorSnackbar)
+                }
+            }
+            .takeWhile { it is ApiResult.Data? }
+            .map { it?.getOrNull()?.fileName }
+            .toList()
+
+        if (stepsCoversUrls.size < steps.size) {
+            showSnackbar(unhandledErrorSnackbar)
+            return
+        }
+
+        val recipeCoverRes = nullable {
+            val data = (state().recipeParamsUiState.cover as? ImageContainer.Bytes?)?.value.bind()
+            uploadCover(cover = data)
+        }
+
+        when (recipeCoverRes) {
+            is ApiResult.Data -> then(recipeCoverRes.value.fileName, stepsCoversUrls)
+
+            is ApiResult.Forbidden -> logOutWithError()
+
+            is ApiResult.ApiError, is ApiResult.UnhandledError ->
+                showSnackbar(unhandledErrorSnackbar)
+
+            null -> then(null, stepsCoversUrls)
         }
     }
 
-    private suspend fun uploadRecipeCover(
-        recipeCover: ByteArray,
-        unhandledErrorSnackbar: SnackbarMessage,
-        successSnackbar: SnackbarMessage,
-    ) = handleModifyApiResult(
-        unhandledErrorSnackbar = unhandledErrorSnackbar,
-        result = withContext(AppDispatchers.Data) {
-            recipeRepository.uploadRecipeCover(cover = recipeCover)
-        },
-        onSuccess = { onSuccess(successSnackbar) }
+    private suspend inline fun uploadCover(cover: ByteArray) = acquireApiResult(
+        result = withContext(AppDispatchers.Data) { recipeRepository.uploadCover(cover = cover) },
     )
-
-    private suspend fun storeCoverOrFinish(
-        unhandledErrorSnackbar: SnackbarMessage,
-        successSnackbar: SnackbarMessage,
-    ) {
-        (state().recipeParamsUiState.cover as? ImageContainer.Bytes?)?.value?.let {
-            uploadRecipeCover(
-                recipeCover = it,
-                unhandledErrorSnackbar = unhandledErrorSnackbar,
-                successSnackbar = successSnackbar
-            )
-        } ?: onSuccess(successSnackbar = successSnackbar)
-    }
 
     private suspend inline fun onSuccess(successSnackbar: SnackbarMessage) {
         showSnackbar(successSnackbar)
@@ -364,17 +423,25 @@ internal class RecipeEditorExecutor(
 
     // -------------------- API results handling --------------------
 
-    private suspend inline fun handleModifyApiResult(
-        result: ApiResultWithCode<Unit>,
+    private suspend inline fun <T> handleRecipeApiResult(
+        result: ApiResultWithCode<T>,
         unhandledErrorSnackbar: SnackbarMessage,
-        onSuccess: () -> Unit,
+        onSuccess: (T) -> Unit,
     ) = handleApiResult(
         result = result,
         onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },
-        onErrorStatusCode = { showSnackbar(unhandledErrorSnackbar) },
-        onSuccess = { onSuccess() },
+        onErrorStatusCode = { status ->
+            when {
+                status.isForbidden -> logOutWithError()
+                else -> showSnackbar(unhandledErrorSnackbar)
+            }
+        },
+        onSuccess = onSuccess,
     )
 
-    private suspend fun showSnackbar(snackbarMessage: SnackbarMessage) =
+    private suspend inline fun showSnackbar(snackbarMessage: SnackbarMessage) =
         globalEventRepository.sendSnackbar(snackbarMessage)
+
+    private suspend inline fun logOutWithError() =
+        globalEventRepository.sendLogOut(Reason.ERROR)
 }

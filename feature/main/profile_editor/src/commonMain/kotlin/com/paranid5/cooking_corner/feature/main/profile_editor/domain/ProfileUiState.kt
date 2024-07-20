@@ -23,7 +23,7 @@ data class ProfileUiState(
             name = response.name.orEmpty(),
             surname = response.surname.orEmpty(),
             cookingExperience = response.cookingExperienceYears.toStringOrEmpty(),
-            cover = response.imagePath?.let(ImageContainer::Uri),
+            cover = response.iconPath?.let(ImageContainer::Uri),
         )
     }
 }

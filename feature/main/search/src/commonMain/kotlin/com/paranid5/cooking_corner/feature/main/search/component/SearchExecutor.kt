@@ -21,13 +21,11 @@ import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
-import com.paranid5.cooking_corner.utils.handleApiResult
-import com.paranid5.cooking_corner.utils.identity
+import com.paranid5.cooking_corner.utils.api.handleApiResult
 import com.paranid5.cooking_corner.utils.mapToImmutableList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

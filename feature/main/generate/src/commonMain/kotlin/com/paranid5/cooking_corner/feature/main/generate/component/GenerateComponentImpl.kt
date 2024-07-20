@@ -15,7 +15,7 @@ import com.paranid5.cooking_corner.feature.main.generate.component.GenerateCompo
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
-import com.paranid5.cooking_corner.utils.handleApiResult
+import com.paranid5.cooking_corner.utils.api.handleApiResult
 import com.paranid5.cooking_corner.utils.updateState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

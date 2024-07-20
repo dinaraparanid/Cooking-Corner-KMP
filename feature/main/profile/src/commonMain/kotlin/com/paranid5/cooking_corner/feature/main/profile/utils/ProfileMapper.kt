@@ -12,5 +12,5 @@ fun ProfileUiState.Companion.fromResponse(response: ProfileDTO) =
         surname = response.surname,
         email = response.email,
         cookingExperienceYears = response.cookingExperienceYears,
-        photoUrl = "$IMAGE_BASE_URL/${response.imagePath}",
+        photoUrl = "$IMAGE_BASE_URL/${response.iconPath}",
     )

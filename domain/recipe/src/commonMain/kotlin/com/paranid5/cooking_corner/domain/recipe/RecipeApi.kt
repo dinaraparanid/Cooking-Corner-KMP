@@ -3,6 +3,7 @@ package com.paranid5.cooking_corner.domain.recipe
 import com.paranid5.cooking_corner.core.common.ApiResultWithCode
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeModifyParams
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
+import com.paranid5.cooking_corner.domain.recipe.dto.UploadCoverResponse
 
 interface RecipeApi {
     suspend fun getRecentRecipes(): ApiResultWithCode<List<RecipeResponse>>
@@ -40,5 +41,5 @@ interface RecipeApi {
 
     suspend fun generate(url: String): ApiResultWithCode<RecipeResponse>
 
-    suspend fun uploadRecipeCover(cover: ByteArray): ApiResultWithCode<Unit>
+    suspend fun uploadCover(cover: ByteArray): ApiResultWithCode<UploadCoverResponse>
 }

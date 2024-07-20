@@ -96,6 +96,7 @@ fun RecipeParamsUiState.Companion.fromResponse(response: RecipeResponse) =
         dishesInput = response.dishes.orEmpty(),
         videoLink = response.videoLink.orEmpty(),
         source = response.source.orEmpty(),
+        cover = response.iconPath?.let(::ImageContainerUri),
         ingredients = SerializableImmutableList(
             response.ingredients
                 ?.mapToImmutableList(IngredientUiState.Companion::fromResponse)

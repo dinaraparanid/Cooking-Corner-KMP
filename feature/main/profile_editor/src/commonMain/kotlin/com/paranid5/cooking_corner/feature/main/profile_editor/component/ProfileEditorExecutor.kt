@@ -21,7 +21,7 @@ import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.toUiState
-import com.paranid5.cooking_corner.utils.handleApiResult
+import com.paranid5.cooking_corner.utils.api.handleApiResult
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

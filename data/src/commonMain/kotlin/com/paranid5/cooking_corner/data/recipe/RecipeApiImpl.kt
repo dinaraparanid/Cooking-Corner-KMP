@@ -11,6 +11,7 @@ import com.paranid5.cooking_corner.domain.recipe.dto.RecipeModifyParams
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.recipe.dto.SearchRecipesRequest
 import com.paranid5.cooking_corner.domain.recipe.dto.UpdateRecipeRequest
+import com.paranid5.cooking_corner.domain.recipe.dto.UploadCoverResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
@@ -269,22 +270,23 @@ internal class RecipeApiImpl(
         }
     }
 
-    override suspend fun uploadRecipeCover(cover: ByteArray): ApiResultWithCode<Unit> =
-        Either.catch {
-            authRepository.withAuth { accessToken ->
-                withContext(AppDispatchers.Data) {
-                    ktorClient.submitFormWithBinaryData(
-                        url = urlBuilder.buildUploadRecipeImageUrl(),
-                        formData = formData {
-                            append("file", cover, Headers.build {
-                                append(HttpHeaders.ContentDisposition, "filename=\"profile\"")
-                            })
-                        },
-                    ) {
-                        bearerAuth(accessToken)
-                        contentType(ContentType.Image.Any)
-                    }
+    override suspend fun uploadCover(
+        cover: ByteArray,
+    ): ApiResultWithCode<UploadCoverResponse> = Either.catch {
+        authRepository.withAuth { accessToken ->
+            withContext(AppDispatchers.Data) {
+                ktorClient.submitFormWithBinaryData(
+                    url = urlBuilder.buildUploadRecipeImageUrl(),
+                    formData = formData {
+                        append("file", cover, Headers.build {
+                            append(HttpHeaders.ContentDisposition, "filename=\"recipe\"")
+                        })
+                    },
+                ) {
+                    bearerAuth(accessToken)
+                    contentType(ContentType.Image.Any)
                 }
             }
         }
+    }
 }
