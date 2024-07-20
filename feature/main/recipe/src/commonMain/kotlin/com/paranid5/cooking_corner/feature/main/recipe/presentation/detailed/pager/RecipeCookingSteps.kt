@@ -20,7 +20,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_no_steps_description
 import com.paranid5.cooking_corner.core.resources.recipe_no_steps_title
 import com.paranid5.cooking_corner.core.resources.recipe_step
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
-import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.StepUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList

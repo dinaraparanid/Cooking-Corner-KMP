@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -16,13 +17,14 @@ import com.paranid5.cooking_corner.ui.foundation.coverModel
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
 
+@NonRestartableComposable
 @Composable
 internal fun ProfileCover(
-    photoUrl: String?,
+    cover: Any?,
     modifier: Modifier = Modifier,
 ) = SubcomposeAsyncImage(
     modifier = modifier,
-    model = coverModel(data = photoUrl),
+    model = coverModel(data = cover),
     contentDescription = null,
     alignment = Alignment.Center,
     contentScale = ContentScale.Crop,

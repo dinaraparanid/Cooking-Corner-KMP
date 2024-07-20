@@ -11,7 +11,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_editor_add_step_placeho
 import com.paranid5.cooking_corner.core.resources.recipe_editor_steps
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.StepDialogState
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.StepUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.combinedClickableWithRipple

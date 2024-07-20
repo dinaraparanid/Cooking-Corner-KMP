@@ -19,11 +19,11 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStoreProvider.Msg
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.ImageContainer
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
-import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.StepUiState
 import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
 import com.paranid5.cooking_corner.ui.entity.mappers.toRequest
 import com.paranid5.cooking_corner.ui.toUiState
@@ -226,6 +226,8 @@ internal class RecipeEditorExecutor(
             return
         }
 
+        dispatch(Msg.UpdateUiState(UiState.Loading))
+
         uploadCoverAndProceed(unhandledErrorSnackbar = unhandledErrorSnackbar) { recipeCover, stepsCovers ->
             uploadRecipe(
                 launchMode = launchMode,
@@ -366,7 +368,9 @@ internal class RecipeEditorExecutor(
             .recipeParamsUiState
             .steps
             .map(StepUiState::toRequest)
-            .zip(stepsCoversUrls) { step, cover -> step.copy(imagePath = cover) }
+            .zip(stepsCoversUrls) { step, cover ->
+                step.copy(imagePath = cover ?: step.imagePath)
+            }
 
     private suspend inline fun uploadCoverAndProceed(
         unhandledErrorSnackbar: SnackbarMessage,
@@ -391,7 +395,7 @@ internal class RecipeEditorExecutor(
             .toList()
 
         if (stepsCoversUrls.size < steps.size) {
-            showSnackbar(unhandledErrorSnackbar)
+            onFailure(errorSnackbar = unhandledErrorSnackbar)
             return
         }
 
@@ -406,7 +410,7 @@ internal class RecipeEditorExecutor(
             is ApiResult.Forbidden -> logOutWithError()
 
             is ApiResult.ApiError, is ApiResult.UnhandledError ->
-                showSnackbar(unhandledErrorSnackbar)
+                onFailure(errorSnackbar = unhandledErrorSnackbar)
 
             null -> then(null, stepsCoversUrls)
         }
@@ -421,6 +425,11 @@ internal class RecipeEditorExecutor(
         publish(Label.Back)
     }
 
+    private suspend inline fun onFailure(errorSnackbar: SnackbarMessage) {
+        dispatch(Msg.UpdateUiState(UiState.Success))
+        showSnackbar(errorSnackbar)
+    }
+
     // -------------------- API results handling --------------------
 
     private suspend inline fun <T> handleRecipeApiResult(
@@ -433,7 +442,7 @@ internal class RecipeEditorExecutor(
         onErrorStatusCode = { status ->
             when {
                 status.isForbidden -> logOutWithError()
-                else -> showSnackbar(unhandledErrorSnackbar)
+                else -> onFailure(errorSnackbar = unhandledErrorSnackbar)
             }
         },
         onSuccess = onSuccess,

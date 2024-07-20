@@ -24,8 +24,8 @@ import com.paranid5.cooking_corner.core.resources.recipe_editor_source
 import com.paranid5.cooking_corner.core.resources.recipe_editor_video_link
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.CategoryUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppSpinnerWithArrow
 import com.paranid5.cooking_corner.ui.theme.AppTheme

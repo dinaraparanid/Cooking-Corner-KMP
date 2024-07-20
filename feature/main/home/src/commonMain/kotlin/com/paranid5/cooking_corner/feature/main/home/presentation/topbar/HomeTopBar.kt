@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +32,7 @@ import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.vectorResource
 
 private val ICON_SIZE = 32.dp
+private val CATEGORY_SPINNER_MIN_HEIGHT = 52.dp
 
 @Composable
 internal fun HomeTopBar(
@@ -83,6 +85,7 @@ private fun HomeTopBarImpl(
                 .weight(1F)
                 .align(Alignment.CenterVertically)
                 .padding(vertical = AppTheme.dimensions.padding.small)
+                .heightIn(min = CATEGORY_SPINNER_MIN_HEIGHT)
                 .clip(spinnerShape)
                 .border(
                     width = AppTheme.dimensions.borders.minimum,

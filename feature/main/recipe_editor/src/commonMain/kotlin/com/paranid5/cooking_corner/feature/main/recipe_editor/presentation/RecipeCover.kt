@@ -54,7 +54,7 @@ internal fun RecipeCover(
             onClick = launchPicker,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(horizontal = AppTheme.dimensions.padding.small)
+                .padding(AppTheme.dimensions.padding.small)
                 .background(
                     color = AppTheme.colors.button.primary.copy(alpha = 0.5F),
                     shape = CircleShape,

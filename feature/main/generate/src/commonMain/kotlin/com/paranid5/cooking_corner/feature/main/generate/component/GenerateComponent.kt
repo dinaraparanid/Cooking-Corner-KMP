@@ -3,7 +3,7 @@ package com.paranid5.cooking_corner.feature.main.generate.component
 import com.arkivanov.decompose.ComponentContext
 import com.paranid5.cooking_corner.component.StateSource
 import com.paranid5.cooking_corner.component.UiIntentHandler
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeParamsUiState
 
 interface GenerateComponent : StateSource<GenerateState>, UiIntentHandler<GenerateUiIntent> {
     sealed interface BackResult {

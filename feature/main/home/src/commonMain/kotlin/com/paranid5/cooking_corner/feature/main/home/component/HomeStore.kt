@@ -6,8 +6,8 @@ import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.Label
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.CategoryUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.filterToImmutableList

@@ -19,7 +19,7 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_kebab
 import com.paranid5.cooking_corner.core.resources.recipe_private_label
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedBackButton
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton

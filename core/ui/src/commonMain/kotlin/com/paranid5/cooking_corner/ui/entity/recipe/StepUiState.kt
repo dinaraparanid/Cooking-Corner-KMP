@@ -1,6 +1,7 @@
-package com.paranid5.cooking_corner.ui.entity
+package com.paranid5.cooking_corner.ui.entity.recipe
 
 import androidx.compose.runtime.Immutable
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
 import kotlinx.serialization.Serializable
 import kotlin.random.Random
 

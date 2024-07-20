@@ -18,9 +18,9 @@ import com.paranid5.cooking_corner.domain.global_event.GlobalEvent.LogOut.Reason
 import com.paranid5.cooking_corner.domain.global_event.GlobalEventRepository
 import com.paranid5.cooking_corner.domain.global_event.sendLogOut
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent.BackResult
-import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
-import com.paranid5.cooking_corner.feature.main.profile.utils.fromResponse
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
+import com.paranid5.cooking_corner.ui.entity.profile.ProfileUiState
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.doNothing
 import com.paranid5.cooking_corner.utils.updateState
@@ -68,7 +68,7 @@ internal class ProfileComponentImpl(
                                 if (status.isForbidden) logOut(Reason.ERROR)
                                 null
                             },
-                            ifRight = { ProfileUiState.fromResponse(it).toUiState() }
+                            ifRight = { ProfileUiState.fromResponse(it).toUiState() },
                         )
                     }
                 )

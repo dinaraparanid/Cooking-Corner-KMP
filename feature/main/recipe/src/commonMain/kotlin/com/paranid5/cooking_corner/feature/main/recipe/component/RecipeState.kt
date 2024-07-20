@@ -2,7 +2,7 @@ package com.paranid5.cooking_corner.feature.main.recipe.component
 
 import androidx.compose.runtime.Immutable
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

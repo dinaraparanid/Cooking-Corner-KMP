@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.State
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.CategoryUiState
 import com.paranid5.cooking_corner.ui.foundation.AppSpinnerWithArrow
 
 @Composable

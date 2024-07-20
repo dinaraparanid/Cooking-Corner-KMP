@@ -16,9 +16,10 @@ import com.paranid5.cooking_corner.feature.main.profile_editor.component.Profile
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStore.State
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStoreProvider.Msg
-import com.paranid5.cooking_corner.feature.main.profile_editor.domain.ProfileUiState
 import com.paranid5.cooking_corner.ui.UiState
 import com.paranid5.cooking_corner.ui.entity.ImageContainer
+import com.paranid5.cooking_corner.ui.entity.mappers.fromResponse
+import com.paranid5.cooking_corner.ui.entity.profile.ProfileUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.utils.api.handleApiResult
@@ -107,10 +108,10 @@ internal class ProfileEditorExecutor(
         result = withContext(AppDispatchers.Data) {
             authRepository.updateProfile(
                 username = profileUiState.username,
-                email = profileUiState.email,
-                name = profileUiState.name,
-                surname = profileUiState.surname,
-                cookingExperienceYears = profileUiState.cookingExperience.toIntOrNull(),
+                email = profileUiState.email.orEmpty(),
+                name = profileUiState.name.orEmpty(),
+                surname = profileUiState.surname.orEmpty(),
+                cookingExperienceYears = profileUiState.cookingExperienceYears,
             )
         },
         onUnhandledError = { showSnackbar(unhandledErrorSnackbar) },

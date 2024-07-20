@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -40,8 +39,9 @@ import com.paranid5.cooking_corner.core.resources.profile_username
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileComponent
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileState
 import com.paranid5.cooking_corner.feature.main.profile.component.ProfileUiIntent
-import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.data
+import com.paranid5.cooking_corner.ui.entity.profile.ProfileUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.AppPullRefreshIndicator
@@ -140,7 +140,7 @@ private fun ProfileUiImpl(
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     ProfileCover(
-        photoUrl = profileUiState.photoUrl,
+        cover = profileUiState.cover?.data,
         modifier = Modifier
             .size(PHOTO_SIZE)
             .align(Alignment.CenterHorizontally)

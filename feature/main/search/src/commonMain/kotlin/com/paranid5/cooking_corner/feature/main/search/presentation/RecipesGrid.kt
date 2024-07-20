@@ -23,7 +23,7 @@ import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.search_matching_results
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.RecipeItem
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.ui.utils.pxToDp

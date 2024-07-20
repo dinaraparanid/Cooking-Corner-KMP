@@ -6,8 +6,8 @@ import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStore.Label
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStore.State
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.profile_editor.domain.ProfileUiState
 import com.paranid5.cooking_corner.ui.UiState
+import com.paranid5.cooking_corner.ui.entity.profile.ProfileUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

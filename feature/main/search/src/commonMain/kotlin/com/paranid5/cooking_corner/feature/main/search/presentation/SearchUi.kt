@@ -49,6 +49,8 @@ fun SearchUi(
                     .padding(horizontal = AppTheme.dimensions.padding.extraMedium),
             )
 
+            Spacer(Modifier.height(AppTheme.dimensions.padding.small))
+
             when {
                 state.isSearching -> FoundRecipes(
                     state = state,

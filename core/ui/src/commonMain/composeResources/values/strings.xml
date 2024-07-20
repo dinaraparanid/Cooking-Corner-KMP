@@ -35,6 +35,7 @@
     <string name="home_no_item_placeholder_row_3">recipes you're interested in, you can use the</string>
     <string name="home_no_item_placeholder_row_4">import existing recipes from a website, or</string>
     <string name="home_no_item_placeholder_row_5">add and write your recipe manually.</string>
+    <string name="home_remove_public_recipe_error">Recipe is public and cannot be deleted</string>
 
     <!-- Profile -->
     <string name="profile_username">Username</string>

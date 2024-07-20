@@ -1,6 +1,5 @@
 package com.paranid5.cooking_corner.feature.main.search.component
 
-import androidx.paging.PagingData
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnPause
 import com.arkivanov.essenty.lifecycle.doOnResume
@@ -14,12 +13,10 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchComponent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Label
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 

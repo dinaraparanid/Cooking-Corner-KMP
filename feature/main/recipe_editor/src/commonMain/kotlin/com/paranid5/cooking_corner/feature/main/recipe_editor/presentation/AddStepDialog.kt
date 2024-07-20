@@ -54,8 +54,10 @@ internal fun AddStepDialog(
 
     RecipeCoverOrPicker(
         cover = stepDialogState.cover,
-        modifier = Modifier.align(Alignment.CenterHorizontally),
         onPicked = onPicked,
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(horizontal = AppTheme.dimensions.padding.small),
     )
 
     Spacer(Modifier.height(AppTheme.dimensions.padding.medium))

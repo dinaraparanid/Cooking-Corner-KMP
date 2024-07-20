@@ -2,6 +2,7 @@ package com.paranid5.cooking_corner.ui.entity
 
 import androidx.compose.runtime.Immutable
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 @Immutable
@@ -12,7 +13,7 @@ sealed interface ImageContainer {
 
     @Serializable
     @Immutable
-    data class Bytes(val value: ByteArray?) : ImageContainer
+    data class Bytes(@Transient val value: ByteArray? = null) : ImageContainer
 }
 
 inline val ImageContainer.data: Any?

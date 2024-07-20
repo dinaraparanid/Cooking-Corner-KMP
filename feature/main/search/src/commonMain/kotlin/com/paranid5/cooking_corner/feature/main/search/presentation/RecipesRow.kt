@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.brief.RecipeItem
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import kotlinx.collections.immutable.ImmutableList
 

@@ -15,7 +15,8 @@ interface RecipeUiIntent {
     ) : RecipeUiIntent
 
     data class Delete(
-        val errorSnackbar: SnackbarMessage,
+        val unhandledErrorSnackbar: SnackbarMessage,
+        val recipeCannotBeDeletedSnackbar: SnackbarMessage,
         val successSnackbar: SnackbarMessage,
     ) : RecipeUiIntent
 

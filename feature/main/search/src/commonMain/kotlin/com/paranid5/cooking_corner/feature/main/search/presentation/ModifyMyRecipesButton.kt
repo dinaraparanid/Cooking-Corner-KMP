@@ -9,13 +9,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.home_remove_public_recipe_error
 import com.paranid5.cooking_corner.core.resources.search_add_to_recipes
 import com.paranid5.cooking_corner.core.resources.search_remove_from_recipes
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
@@ -35,6 +36,7 @@ internal fun ModifyMyRecipesButton(
     }
 
     val unhandledErrorSnackbar = UnhandledErrorSnackbar()
+    val recipeCannotBeDeletedSnackbar = RecipeCannotBeDeletedSnackbar()
 
     fun addRecipe() = onUiIntent(
         UiIntent.AddToMyRecipesClick(
@@ -47,6 +49,7 @@ internal fun ModifyMyRecipesButton(
         UiIntent.RemoveFromMyRecipesClick(
             recipeUiState = recipeUiState,
             unhandledErrorSnackbar = unhandledErrorSnackbar,
+            recipeCannotBeDeletedSnackbar = recipeCannotBeDeletedSnackbar,
         )
     )
 
@@ -96,5 +99,11 @@ private fun ModifyMyRecipesButtonImpl(
 @Composable
 private fun UnhandledErrorSnackbar() = SnackbarMessage(
     message = stringResource(Res.string.something_went_wrong),
+    snackbarType = SnackbarType.NEGATIVE,
+)
+
+@Composable
+private fun RecipeCannotBeDeletedSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.home_remove_public_recipe_error),
     snackbarType = SnackbarType.NEGATIVE,
 )

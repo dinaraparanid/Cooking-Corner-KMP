@@ -22,7 +22,7 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeParamsUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme

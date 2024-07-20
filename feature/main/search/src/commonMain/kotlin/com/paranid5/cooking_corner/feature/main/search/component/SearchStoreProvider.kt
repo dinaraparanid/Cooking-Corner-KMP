@@ -9,7 +9,7 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Lab
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 
 internal class SearchStoreProvider(

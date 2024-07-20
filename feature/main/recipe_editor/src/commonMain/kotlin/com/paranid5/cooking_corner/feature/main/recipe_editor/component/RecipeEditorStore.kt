@@ -10,11 +10,11 @@ import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEd
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.StepDialogState
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.CategoryUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.CategoryUiState
 import com.paranid5.cooking_corner.ui.entity.ImageContainer
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
-import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.StepUiState
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.orNil

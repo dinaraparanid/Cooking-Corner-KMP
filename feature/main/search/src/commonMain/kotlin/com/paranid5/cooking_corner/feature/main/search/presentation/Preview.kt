@@ -16,7 +16,7 @@ import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.State
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.theme.AppTheme

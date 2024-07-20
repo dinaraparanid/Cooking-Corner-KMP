@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.paranid5.cooking_corner.core.resources.Res
+import com.paranid5.cooking_corner.core.resources.home_remove_public_recipe_error
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_delete
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_edit
 import com.paranid5.cooking_corner.core.resources.recipe_kebab_publish
@@ -21,7 +22,7 @@ import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarMessage
 import com.paranid5.cooking_corner.domain.snackbar.SnackbarType
 import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.clickableWithRipple
 import com.paranid5.cooking_corner.utils.persistentListOfNotNull
@@ -98,13 +99,14 @@ private fun buildKebabMenuItems(
 ): PersistentList<RecipeKebabMenuItemData> {
     val publishedSnackbar = PublishedSnackbar()
     val removedSnackbar = RemovedSnackbar()
-    val errorSnackbar = ErrorSnackbar()
+    val unhandledErrorSnackbar = UnhandledErrorSnackbar()
+    val recipeCannotBeDeletedSnackbar = RecipeCannotBeDeletedSnackbar()
 
     return persistentListOfNotNull(
         buildKebabMenuItem(stringResource(Res.string.recipe_kebab_publish)) {
             onUiIntent(
                 RecipeUiIntent.Publish(
-                    errorSnackbar = errorSnackbar,
+                    errorSnackbar = unhandledErrorSnackbar,
                     successSnackbar = publishedSnackbar,
                 )
             )
@@ -115,8 +117,9 @@ private fun buildKebabMenuItems(
         buildKebabMenuItem(stringResource(Res.string.recipe_kebab_delete)) {
             onUiIntent(
                 RecipeUiIntent.Delete(
-                    errorSnackbar = errorSnackbar,
+                    unhandledErrorSnackbar = unhandledErrorSnackbar,
                     successSnackbar = removedSnackbar,
+                    recipeCannotBeDeletedSnackbar = recipeCannotBeDeletedSnackbar,
                 )
             )
         }.takeIf { isPublished.not() },
@@ -136,9 +139,15 @@ private fun RemovedSnackbar() = SnackbarMessage(
 )
 
 @Composable
-private fun ErrorSnackbar() = SnackbarMessage(
+private fun UnhandledErrorSnackbar() = SnackbarMessage(
     message = stringResource(Res.string.something_went_wrong),
     snackbarType = SnackbarType.POSITIVE,
+)
+
+@Composable
+private fun RecipeCannotBeDeletedSnackbar() = SnackbarMessage(
+    message = stringResource(Res.string.home_remove_public_recipe_error),
+    snackbarType = SnackbarType.NEGATIVE,
 )
 
 private fun buildKebabMenuItem(title: String, onClick: () -> Unit) =

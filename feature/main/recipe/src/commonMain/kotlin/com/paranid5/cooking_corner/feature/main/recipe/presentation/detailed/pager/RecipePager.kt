@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
-import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.StepUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch

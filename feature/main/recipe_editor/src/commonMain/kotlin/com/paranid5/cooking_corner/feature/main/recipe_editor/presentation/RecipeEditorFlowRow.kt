@@ -15,14 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.paranid5.cooking_corner.core.resources.Res
-import com.paranid5.cooking_corner.core.resources.recipe_editor_ingredients
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
 import kotlinx.collections.immutable.ImmutableList
-import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

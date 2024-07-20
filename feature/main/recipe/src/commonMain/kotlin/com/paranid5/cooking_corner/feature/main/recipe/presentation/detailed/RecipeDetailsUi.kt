@@ -33,7 +33,7 @@ import com.paranid5.cooking_corner.feature.main.recipe.component.RecipeUiIntent
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.RecipeClippedCover
 import com.paranid5.cooking_corner.feature.main.recipe.presentation.detailed.pager.RecipePager
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeDetailedUiState
 import com.paranid5.cooking_corner.ui.foundation.AppProgressIndicator
 import com.paranid5.cooking_corner.ui.foundation.AppPullRefreshIndicator
 import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub

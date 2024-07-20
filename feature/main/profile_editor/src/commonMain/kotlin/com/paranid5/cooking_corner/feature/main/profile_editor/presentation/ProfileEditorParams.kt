@@ -17,7 +17,7 @@ import com.paranid5.cooking_corner.core.resources.profile_username
 import com.paranid5.cooking_corner.core.resources.unit_years
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStore.State
 import com.paranid5.cooking_corner.feature.main.profile_editor.component.ProfileEditorStore.UiIntent
-import com.paranid5.cooking_corner.feature.main.profile_editor.domain.ProfileUiState
+import com.paranid5.cooking_corner.ui.entity.profile.ProfileUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,21 +43,21 @@ internal fun ProfileEditorParams(
     )
 
     ProfileEditorTextField(
-        value = profileUiState.name,
+        value = profileUiState.name.orEmpty(),
         placeholder = stringResource(Res.string.profile_name),
         onValueChange = { onUiIntent(UiIntent.UpdateName(name = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     ProfileEditorTextField(
-        value = profileUiState.surname,
+        value = profileUiState.surname.orEmpty(),
         placeholder = stringResource(Res.string.profile_surname),
         onValueChange = { onUiIntent(UiIntent.UpdateSurname(surname = it)) },
         modifier = Modifier.fillMaxWidth(),
     )
 
     ProfileEditorTextField(
-        value = profileUiState.email,
+        value = profileUiState.email.orEmpty(),
         placeholder = stringResource(Res.string.profile_email),
         onValueChange = { onUiIntent(UiIntent.UpdateEmail(email = it)) },
         modifier = Modifier.fillMaxWidth(),
@@ -65,7 +65,7 @@ internal fun ProfileEditorParams(
 
     ProfileEditorTextField(
         modifier = Modifier.fillMaxWidth(),
-        value = profileUiState.cookingExperience,
+        value = profileUiState.cookingExperience.orEmpty(),
         placeholder = stringResource(Res.string.profile_cooking_experience),
         suffix = stringResource(Res.string.unit_years),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

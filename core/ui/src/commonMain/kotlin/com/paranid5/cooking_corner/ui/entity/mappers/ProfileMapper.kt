@@ -1,7 +1,8 @@
-package com.paranid5.cooking_corner.feature.main.profile.utils
+package com.paranid5.cooking_corner.ui.entity.mappers
 
 import com.paranid5.cooking_corner.domain.auth.dto.ProfileDTO
-import com.paranid5.cooking_corner.feature.main.profile.entity.ProfileUiState
+import com.paranid5.cooking_corner.ui.entity.ImageContainer
+import com.paranid5.cooking_corner.ui.entity.profile.ProfileUiState
 
 private const val IMAGE_BASE_URL = "https://storage.yandexcloud.net/cooking-corner-backet"
 
@@ -11,6 +12,6 @@ fun ProfileUiState.Companion.fromResponse(response: ProfileDTO) =
         name = response.name,
         surname = response.surname,
         email = response.email,
-        cookingExperienceYears = response.cookingExperienceYears,
-        photoUrl = "$IMAGE_BASE_URL/${response.iconPath}",
+        cookingExperience = response.cookingExperienceYears?.toString(),
+        cover = ImageContainer.Uri("$IMAGE_BASE_URL/${response.imagePath}"),
     )

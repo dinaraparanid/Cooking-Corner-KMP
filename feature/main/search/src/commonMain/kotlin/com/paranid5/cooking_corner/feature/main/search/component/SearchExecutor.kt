@@ -18,7 +18,7 @@ import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.Sta
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStore.UiIntent
 import com.paranid5.cooking_corner.feature.main.search.component.SearchStoreProvider.Msg
 import com.paranid5.cooking_corner.ui.UiState
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.toUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.api.handleApiResult
@@ -30,7 +30,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private val UPDATE_SEARCH_TEXT_DELAY = 1000L
+private const val RECIPE_CANNOT_BE_DELETED = 400
+private const val UPDATE_SEARCH_TEXT_DELAY = 1000L
 
 internal class SearchExecutor(
     private val recipeRepository: RecipeRepository,
@@ -50,6 +51,7 @@ internal class SearchExecutor(
             is UiIntent.RemoveFromMyRecipesClick -> removeFromMyRecipes(
                 recipeUiState = intent.recipeUiState,
                 unhandledErrorSnackbar = intent.unhandledErrorSnackbar,
+                recipeCannotBeDeletedSnackbar = intent.recipeCannotBeDeletedSnackbar,
             )
 
             is UiIntent.SearchRecipes -> launchNewSearchTextUpdateQuery(text = state().searchText)
@@ -106,6 +108,7 @@ internal class SearchExecutor(
                 recipeRepository.addToMyRecipes(recipeId = recipeUiState.id)
             },
             unhandledErrorSnackbar = unhandledErrorSnackbar,
+            onApiError = { showSnackbar(unhandledErrorSnackbar) },
             onSuccess = ::loadRecipes,
         )
     }
@@ -113,12 +116,21 @@ internal class SearchExecutor(
     private fun removeFromMyRecipes(
         recipeUiState: RecipeUiState,
         unhandledErrorSnackbar: SnackbarMessage,
+        recipeCannotBeDeletedSnackbar: SnackbarMessage,
     ) = scope.launch {
         handleModifyRecipeApiResult(
             result = withContext(AppDispatchers.Data) {
                 recipeRepository.removeFromMyRecipes(recipeId = recipeUiState.id)
             },
             unhandledErrorSnackbar = unhandledErrorSnackbar,
+            onApiError = { (status) ->
+                showSnackbar(
+                    when (status) {
+                        RECIPE_CANNOT_BE_DELETED -> recipeCannotBeDeletedSnackbar
+                        else -> unhandledErrorSnackbar
+                    }
+                )
+            },
             onSuccess = ::loadRecipes,
         )
     }
@@ -173,16 +185,20 @@ internal class SearchExecutor(
     private suspend inline fun handleModifyRecipeApiResult(
         result: ApiResultWithCode<Unit>,
         unhandledErrorSnackbar: SnackbarMessage,
+        onApiError: (HttpStatusCode) -> Unit,
         onSuccess: () -> Unit,
     ) = handleApiResult(
         result = result,
-        onSuccess = { onSuccess() },
         onUnhandledError = { globalEventRepository.sendSnackbar(unhandledErrorSnackbar) },
         onErrorStatusCode = { status ->
             when {
                 status.isForbidden -> globalEventRepository.sendLogOut(Reason.ERROR)
-                else -> globalEventRepository.sendSnackbar(unhandledErrorSnackbar)
+                else -> onApiError(status)
             }
         },
+        onSuccess = { onSuccess() },
     )
+
+    private suspend inline fun showSnackbar(snackbarMessage: SnackbarMessage) =
+        globalEventRepository.sendSnackbar(snackbarMessage)
 }

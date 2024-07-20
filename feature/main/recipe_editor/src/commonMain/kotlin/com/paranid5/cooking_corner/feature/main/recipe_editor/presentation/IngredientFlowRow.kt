@@ -11,7 +11,7 @@ import com.paranid5.cooking_corner.core.resources.recipe_editor_add_ingredient_p
 import com.paranid5.cooking_corner.core.resources.recipe_editor_ingredients
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.State.IngredientDialogState
 import com.paranid5.cooking_corner.feature.main.recipe_editor.component.RecipeEditorStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.IngredientUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.combinedClickableWithRipple

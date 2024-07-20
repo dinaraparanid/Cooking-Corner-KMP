@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.recipe_no_ingredients_description
 import com.paranid5.cooking_corner.core.resources.recipe_no_ingredients_title
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.IngredientUiState
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource

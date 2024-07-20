@@ -4,11 +4,11 @@ import com.paranid5.cooking_corner.domain.recipe.dto.IngredientDTO
 import com.paranid5.cooking_corner.domain.recipe.dto.RecipeResponse
 import com.paranid5.cooking_corner.domain.recipe.dto.StepDTO
 import com.paranid5.cooking_corner.ui.entity.ImageContainer
-import com.paranid5.cooking_corner.ui.entity.IngredientUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeDetailedUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeParamsUiState
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
-import com.paranid5.cooking_corner.ui.entity.StepUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.IngredientUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeDetailedUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeParamsUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.StepUiState
 import com.paranid5.cooking_corner.ui.utils.SerializableImmutableList
 import com.paranid5.cooking_corner.utils.mapToImmutableList
 import com.paranid5.cooking_corner.utils.orNil
@@ -75,7 +75,11 @@ fun StepUiState.Companion.fromResponse(response: StepDTO) =
         cover = response.imagePath?.let(::ImageContainerUri),
     )
 
-fun StepUiState.toRequest() = StepDTO(title = title, description = description)
+fun StepUiState.toRequest() = StepDTO(
+    title = title,
+    description = description,
+    imagePath = (cover as? ImageContainer.Uri?)?.value?.removePrefix("$IMAGE_BASE_URL/"),
+)
 
 fun RecipeParamsUiState.Companion.fromResponse(response: RecipeResponse) =
     RecipeParamsUiState(

@@ -21,7 +21,7 @@ import com.paranid5.cooking_corner.core.resources.ic_like
 import com.paranid5.cooking_corner.core.resources.ic_liked
 import com.paranid5.cooking_corner.core.resources.something_went_wrong
 import com.paranid5.cooking_corner.feature.main.home.component.HomeStore.UiIntent
-import com.paranid5.cooking_corner.ui.entity.RecipeUiState
+import com.paranid5.cooking_corner.ui.entity.recipe.RecipeUiState
 import com.paranid5.cooking_corner.ui.foundation.AppMainText
 import com.paranid5.cooking_corner.ui.foundation.AppOutlinedRippleButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme

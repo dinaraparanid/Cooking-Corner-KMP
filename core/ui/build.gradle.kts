@@ -58,6 +58,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.utils)
 
+            api(projects.domain.auth)
             api(projects.domain.recipe)
 
             implementation(compose.runtime)
