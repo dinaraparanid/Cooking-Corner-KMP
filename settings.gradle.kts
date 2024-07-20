@@ -37,12 +37,21 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+
 include(":core:common")
 include(":core:ui")
 include(":core:component")
 include(":core:utils")
+
 include(":domain:auth")
+include(":domain:global_event")
+include(":domain:snackbar")
+include(":domain:recipe")
+include(":domain:tag")
+include(":domain:category")
+
 include(":data")
+
 include(":feature:splash")
 include(":feature:auth")
 include(":feature:main:splash")
@@ -53,10 +62,5 @@ include(":feature:main:search")
 include(":feature:main:profile")
 include(":feature:main:recipe")
 include(":feature:main:generate")
-include(":domain:recipe")
-include(":domain:global_event")
-include(":domain:snackbar")
 include(":feature:main:recipe_editor")
-include(":domain:category")
-include(":domain:tag")
 include(":feature:main:profile_editor")

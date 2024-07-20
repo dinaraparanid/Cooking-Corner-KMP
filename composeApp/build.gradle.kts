@@ -127,7 +127,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
     }
     packaging {
         resources {
@@ -154,15 +154,25 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.paranid5.cooking_corner.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Cooking Corner"
             packageVersion = "1.0.0"
+            description = "Cooking Recipes App"
+            copyright = "© 2024 Arseny Savchenko. All rights reserved."
+            includeAllModules = true
             macOS {
                 bundleID = "com.paranid5.cooking_corner"
                 dockName = "Cooking Corner"
+                iconFile.set(project.file("ic_launcher.icns"))
+            }
+            windows {
+                iconFile.set(project.file("ic_launcher.ico"))
+            }
+            linux {
+                iconFile.set(project.file("ic_launcher.png"))
             }
         }
     }
