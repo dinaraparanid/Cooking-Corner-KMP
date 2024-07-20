@@ -16,8 +16,13 @@ and other KMP libraries
 
 ## **Preview**
 
-* ![Mobile (Android + iOS)](https://youtu.be/3Q5-JLzQ5_k)
-* ![Desktop](https://youtu.be/GcjG9bAx0AI)
+### Mobile (Android + iOS)
+
+[![Mobile](https://img.youtube.com/vi/3Q5-JLzQ5_k/0.jpg)](https://www.youtube.com/watch?v=3Q5-JLzQ5_k)
+
+### Desktop
+
+[![Desktop](https://img.youtube.com/vi/GcjG9bAx0AI/0.jpg)](https://www.youtube.com/watch?v=GcjG9bAx0AI)
 
 ## **Stack**
 
