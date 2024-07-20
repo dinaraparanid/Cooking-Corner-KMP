@@ -130,14 +130,16 @@ internal class ProfileEditorExecutor(
         (profileUiState.cover as? ImageContainer.Bytes?)?.value?.let {
             uploadProfileCover(
                 profileCover = it,
+                profileUsername = profileUiState.username,
                 unhandledErrorSnackbar = unhandledErrorSnackbar,
                 successSnackbar = successSnackbar,
             )
-        } ?: onSuccess(successSnackbar)
+        } ?: onSuccess(username = profileUiState.username, successSnackbar = successSnackbar)
     }
 
     private suspend fun uploadProfileCover(
         profileCover: ByteArray,
+        profileUsername: String,
         unhandledErrorSnackbar: SnackbarMessage,
         successSnackbar: SnackbarMessage,
     ) = handleApiResult(
@@ -151,10 +153,19 @@ internal class ProfileEditorExecutor(
                 else -> showSnackbar(unhandledErrorSnackbar)
             }
         },
-        onSuccess = { onSuccess(successSnackbar) },
+        onSuccess = {
+            onSuccess(
+                username = profileUsername,
+                successSnackbar = successSnackbar,
+            )
+        },
     )
 
-    private suspend inline fun onSuccess(successSnackbar: SnackbarMessage,) {
+    private suspend inline fun onSuccess(
+        username: String,
+        successSnackbar: SnackbarMessage,
+    ) {
+        authRepository.storeLogin(username)
         showSnackbar(successSnackbar)
         publish(Label.Back)
     }
