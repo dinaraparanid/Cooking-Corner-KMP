@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.Text
@@ -48,7 +50,7 @@ internal fun SignInUi(
     val state by component.stateFlow.collectAsState()
     val onUiIntent = component::onUiIntent
 
-    Box(modifier) {
+    Column(modifier.verticalScroll(rememberScrollState())) {
         SignInContent(
             state = state,
             onUiIntent = onUiIntent,
@@ -57,11 +59,13 @@ internal fun SignInUi(
                 .padding(top = AppTheme.dimensions.padding.enormous),
         )
 
+        Spacer(Modifier.weight(1F))
+
         SignUpButton(
             onUiIntent = onUiIntent,
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = AppTheme.dimensions.padding.extraMedium),
+                .align(Alignment.CenterHorizontally)
+                .padding(vertical = AppTheme.dimensions.padding.extraMedium),
         )
     }
 }

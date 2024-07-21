@@ -1,5 +1,7 @@
 package com.paranid5.cooking_corner.featrue.auth.sign_up.presentation
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -63,7 +65,7 @@ private fun SignUpContent(
     val invalidCredentialsSnackbar =
         ErrorSnackbar(stringResource(Res.string.auth_user_already_exists))
 
-    ConstraintLayout(modifier = modifier) {
+    ConstraintLayout(modifier = modifier.verticalScroll(rememberScrollState())) {
         val (
             backButton,
             title,
@@ -149,6 +151,7 @@ private fun SignUpContent(
             },
             modifier = Modifier.constrainAs(confirmButton) {
                 top.linkTo(confirmPassword.bottom, margin = appPadding.large)
+                bottom.linkTo(parent.bottom, margin = appPadding.extraMedium)
                 start.linkTo(parent.start, margin = appPadding.extraMedium)
                 end.linkTo(parent.end, margin = appPadding.extraMedium)
                 width = Dimension.fillToConstraints

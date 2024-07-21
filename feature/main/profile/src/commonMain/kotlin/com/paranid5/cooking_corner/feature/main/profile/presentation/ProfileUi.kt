@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -24,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.paranid5.cooking_corner.core.resources.Res
 import com.paranid5.cooking_corner.core.resources.ic_edit
 import com.paranid5.cooking_corner.core.resources.profile_cooking_experience
@@ -71,22 +75,24 @@ fun ProfileUi(
     )
 
     @Composable
-    fun BoxScope.buildProfileButtonsModifier() =
+    fun ColumnScope.buildProfileButtonsModifier() =
         Modifier
             .fillMaxWidth()
-            .align(Alignment.BottomCenter)
-            .padding(bottom = AppTheme.dimensions.padding.large)
+            .align(Alignment.CenterHorizontally)
+            .padding(vertical = AppTheme.dimensions.padding.large)
             .padding(horizontal = AppTheme.dimensions.padding.extraLarge)
 
     @Composable
-    fun BoxScope.Content(profileUiState: ProfileUiState) {
+    fun ColumnScope.Content(profileUiState: ProfileUiState) {
         ProfileUiImpl(
             state = state,
             profileUiState = profileUiState,
             modifier = Modifier
-                .align(Alignment.TopCenter)
+                .align(Alignment.CenterHorizontally)
                 .padding(top = AppTheme.dimensions.padding.medium),
         )
+
+        Spacer(Modifier.weight(1F))
 
         ProfileButtons(
             isProfileEditable = true,
@@ -96,11 +102,17 @@ fun ProfileUi(
     }
 
     @Composable
-    fun BoxScope.Error() {
-        AppErrorStub(
-            errorMessage = stringResource(Res.string.profile_error),
-            modifier = Modifier.align(Alignment.Center),
-        )
+    fun ColumnScope.Error() {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .weight(1F)
+        ) {
+            AppErrorStub(
+                errorMessage = stringResource(Res.string.profile_error),
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
 
         ProfileButtons(
             isProfileEditable = false,
@@ -109,27 +121,30 @@ fun ProfileUi(
         )
     }
 
-    Box(
+    Column(
         modifier
             .pullRefresh(pullRefreshState)
             .verticalScroll(rememberScrollState())
     ) {
+        AppPullRefreshIndicator(
+            isRefreshing = isRefreshingShown,
+            state = pullRefreshState,
+            modifier = Modifier
+                .zIndex(1F)
+                .align(Alignment.CenterHorizontally),
+        )
+
         when (state.uiState) {
             is UiState.Data, is UiState.Refreshing, is UiState.Success ->
                 state.uiState.getOrNull()?.let { Content(profileUiState = it) }
 
-            is UiState.Error ->
-                Error()
+            is UiState.Error -> Error()
 
             is UiState.Loading, is UiState.Undefined ->
-                AppProgressIndicator(Modifier.align(Alignment.Center))
+                Box(Modifier.fillMaxSize()) {
+                    AppProgressIndicator(Modifier.align(Alignment.Center))
+                }
         }
-
-        AppPullRefreshIndicator(
-            isRefreshing = isRefreshingShown,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
     }
 }
 

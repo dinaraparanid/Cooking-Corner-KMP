@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.CookingCorner" parent="Theme.MaterialComponents.DayNight.NoActionBar" >
+    <style name="Theme.CookingCorner" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:colorPrimary">@color/main_pastel</item>
         <item name="android:colorBackground">@color/main_pastel</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/main_pastel</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 </resources>

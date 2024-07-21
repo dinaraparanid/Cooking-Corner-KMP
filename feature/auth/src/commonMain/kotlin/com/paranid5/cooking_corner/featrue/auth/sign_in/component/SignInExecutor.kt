@@ -24,6 +24,7 @@ internal class SignInExecutor(
 
             is UiIntent.ConfirmCredentials -> scope.launch {
                 tryAcquireTokens(unhandledErrorSnackbar = intent.unhandledErrorSnackbarMessage)
+                dispatch(Msg.UpdateLoginText("ХУЕСОС"))
             }
 
             is UiIntent.ShowSignUp -> publish(Label.ShowSignUp)
