@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.ui.utils.AppTextSelectionColors
 
 @Composable
 fun AppOutlinedEditText(
@@ -41,6 +42,7 @@ fun AppOutlinedEditText(
         focusedIndicatorColor = Color.Transparent,
         disabledIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
+        selectionColors = AppTextSelectionColors,
     ),
     placeholder = placeholder?.let { { ExtraText(text = it) } },
     modifier = modifier.border(
@@ -86,6 +88,7 @@ fun AppAnimatedOutlinedEditText(
         focusedIndicatorColor = AppTheme.colors.button.primary,
         disabledIndicatorColor = AppTheme.colors.button.primary,
         unfocusedIndicatorColor = AppTheme.colors.button.primary,
+        selectionColors = AppTextSelectionColors,
     ),
     label = placeholder?.let { { ExtraText(text = it) } },
     suffix = suffix?.let { { ExtraText(text = it) } },

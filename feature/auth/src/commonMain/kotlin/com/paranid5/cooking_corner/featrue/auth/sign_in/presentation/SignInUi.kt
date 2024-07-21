@@ -1,6 +1,5 @@
 package com.paranid5.cooking_corner.featrue.auth.sign_in.presentation
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth

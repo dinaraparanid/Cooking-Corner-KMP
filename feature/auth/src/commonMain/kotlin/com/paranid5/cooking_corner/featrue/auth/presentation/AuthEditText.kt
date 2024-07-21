@@ -14,6 +14,7 @@ import com.paranid5.cooking_corner.core.resources.ic_password_hide
 import com.paranid5.cooking_corner.core.resources.ic_password_show
 import com.paranid5.cooking_corner.ui.foundation.AppIconButton
 import com.paranid5.cooking_corner.ui.theme.AppTheme
+import com.paranid5.cooking_corner.ui.utils.AppTextSelectionColors
 import org.jetbrains.compose.resources.vectorResource
 
 private const val PASSWORD_MASK = '*'
@@ -59,6 +60,7 @@ internal fun AuthEditText(
         focusedIndicatorColor = AppTheme.colors.text.tertiriary,
         disabledIndicatorColor = AppTheme.colors.text.tertiriary,
         unfocusedIndicatorColor = AppTheme.colors.text.tertiriary,
+        selectionColors = AppTextSelectionColors,
     ),
     placeholder = { AuthPlaceholder(text = placeholder) },
     supportingText = { if (isError) errorText?.let { AuthErrorText(text = it) } },

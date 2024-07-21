@@ -33,6 +33,7 @@ import com.paranid5.cooking_corner.ui.foundation.placeholder.AppErrorStub
 import com.paranid5.cooking_corner.ui.getOrNull
 import com.paranid5.cooking_corner.ui.theme.AppTheme
 import com.paranid5.cooking_corner.ui.utils.simpleShadow
+import com.paranid5.cooking_corner.utils.doNothing
 import org.jetbrains.compose.resources.stringResource
 
 private val BACK_BUTTON_SIZE = 36.dp
@@ -64,7 +65,7 @@ fun ProfileEditorUi(
             is UiState.Undefined, UiState.Loading, is UiState.Refreshing ->
                 AppProgressIndicator(Modifier.align(Alignment.Center))
 
-            is UiState.Success -> error("Illegal state: UiState.Success")
+            is UiState.Success -> doNothing
         }
     }
 }
