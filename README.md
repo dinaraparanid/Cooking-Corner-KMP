@@ -4,9 +4,11 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-2.0.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 
 ## **Developer**
+
 [Paranid5](https://github.com/dinaraparanid)
 
 ## **About App**
+
 **Cooking Corner** is a Kotlin Multiplatform client application
 that is aimed to store, share, rate and manage cooking recipes.
 
@@ -18,11 +20,11 @@ and other KMP libraries
 
 ### Mobile (Android + iOS)
 
-[![Mobile](https://img.youtube.com/vi/3Q5-JLzQ5_k/0.jpg)](https://www.youtube.com/watch?v=3Q5-JLzQ5_k)
+[![Mobile](https://img.youtube.com/vi/wTG8KO9HMJY/0.jpg)](https://www.youtube.com/watch?v=wTG8KO9HMJY)
 
 ### Desktop
 
-[![Desktop](https://img.youtube.com/vi/GcjG9bAx0AI/0.jpg)](https://www.youtube.com/watch?v=GcjG9bAx0AI)
+[![Desktop](https://img.youtube.com/vi/x8-rwyaQRtU/0.jpg)](https://www.youtube.com/watch?v=x8-rwyaQRtU)
 
 ## **Stack**
 
