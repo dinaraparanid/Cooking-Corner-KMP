@@ -16,14 +16,16 @@ Currently, application supports three targets: ***Android***, ***iOS*** and ***D
 Projects shares same business and UI logic by utilizing Compose Multiplatform, Decompose, Kodein
 and other KMP libraries
 
-## **Preview**
+## **Video Preview**
 
 ### Mobile (Android + iOS)
 
+**Click to see:**
 [![Mobile](https://img.youtube.com/vi/wTG8KO9HMJY/0.jpg)](https://www.youtube.com/watch?v=wTG8KO9HMJY)
 
 ### Desktop
 
+**Click to see:**
 [![Desktop](https://img.youtube.com/vi/x8-rwyaQRtU/0.jpg)](https://www.youtube.com/watch?v=x8-rwyaQRtU)
 
 ## **Stack**
