@@ -20,12 +20,14 @@ and other KMP libraries
 
 ### Mobile (Android + iOS)
 
-**Click to see:**
+**Click for video:**
+
 [![Mobile](https://img.youtube.com/vi/wTG8KO9HMJY/0.jpg)](https://www.youtube.com/watch?v=wTG8KO9HMJY)
 
 ### Desktop
 
-**Click to see:**
+**Click for video:**
+
 [![Desktop](https://img.youtube.com/vi/x8-rwyaQRtU/0.jpg)](https://www.youtube.com/watch?v=x8-rwyaQRtU)
 
 ## **Stack**
